@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { cookies } from "next/headers";
-import { createClient } from "@/utils/supabase/server";
-import { signOut } from "@/app/auth/actions";
+import Link from 'next/link';
+import { cookies } from 'next/headers';
+import { createClient } from '@/utils/supabase/server';
+import { signOut } from '@/app/auth/actions';
 
 export default async function Navbar() {
   const cookieStore = await cookies();
@@ -16,7 +16,7 @@ export default async function Navbar() {
       <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
         {/* Logo / Home Link */}
         <Link href="/" className="text-xl font-bold tracking-tight text-black dark:text-white">
-          what i'm on
+          what i&apos;m on
         </Link>
 
         {/* Auth State Links */}
