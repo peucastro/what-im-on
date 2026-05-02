@@ -49,6 +49,16 @@ body {
   font-family: var(--app-font-family);
 }
 
+@layer utilities {
+  .bg-app-header {
+    background-image: var(--app-header-image);
+  }
+
+  .bg-app-page {
+    background: var(--app-page-background);
+  }
+}
+
 /* Helper class for the overlay */
 .app-overlay {
   position: fixed;
