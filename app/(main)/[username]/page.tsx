@@ -3,6 +3,7 @@ import { createClient } from '@/utils/supabase/server';
 import { notFound } from 'next/navigation';
 import ItemCard from '@/components/ItemCard';
 import ProfileHeader from '@/components/ProfileHeader';
+import VibeButton from '@/components/VibeButton';
 
 interface Item {
   id: string;
@@ -22,7 +23,7 @@ async function getUserProfile(username: string) {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
-  // 1. Get user by username
+  // 1. Get user by username first to know whose items to fetch
   const { data: userData, error: userError } = await supabase
     .from('users')
     .select('id, username, display_name')
@@ -33,38 +34,39 @@ async function getUserProfile(username: string) {
     return null;
   }
 
-  // 2. Get current logged in user to check ownership
-  const { data: { user: authUser } } = await supabase.auth.getUser();
+  // 2. Parallelize items fetch and current auth check
+  const [itemsResult, authResult] = await Promise.all([
+    supabase
+      .from('items')
+      .select(`
+        id,
+        title,
+        description,
+        image_url,
+        category_id,
+        categories (
+          label,
+          icon
+        )
+      `)
+      .eq('user_id', userData.id)
+      .order('created_at', { ascending: false }),
+    supabase.auth.getUser()
+  ]);
+
+  const itemsData = itemsResult.data;
+  const authUser = authResult.data?.user;
   const isOwner = authUser?.id === userData.id;
 
-  // 3. Get items with categories
-  const { data: itemsData, error: itemsError } = await supabase
-    .from('items')
-    .select(
-      `
-      id,
-      title,
-      description,
-      image_url,
-      category_id,
-      categories (
-        label,
-        icon
-      )
-    `
-    )
-    .eq('user_id', userData.id)
-    .order('created_at', { ascending: false });
-
-  if (itemsError) {
-    console.error('Error fetching items:', itemsError);
+  if (itemsResult.error) {
+    console.error('Error fetching items:', itemsResult.error);
     return null;
   }
 
   // Group items by category
   const groups: Record<string, ItemGroup> = {};
 
-  itemsData.forEach((item: any) => {
+  (itemsData || []).forEach((item: any) => {
     const categoryLabel = item.categories?.label || 'Other';
     const categoryIcon = item.categories?.icon;
 
@@ -107,7 +109,26 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
       <ProfileHeader username={profile.username} isOwner={profile.isOwner} />
 
       {profile.itemGroups.length === 0 ? (
-        <p className="text-zinc-600">no current interests yet</p>
+        <div className="flex flex-col items-center justify-center py-4 text-center space-y-2 px-4">
+          <div className="space-y-2">
+            {!profile.isOwner && (
+              <p className="text-app-font lowercase">
+              no current interests yet
+            </p>
+            )}
+            {profile.isOwner && (
+              <p className="text-app-font lowercase">
+                your profile is looking a bit empty...
+              </p>
+            )}
+          </div>
+          
+          {profile.isOwner && (
+            <VibeButton variant="outline" className="hover:opacity-100">
+              ➕ &nbsp; add something
+            </VibeButton>
+          )}
+        </div>
       ) : (
         <div className="space-y-8 sm:px-6 px-0">
           {profile.itemGroups.map((group: ItemGroup) => (

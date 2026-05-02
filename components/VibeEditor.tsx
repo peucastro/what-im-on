@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTheme } from './ThemeProvider';
 import { THEMES, FONT_FAMILY_MAP, FontFamily, BorderRadius, THEME_CACHE_KEY } from '@/utils/themes';
 import { createClient } from '@/utils/supabase/client';
+import VibeButton from './VibeButton';
 
 export default function VibeEditor() {
   const { preferences, setPreferences } = useTheme();
@@ -31,11 +32,8 @@ export default function VibeEditor() {
       if (error) {
         alert('Failed to save vibe: ' + error.message);
       } else {
-        // Update local cache so it persists on next load even without server roundtrip
         localStorage.setItem(THEME_CACHE_KEY, JSON.stringify(preferences));
         setIsOpen(false);
-        // We don't use router.refresh() here to avoid potential hangs
-        // The UI is already updated via setPreferences in the preview loop
       }
     }
     setIsSaving(false);
@@ -48,19 +46,15 @@ export default function VibeEditor() {
 
   if (!isOpen) {
     return (
-      <button
-        onClick={() => setIsOpen(true)}
-        className="rounded-app border border-app-border bg-app-nav px-3 py-1 text-sm font-medium text-app-font hover:bg-black hover:text-white transition-all lowercase"
-      >
-        ✏️ edit vibe
-      </button>
+      <VibeButton onClick={() => setIsOpen(true)}>
+        ✏️ &nbsp; edit vibe
+      </VibeButton>
     );
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/20 p-4 backdrop-blur-sm">
+    <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/20 p-4 backdrop-blur-sm">
       <div className="w-full max-w-sm rounded-app border border-app-border bg-app-nav p-8 shadow-2xl relative overflow-hidden">
-        {/* Subtitle / Background Texture for the modal itself to feel less "flat" */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-app-overlay" />
         
         <div className="relative z-10">
@@ -150,19 +144,20 @@ export default function VibeEditor() {
           </div>
 
           <div className="mt-10 flex flex-col gap-2">
-            <button
+            <VibeButton
               onClick={handleSave}
               disabled={isSaving}
-              className="w-full rounded-app bg-app-accent py-3 text-white text-sm font-bold hover:opacity-90 disabled:opacity-50 transition-colors lowercase"
+              variant="primary"
+              className="w-full py-3 text-sm"
             >
               {isSaving ? 'saving...' : 'save vibe'}
-            </button>
-            <button
+            </VibeButton>
+            <VibeButton
               onClick={handleCancel}
-              className="w-full rounded-app py-3 text-app-font text-sm hover:bg-zinc-100 transition-colors lowercase"
+              className="w-full py-3 text-sm border-transparent hover:bg-zinc-100 hover:text-app-font"
             >
               cancel
-            </button>
+            </VibeButton>
           </div>
         </div>
       </div>
