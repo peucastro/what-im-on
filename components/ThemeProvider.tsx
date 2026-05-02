@@ -12,7 +12,9 @@ import {
 
 interface ThemeContextType {
   preferences: UserPreferences;
+  activePreferences: UserPreferences;
   setPreferences: (prefs: UserPreferences) => void;
+  setOverride: (prefs: UserPreferences | null) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -48,6 +50,8 @@ export function ThemeProvider({
     return serverPreferences;
   });
 
+  const [override, setOverride] = useState<UserPreferences | null>(null);
+
   // Sync with server preferences when they change (e.g. login/logout)
   const [prevServerPreferences, setPrevServerPreferences] = useState(serverPreferences);
   if (serverPreferences !== prevServerPreferences) {
@@ -55,15 +59,31 @@ export function ThemeProvider({
     setPreferences(serverPreferences);
   }
 
-  // Persist to localStorage whenever preferences change
+  // Persist to localStorage whenever preferences change (only if no override)
   useEffect(() => {
-    localStorage.setItem(THEME_CACHE_KEY, JSON.stringify(preferences));
-  }, [preferences]);
+    if (!override) {
+      localStorage.setItem(THEME_CACHE_KEY, JSON.stringify(preferences));
+    }
+  }, [preferences, override]);
 
-  // Compute active preferences based on current page
+  // Compute active preferences based on current page/override
   const activePreferences = useMemo(() => {
-    return isHomePage ? DEFAULT_PREFERENCES : preferences;
-  }, [isHomePage, preferences]);
+    if (override) {
+      console.log('[Theme] Using OVERRIDE:', override.theme_id);
+      return override;
+    }
+    if (isHomePage) {
+      console.log('[Theme] Using HOME DEFAULT');
+      return DEFAULT_PREFERENCES;
+    }
+    console.log('[Theme] Using PERSONAL PREFS:', preferences.theme_id);
+    return preferences;
+  }, [isHomePage, preferences, override]);
+
+  // Debug logging
+  useEffect(() => {
+    console.log('[Theme] Current State - Theme:', activePreferences.theme_id, '| Override active:', !!override);
+  }, [activePreferences, override]);
 
   const theme = useMemo(() => {
     return THEMES[activePreferences.theme_id] || THEMES.default;
@@ -87,7 +107,7 @@ export function ThemeProvider({
   }, [theme, activePreferences]);
 
   return (
-    <ThemeContext.Provider value={{ preferences, setPreferences }}>
+    <ThemeContext.Provider value={{ preferences, activePreferences, setPreferences, setOverride }}>
       <div className="app-overlay" />
       {children}
     </ThemeContext.Provider>

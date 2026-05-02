@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import ItemCard from '@/components/ItemCard';
 import ProfileHeader from '@/components/ProfileHeader';
 import VibeButton from '@/components/VibeButton';
+import ProfileThemeOverride from '@/components/ProfileThemeOverride';
+import { UserPreferences } from '@/utils/themes';
 
 interface Item {
   id: string;
@@ -34,8 +36,8 @@ async function getUserProfile(username: string) {
     return null;
   }
 
-  // 2. Parallelize items fetch and current auth check
-  const [itemsResult, authResult] = await Promise.all([
+  // 2. Parallelize items fetch, preferences fetch, and current auth check
+  const [itemsResult, preferencesResult, authResult] = await Promise.all([
     supabase
       .from('items')
       .select(
@@ -53,10 +55,16 @@ async function getUserProfile(username: string) {
       )
       .eq('user_id', userData.id)
       .order('created_at', { ascending: false }),
+    supabase
+      .from('user_preferences')
+      .select('theme_id, border_radius, font_family, pet_id')
+      .eq('user_id', userData.id)
+      .single(),
     supabase.auth.getUser(),
   ]);
 
   const itemsData = itemsResult.data;
+  const preferencesData = preferencesResult.data;
   const authUser = authResult.data?.user;
   const isOwner = authUser?.id === userData.id;
 
@@ -88,7 +96,7 @@ async function getUserProfile(username: string) {
     if (!groups[categoryLabel]) {
       groups[categoryLabel] = {
         category_label: categoryLabel,
-        category_icon: categoryIcon,
+        category_icon: categoryIcon ?? undefined,
         items: [],
       };
     }
@@ -96,8 +104,8 @@ async function getUserProfile(username: string) {
     groups[categoryLabel].items.push({
       id: item.id,
       title: item.title,
-      description: item.description,
-      image_url: item.image_url,
+      description: item.description ?? undefined,
+      image_url: item.image_url ?? undefined,
       category_id: item.category_id,
     });
   });
@@ -108,6 +116,7 @@ async function getUserProfile(username: string) {
     username: userData.display_name || userData.username,
     itemGroups: itemsByCategory,
     isOwner,
+    preferences: preferencesData,
   };
 }
 
@@ -121,6 +130,9 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
 
   return (
     <div className="space-y-12 w-full mx-auto md:max-w-sm">
+      {!profile.isOwner && (
+        <ProfileThemeOverride preferences={profile.preferences as UserPreferences} />
+      )}
       <ProfileHeader username={profile.username} isOwner={profile.isOwner} />
 
       {profile.itemGroups.length === 0 ? (

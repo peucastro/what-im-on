@@ -10,7 +10,7 @@ interface ProfileHeaderProps {
 }
 
 export default function ProfileHeader({ username, isOwner }: ProfileHeaderProps) {
-  const { preferences } = useTheme();
+  const { activePreferences } = useTheme();
 
   return (
     <div className="relative group">
@@ -26,10 +26,10 @@ export default function ProfileHeader({ username, isOwner }: ProfileHeaderProps)
       <div className="absolute top-4 right-4">{isOwner && <VibeEditor />}</div>
 
       {/* Pet at the bottom */}
-      {preferences.pet_id !== 'none' && (
+      {activePreferences.pet_id !== 'none' && (
         <div className="absolute top-16 right-20 pointer-events-none">
           <Image
-            src={`/assets/pets/${preferences.pet_id}.gif`}
+            src={`/assets/pets/${activePreferences.pet_id}.gif`}
             alt="pet"
             width={64}
             height={64}
