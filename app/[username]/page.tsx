@@ -9,8 +9,7 @@ interface Item {
   title: string;
   description?: string;
   image_url?: string;
-  users: { username: string };
-  categories: { label: string; icon?: string };
+  category_id?: string;
 }
 
 interface ItemGroup {
@@ -28,8 +27,19 @@ async function getUserProfile(username: string): Promise<ProfileData | null> {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
-  // Fetch user and current items
-  const { data, error } = await supabase
+  // First get user info including display_name
+  const { data: userData, error: userError } = await supabase
+    .from('users')
+    .select('id, username, display_name')
+    .eq('username', username)
+    .single();
+
+  if (userError || !userData) {
+    return null;
+  }
+
+  // Get current items
+  const { data: items, error: itemsError } = await supabase
     .from('items')
     .select(
       `
@@ -37,60 +47,65 @@ async function getUserProfile(username: string): Promise<ProfileData | null> {
       title,
       description,
       image_url,
-      users!inner(username),
-      categories!inner(label, icon)
+      category_id
     `
     )
-    .eq('users.username', username)
+    .eq('user_id', userData.id)
     .eq('is_current', true)
     .order('category_id');
 
-  if (error) {
-    console.error('Error fetching profile:', error);
-    return null;
+  // Get all categories for lookup
+  const { data: allCategories } = await supabase.from('categories').select('id, label, icon');
+
+  if (itemsError) {
+    console.error('Error fetching items:', itemsError);
+    return { username: userData.display_name || userData.username, itemGroups: [] };
   }
 
-  if (!data || data.length === 0) {
-    // User might exist but has no current items, or doesn't exist
-    // Check if user exists
-    const { data: userData } = await supabase
-      .from('users')
-      .select('username')
-      .eq('username', username)
-      .single();
-
-    if (!userData) {
-      return null;
-    }
-
-    // User exists but has no current items
+  if (!items || items.length === 0) {
     return {
-      username,
+      username: userData.display_name || userData.username,
       itemGroups: [],
     };
   }
 
   // Transform data and group by category
   const itemsByCategory: ItemGroup[] = [];
-  (data as Item[]).forEach((item) => {
-    const categoryLabel = item.categories.label;
+  const categoryMap = new Map(allCategories?.map((c) => [c.id, c]) || []);
+
+  items?.forEach((item) => {
+    const category = categoryMap.get(item.category_id);
+    const categoryLabel = category?.label || 'Other';
+    const categoryIcon = category?.icon;
     const existingCategory = itemsByCategory.find(
       (group) => group.category_label === categoryLabel
     );
 
     if (existingCategory) {
-      existingCategory.items.push(item);
+      existingCategory.items.push({
+        id: item.id,
+        title: item.title,
+        description: item.description,
+        image_url: item.image_url,
+      });
     } else {
       itemsByCategory.push({
         category_label: categoryLabel,
-        category_icon: item.categories.icon,
-        items: [item],
+        category_icon: categoryIcon,
+        items: [
+          {
+            id: item.id,
+            title: item.title,
+            description: item.description,
+            image_url: item.image_url,
+          },
+        ],
       });
     }
   });
 
   return {
-    username: (data[0] as Item).users.username,
+    username: userData.display_name || userData.username,
     itemGroups: itemsByCategory,
   };
 }
