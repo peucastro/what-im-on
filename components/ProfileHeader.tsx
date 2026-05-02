@@ -2,7 +2,6 @@
 
 import VibeEditor from './VibeEditor';
 import { useTheme } from './ThemeProvider';
-
 import { UserPreferences } from '@/utils/themes';
 
 interface ProfileHeaderProps {
@@ -11,13 +10,18 @@ interface ProfileHeaderProps {
   preferences?: UserPreferences | null;
 }
 
-export default function ProfileHeader({ username, isOwner, preferences: propPreferences }: ProfileHeaderProps) {
+export default function ProfileHeader({
+  username,
+  isOwner,
+  preferences: propPreferences,
+}: ProfileHeaderProps) {
   const { activePreferences: globalActivePreferences } = useTheme();
-  
-  // Prioritize propPreferences (from SSR) over global context (client-side override)
-  const activePreferences = propPreferences || globalActivePreferences;
 
-  const petPath = `/assets/pets/${activePreferences.pet_id}.gif`;
+  // If we are the owner, we want the live 'context' preferences so edits show up immediately (optimistic update).
+  // If we are a visitor, we prefer the propPreferences (from SSR) to avoid theme/pet flashes.
+  const activePreferences = isOwner
+    ? globalActivePreferences
+    : propPreferences || globalActivePreferences;
 
   return (
     <div className="relative group">

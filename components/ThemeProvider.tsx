@@ -68,15 +68,8 @@ export function ThemeProvider({
 
   // Compute active preferences based on current page/override
   const activePreferences = useMemo(() => {
-    if (override) {
-      console.log('[Theme] Using OVERRIDE:', override.theme_id);
-      return override;
-    }
-    if (isHomePage) {
-      console.log('[Theme] Using HOME DEFAULT');
-      return DEFAULT_PREFERENCES;
-    }
-    console.log('[Theme] Using PERSONAL PREFS:', preferences.theme_id);
+    if (override) return override;
+    if (isHomePage) return DEFAULT_PREFERENCES;
     return preferences;
   }, [isHomePage, preferences, override]);
 
