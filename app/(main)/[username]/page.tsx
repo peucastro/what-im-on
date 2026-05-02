@@ -133,7 +133,9 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
       {!profile.isOwner && (
         <ProfileThemeOverride preferences={profile.preferences as UserPreferences} />
       )}
-      <ProfileHeader username={profile.username} isOwner={profile.isOwner} />
+      <div className="mt-8">
+        <ProfileHeader username={profile.username} isOwner={profile.isOwner} />
+      </div>
 
       {profile.itemGroups.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-4 text-center space-y-2 px-4">
