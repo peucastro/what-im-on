@@ -69,8 +69,12 @@ async function getUserProfile(username: string) {
   const isOwner = authUser?.id === userData.id;
 
   if (itemsResult.error) {
-    console.error('Error fetching items:', itemsResult.error);
+    console.error('[ProfilePage] Error fetching items:', itemsResult.error);
     return null;
+  }
+
+  if (preferencesResult.error) {
+    console.error('[ProfilePage] Error fetching preferences:', preferencesResult.error);
   }
 
   // Group items by category
@@ -118,9 +122,9 @@ async function getUserProfile(username: string) {
     isOwner,
     preferences: preferencesData,
   };
-}
+  }
 
-export default async function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
+  export default async function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
   const { username } = await params;
   const profile = await getUserProfile(username);
 
@@ -134,7 +138,11 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
         <ProfileThemeOverride preferences={profile.preferences as UserPreferences} />
       )}
       <div className="mt-8">
-        <ProfileHeader username={profile.username} isOwner={profile.isOwner} />
+        <ProfileHeader
+          username={profile.username}
+          isOwner={profile.isOwner}
+          preferences={profile.preferences as UserPreferences}
+        />
       </div>
 
       {profile.itemGroups.length === 0 ? (

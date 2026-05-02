@@ -80,16 +80,6 @@ export function ThemeProvider({
     return preferences;
   }, [isHomePage, preferences, override]);
 
-  // Debug logging
-  useEffect(() => {
-    console.log(
-      '[Theme] Current State - Theme:',
-      activePreferences.theme_id,
-      '| Override active:',
-      !!override
-    );
-  }, [activePreferences, override]);
-
   const theme = useMemo(() => {
     return THEMES[activePreferences.theme_id] || THEMES.default;
   }, [activePreferences.theme_id]);
