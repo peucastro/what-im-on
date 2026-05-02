@@ -28,7 +28,7 @@ export default async function Header() {
       
       {/* Nav Bar */}
       <nav className="w-full border-b border-app-border bg-app-nav">
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
+        <div className="mx-auto flex max-w-3xl items-center justify-between sm:px-6 px-4 py-4">
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <Image

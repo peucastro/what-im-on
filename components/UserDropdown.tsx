@@ -32,7 +32,7 @@ export default function UserDropdown({ username }: UserDropdownProps) {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={toggleDropdown}
-        className="rounded-full bg-black px-4 py-2 text-sm text-white hover:bg-zinc-800 transition-colors lowercase flex items-center gap-1"
+        className="text-sm text-app-font font-medium hover:opacity-70 transition-all lowercase flex items-center gap-2 py-2"
       >
         account
         <motion.span
@@ -41,8 +41,8 @@ export default function UserDropdown({ username }: UserDropdownProps) {
           className="inline-block"
         >
           <svg
-            width="10"
-            height="6"
+            width="8"
+            height="5"
             viewBox="0 0 10 6"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -50,7 +50,7 @@ export default function UserDropdown({ username }: UserDropdownProps) {
             <path
               d="M1 1L5 5L9 1"
               stroke="currentColor"
-              strokeWidth="1.5"
+              strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
@@ -61,32 +61,32 @@ export default function UserDropdown({ username }: UserDropdownProps) {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            initial={{ opacity: 0, y: 8, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            transition={{ duration: 0.15, ease: 'easeOut' }}
-            className="absolute right-0 mt-2 w-48 origin-top-right rounded-2xl border border-zinc-200 bg-white p-2 shadow-xl z-50 overflow-hidden"
+            exit={{ opacity: 0, y: 8, scale: 0.98 }}
+            transition={{ duration: 0.1, ease: 'easeOut' }}
+            className="absolute right-0 mt-1 w-48 origin-top-right rounded-app border border-app-border bg-app-nav p-1.5 shadow-xl z-50 overflow-hidden"
           >
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-0.5">
               <Link
                 href={`/${username}`}
                 onClick={() => setIsOpen(false)}
-                className="rounded-xl px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-50 hover:text-black transition-colors lowercase"
+                className="rounded-app px-3 py-2 text-sm text-app-font hover:bg-app-accent hover:text-white transition-colors lowercase font-app"
               >
                 my profile
               </Link>
               <Link
                 href="/account"
                 onClick={() => setIsOpen(false)}
-                className="rounded-xl px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-50 hover:text-black transition-colors lowercase"
+                className="rounded-app px-3 py-2 text-sm text-app-font hover:bg-app-accent hover:text-white transition-colors lowercase font-app"
               >
-                edit profile
+                settings
               </Link>
-              <div className="h-px bg-zinc-100 my-1 mx-2" />
+              <div className="h-px bg-app-border my-1 mx-1 opacity-50" />
               <form action={signOut}>
                 <button
                   type="submit"
-                  className="w-full text-left rounded-xl px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors lowercase"
+                  className="w-full text-left rounded-app px-3 py-2 text-sm text-app-font hover:bg-red-500 hover:text-white transition-colors lowercase font-app"
                 >
                   sign out
                 </button>

@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="mx-auto w-full max-w-3xl px-6 py-12 flex flex-col items-center gap-12 text-center sm:items-start sm:text-left">
+    <div className="mx-auto w-full max-w-3xl sm:px-6 px-4 py-12 flex flex-col items-center gap-12 text-center sm:items-start sm:text-left">
       <div className="flex flex-col items-center gap-6 sm:items-start">
         <h1 className="text-4xl font-bold tracking-tight text-black sm:text-5xl lowercase">
           What i&apos;m on

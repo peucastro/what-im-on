@@ -66,3 +66,5 @@ export const FONT_FAMILY_MAP: Record<FontFamily, string> = {
   serif: 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
   comic: '"Comic Sans MS", "Comic Sans", cursive',
 };
+
+export const THEME_CACHE_KEY = 'app-theme-preferences';

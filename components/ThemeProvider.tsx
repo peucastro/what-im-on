@@ -5,7 +5,8 @@ import {
   THEMES, 
   BORDER_RADIUS_MAP, 
   FONT_FAMILY_MAP, 
-  UserPreferences 
+  UserPreferences,
+  THEME_CACHE_KEY
 } from '@/utils/themes';
 
 interface ThemeContextType {
@@ -17,17 +18,33 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ 
   children, 
-  preferences: initialPreferences 
+  preferences: serverPreferences 
 }: { 
   children: React.ReactNode;
   preferences: UserPreferences;
 }) {
-  const [preferences, setPreferences] = useState<UserPreferences>(initialPreferences);
+  // Initialize with server preferences, but try to load from cache immediately to avoid flash
+  const [preferences, setPreferences] = useState<UserPreferences>(serverPreferences);
 
-  // Sync with initialPreferences if they change (e.g., from server)
+  // 1. On mount, check if we have a fresher version in localStorage
   useEffect(() => {
-    setPreferences(initialPreferences);
-  }, [initialPreferences]);
+    const cached = localStorage.getItem(THEME_CACHE_KEY);
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        setPreferences(parsed);
+      } catch (e) {
+        console.error('Failed to parse cached theme', e);
+      }
+    }
+  }, []);
+
+  // 2. If server preferences change (e.g. after a hard refresh or navigation), sync them
+  // but only if they are different to avoid unnecessary loops
+  useEffect(() => {
+    setPreferences(serverPreferences);
+    localStorage.setItem(THEME_CACHE_KEY, JSON.stringify(serverPreferences));
+  }, [serverPreferences]);
 
   const theme = useMemo(() => THEMES[preferences.theme_id] || THEMES.default, [preferences.theme_id]);
 

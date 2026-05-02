@@ -104,7 +104,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
   }
 
   return (
-    <div className="space-y-12 w-full mx-auto max-w-sm">
+    <div className="space-y-12 w-full mx-auto md:max-w-sm">
       <div className="relative">
         <ProfileHeader username={profile.username} />
         {profile.isOwner && (
@@ -117,7 +117,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
       {profile.itemGroups.length === 0 ? (
         <p className="text-zinc-600">no current interests yet</p>
       ) : (
-        <div className="space-y-8">
+        <div className="space-y-8 sm:px-6 px-4">
           {profile.itemGroups.map((group: ItemGroup) => (
             <div key={group.category_label}>
               <div className="mb-4 flex items-center gap-2">
