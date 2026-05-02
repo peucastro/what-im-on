@@ -6,10 +6,12 @@ import { motion } from 'framer-motion';
 import { login } from '@/app/(main)/auth/actions';
 import OnboardingButton from '@/components/OnboardingButton';
 import { useState, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { containerVariants, itemVariants } from '@/utils/animations';
+import FormMessage from '@/components/FormMessage';
 
 function LoginForm() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const initialMessage = searchParams.get('message');
 
@@ -29,19 +31,26 @@ function LoginForm() {
     const redirectTo = searchParams.get('next') || undefined;
 
     try {
-      await login(formData, redirectTo);
-    } catch (error) {
-      if ((error as { digest?: string }).digest?.startsWith('NEXT_REDIRECT')) {
+      const result = await login(formData, redirectTo);
+
+      if (result.success) {
         setIsSuccess(true);
         setTimeout(() => {
           setShowExit(true);
-        }, 1000);
-        throw error;
+          setTimeout(() => {
+            router.push(result.redirectUrl || '/');
+          }, 300);
+        }, 1500);
+      } else {
+        setIsError(true);
+        setErrorMessage(result.error || 'Sign in failed. Please try again');
+        setIsLoading(false);
       }
-
+    } catch (error) {
       setIsError(true);
-      setErrorMessage('Could not authenticate user');
+      setErrorMessage('An unexpected error occurred. Please try again');
       setIsLoading(false);
+      console.error('Login error:', error);
     }
   };
 
@@ -111,7 +120,7 @@ function LoginForm() {
           sign in
         </OnboardingButton>
 
-        {errorMessage && <p className="text-sm text-red-500 text-center">{errorMessage}</p>}
+        <FormMessage message={errorMessage} type="error" />
       </motion.form>
 
       <motion.div className="relative" variants={itemVariants}>

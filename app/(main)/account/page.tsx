@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { createClient } from '@/utils/supabase/client';
 import { updateProfile, updateEmail, updatePassword, deleteAccount } from './actions';
 import OnboardingButton from '@/components/OnboardingButton';
+import FormMessage from '@/components/FormMessage';
 import { useRouter } from 'next/navigation';
 
 import { containerVariants, itemVariants } from '@/utils/animations';
@@ -82,7 +83,6 @@ export default function AccountPage() {
     setProfileLoading(false);
     if (result.success) {
       setProfileSuccess(true);
-      setProfileMsg(result.message || 'profile updated');
       setTimeout(() => setProfileSuccess(false), 3000);
     } else {
       setProfileError(true);
@@ -104,7 +104,6 @@ export default function AccountPage() {
     setEmailLoading(false);
     if (result.success) {
       setEmailSuccess(true);
-      setEmailMsg(result.message || 'check your email for confirmation');
     } else {
       setEmailError(true);
       setEmailMsg(result.error || 'failed to update email');
@@ -228,13 +227,7 @@ export default function AccountPage() {
                 save profile
               </OnboardingButton>
 
-              {profileMsg && (
-                <p
-                  className={`text-xs text-center lowercase ${profileError ? 'text-red-500' : 'text-app-font opacity-60'}`}
-                >
-                  {profileMsg}
-                </p>
-              )}
+              <FormMessage message={profileMsg} type={profileError ? 'error' : 'success'} />
             </form>
           </motion.section>
 
@@ -265,19 +258,12 @@ export default function AccountPage() {
                 isSuccess={emailSuccess}
                 isError={emailError}
                 loadingText="updating email..."
-                successText="check your inbox"
-                className="rounded-app bg-app-accent text-white py-3 lowercase font-bold"
+                successText="email updated"
               >
                 update email
               </OnboardingButton>
 
-              {emailMsg && (
-                <p
-                  className={`text-xs text-center lowercase ${emailError ? 'text-red-500' : 'text-app-font opacity-60'}`}
-                >
-                  {emailMsg}
-                </p>
-              )}
+              <FormMessage message={emailMsg} type={emailError ? 'error' : 'success'} />
             </form>
           </motion.section>
 
@@ -343,13 +329,7 @@ export default function AccountPage() {
                 update password
               </OnboardingButton>
 
-              {passwordMsg && (
-                <p
-                  className={`text-xs text-center lowercase ${passwordError ? 'text-red-500' : 'text-app-font opacity-60'}`}
-                >
-                  {passwordMsg}
-                </p>
-              )}
+              <FormMessage message={passwordMsg} type={passwordError ? 'error' : 'success'} />
             </form>
           </motion.section>
 

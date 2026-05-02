@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useRef, Suspense } from 'react';
 import { containerVariants, itemVariants } from '@/utils/animations';
+import FormMessage from '@/components/FormMessage';
 
 function UsernameForm() {
   const router = useRouter();
@@ -96,11 +97,7 @@ function UsernameForm() {
         </OnboardingButton>
       </motion.form>
 
-      {isError && errorMessage && (
-        <motion.div variants={itemVariants} className="text-center">
-          <p className="text-sm text-red-500">{errorMessage}</p>
-        </motion.div>
-      )}
+      <FormMessage message={errorMessage} type="error" />
     </motion.div>
   );
 }

@@ -5,7 +5,61 @@ import { redirect } from 'next/navigation';
 import { cookies, headers } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 
-export async function login(formData: FormData, redirectTo?: string) {
+function getAuthErrorMessage(code?: string, fallbackMessage?: string): string {
+  if (code && /^\d{3}$/.test(code)) {
+    return 'Authentication failed. Please try again';
+  }
+  const cleanCode = code?.split(';')[0] || code;
+  switch (cleanCode) {
+    case 'invalid_credentials':
+      return 'Invalid email or password';
+    case 'user_not_found':
+      return 'No account found with this email';
+    case 'invalid_email':
+      return 'Please enter a valid email address';
+    case 'user_disabled':
+      return 'This account has been disabled';
+    case 'too_many_requests':
+      return 'Too many attempts. Please try again later';
+    case 'network_error':
+      return 'Network error. Please check your connection';
+    case 'invalid_password':
+      return 'Incorrect password';
+    default:
+      return fallbackMessage || 'Could not sign in. Please try again';
+  }
+}
+
+function getSignupErrorMessage(code?: string, fallbackMessage?: string): string {
+  if (code && /^\d{3}$/.test(code)) {
+    return 'Registration failed. Please try again';
+  }
+  const cleanCode = code?.split(';')[0] || code;
+  switch (cleanCode) {
+    case 'already_in_use':
+      return 'An account with this email already exists';
+    case 'invalid_email':
+      return 'Please enter a valid email address';
+    case 'weak_password':
+      return 'Password is too weak. Use at least 6 characters';
+    case 'signup_disabled':
+      return 'Sign up is currently disabled';
+    case 'too_many_requests':
+      return 'Too many attempts. Please try again later';
+    case 'network_error':
+      return 'Network error. Please check your connection';
+    default:
+      return fallbackMessage || 'Could not create account. Please try again';
+  }
+}
+
+export type AuthActionResult = {
+  success: boolean;
+  error?: string;
+  redirectUrl?: string;
+};
+
+export async function login(formData: FormData, redirectTo?: string): Promise<AuthActionResult> {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
@@ -18,10 +72,11 @@ export async function login(formData: FormData, redirectTo?: string) {
   });
 
   if (error) {
-    redirect(
-      `/login?message=Could not authenticate user${redirectTo ? `&next=${redirectTo}` : ''}`
-    );
+    const message = getAuthErrorMessage(error.code);
+    return { success: false, error: message };
   }
+
+  let redirectUrl = redirectTo || '/';
 
   if (data.user) {
     const { data: profile } = await supabase
@@ -31,15 +86,15 @@ export async function login(formData: FormData, redirectTo?: string) {
       .single();
 
     if (!profile?.username) {
-      redirect('/onboarding/username');
+      redirectUrl = '/onboarding/username';
     }
   }
 
   revalidatePath('/', 'layout');
-  redirect(redirectTo || '/');
+  return { success: true, redirectUrl };
 }
 
-export async function signup(formData: FormData, redirectTo?: string) {
+export async function signup(formData: FormData, redirectTo?: string): Promise<AuthActionResult> {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
@@ -56,20 +111,22 @@ export async function signup(formData: FormData, redirectTo?: string) {
   });
 
   if (error) {
-    redirect(
-      `/register?message=Could not authenticate user${redirectTo ? `&next=${redirectTo}` : ''}`
-    );
+    const message = getSignupErrorMessage(error.code);
+    return { success: false, error: message };
   }
 
   revalidatePath('/', 'layout');
 
   const nextParam = redirectTo ? `?next=${redirectTo}` : '';
+  let redirectUrl: string;
 
   if (data.session) {
-    redirect(`/onboarding/username${nextParam}`);
+    redirectUrl = `/onboarding/username${nextParam}`;
   } else {
-    redirect(`/login?message=Check email to continue sign in process${nextParam}`);
+    redirectUrl = `/login?message=Check email to continue sign in process${nextParam}`;
   }
+
+  return { success: true, redirectUrl };
 }
 
 export async function signOut() {
