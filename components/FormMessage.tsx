@@ -8,11 +8,13 @@ interface FormMessageProps {
   className?: string;
 }
 
-export default function FormMessage({ message, type = 'default', className = '' }: FormMessageProps) {
-  const colorClass = 
-    type === 'error' ? 'text-red-500' : 
-    type === 'success' ? 'text-emerald-500' : 
-    'text-zinc-600';
+export default function FormMessage({
+  message,
+  type = 'default',
+  className = '',
+}: FormMessageProps) {
+  const colorClass =
+    type === 'error' ? 'text-red-500' : type === 'success' ? 'text-emerald-500' : 'text-zinc-600';
 
   return (
     <AnimatePresence mode="wait">
