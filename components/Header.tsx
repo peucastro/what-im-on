@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import Logo from './Logo';
 import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import UserDropdown from './UserDropdown';
@@ -28,16 +28,10 @@ export default async function Header() {
       
       {/* Nav Bar */}
       <nav className="m-2 border border-app-border bg-app-nav">
-        <div className="mx-auto flex max-w-3xl items-center justify-between sm:px-6 px-4 py-4">
+        <div className="mx-auto flex max-w-3xl items-center justify-between sm:px-6 px-4">
           {/* Logo */}
-          <Link href="/" className="flex items-center">
-            <Image
-              src="/logo.svg"
-              alt="logo"
-              width={64}
-              height={64}
-              className="rounded-app"
-            />
+          <Link href="/" className="flex items-center text-app-font hover:opacity-70 transition-opacity">
+            <Logo className="rounded-app" />
           </Link>
 
           {/* Auth Links */}

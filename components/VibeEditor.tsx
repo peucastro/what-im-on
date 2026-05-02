@@ -50,9 +50,9 @@ export default function VibeEditor() {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="rounded-app border border-app-border bg-app-nav px-4 py-2 text-sm font-medium text-app-font hover:bg-black hover:text-white transition-all lowercase"
+        className="rounded-app border border-app-border bg-app-nav px-3 py-1 text-sm font-medium text-app-font hover:bg-black hover:text-white transition-all lowercase"
       >
-        edit vibe
+        ✏️ edit vibe
       </button>
     );
   }
