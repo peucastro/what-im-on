@@ -5,17 +5,18 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import svgPaths from '../public/svg-gfj0lalzlp';
 import { FaFacebook, FaInstagram } from 'react-icons/fa';
+import Image from 'next/image';
+import logo from '../public/logo.svg';
+import template1 from '../public/template1.png';
+import template2 from '../public/template2.png';
+import riverMan from '../public/riverMan.png';
+import duck from '../public/duck.png';
+import template5 from '../public/template5.png';
+import template6 from '../public/template6.png';
+import others from '../public/others.png';
+import suggestions from '../public/suggestions.png';
 
-const imgLogo = '/logo.svg';
-const imgThePresentDefault1 = '/template1.png';
-const imgThePresentTerminal1 = '/template2.png';
-const imgAlbumArt = '/riverMan.png';
-const imgDancingDuckKarlo1 = '/duck.png';
-const imgThePresentMinecraft1 = '/template3.png';
-const imgNatureTemplate = '/template5.png';
-const imgPinkTempate = '/template6.png';
-const imgOthers = '/others.png';
-const imgSuggestions = '/suggestions.png';
+const MotionImage = motion.create(Image);
 
 export default function Landing() {
   const router = useRouter();
@@ -45,7 +46,7 @@ export default function Landing() {
         {/* Logo: mobile image / desktop svg (responsive) */}
         <div className="relative w-[203px] h-[145px] md:w-[406px] md:h-[290px]">
           {/* mobile: use simple img for small screens */}
-          <img src={imgLogo} alt="logo" className="object-contain block md:hidden w-full h-full" />
+          <Image src={logo} alt="logo" className="object-contain block md:hidden w-full h-full" />
 
           {/* desktop: vector logo for larger screens */}
           <svg
@@ -72,7 +73,7 @@ export default function Landing() {
         {/* Descrição */}
         <p className="font-['Inter'] font-light text-[15px] md:text-[18px] lg:text-[20px] max-w-[600px] tracking-tight mt-6 text-center leading-relaxed">
           A personal space to showcase your current obsessions and crowdsource your next favorite
-          thing. Share what you're into and get curated recommendations.
+          thing. Share what you&apos;re into and get curated recommendations.
         </p>
 
         {/* Botão */}
@@ -92,10 +93,10 @@ export default function Landing() {
           <div className="w-[75px] h-[75px] md:w-[125px] md:h-[125px] lg:w-[160px] lg:h-[160px] bg-[#d9d9d9] rounded-[2px] shrink-0 opacity-75" />
 
           <div className="w-[100px] h-[100px] md:w-[150px] md:h-[150px] lg:w-[190px] lg:h-[190px] relative rounded-[2px] shrink-0 border border-[#ddd] shadow-md">
-            <img
+            <Image
               alt="Album Art"
               className="w-full h-full object-cover rounded-[2px]"
-              src={imgAlbumArt}
+              src={riverMan}
             />
           </div>
 
@@ -117,13 +118,13 @@ export default function Landing() {
         <div className="flex items-center gap-4 mt-6">
           <div className="bg-[rgba(217,217,217,0.5)] rounded-[10px] px-5 py-3 flex items-center justify-center">
             <p className="font-['Inter'] font-normal text-[11px] md:text-[13px] lg:text-[14px]">
-              I can't stop listening to this masterpiece!
+              I can&apos;t stop listening to this masterpiece!
             </p>
           </div>
-          <img
+          <Image
             alt="Dancing Duck"
             className="w-[25px] h-[25px] md:w-[px] md:h-[35px] lg:w-[45px] lg:h-[45px] object-cover"
-            src={imgDancingDuckKarlo1}
+            src={duck}
           />
         </div>
       </section>
@@ -141,32 +142,32 @@ export default function Landing() {
         {/* Contentor com altura generosa para o layout em cascata */}
         <div className="relative w-full flex justify-center min-h-[700px] md:min-h-[900px] mb-20">
           {/* Foto 1 - Topo Esquerda */}
-          <motion.img
+          <MotionImage
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true, margin: '-100px' }}
             alt="Template Default"
             /* Aumentamos para w-[280px] no mobile e w-[320px] no desktop */
-            className="absolute z-10 w-[200px] md:w-[320px] shadow-xl rounded-[30px] border border-gray-100 
+            className="absolute z-10 w-[200px] md:w-[320px] shadow-xl rounded-[30px] border border-gray-100
                  left-1/2 -translate-x-[110%] md:-translate-x-[130%] top-0"
-            src={imgThePresentDefault1}
+            src={template1}
           />
 
           {/* Foto 2 - Centro (Sobrepõe ligeiramente a 1) */}
-          <motion.img
+          <MotionImage
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 150 }}
             transition={{ duration: 0.8, delay: 0.8 }} /* Delay maior para dar tempo à primeira */
             viewport={{ once: true, margin: '-100px' }}
             alt="Template Terminal"
-            className="absolute z-20 w-[200px] md:w-[320px] shadow-2xl rounded-[30px] border-4 border-white 
+            className="absolute z-20 w-[200px] md:w-[320px] shadow-2xl rounded-[30px] border-4 border-white
                  left-1/2 -translate-x-1/2 top-0"
-            src={imgThePresentTerminal1}
+            src={template2}
           />
 
           {/* Foto 3 - Baixo Direita (Sobrepõe ligeiramente a 2) */}
-          <motion.img
+          <MotionImage
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 300 }}
             transition={{ duration: 0.8, delay: 1.4 }} /* Delay ainda maior */
@@ -174,14 +175,14 @@ export default function Landing() {
             alt="Template Nostalgic"
             className="absolute z-30 w-[200px] md:w-[320px] shadow-xl rounded-[30px] border border-gray-100
                  left-1/2 translate-x-[10%] md:translate-x-[30%] top-0"
-            src={imgPinkTempate}
+            src={template6}
           />
         </div>
       </section>
       {/* 4. ADD WHAT YOU'RE ON SECTION */}
       <section className="flex flex-col items-center text-center mt-32 px-4">
         <h2 className="font-['Inter'] font-bold text-[24px] md:text-[30px] lg:text-[40px] tracking-tight">
-          <span className="text-[#2AADA2] font-bold">Add</span> what you're on
+          <span className="text-[#2AADA2] font-bold">Add</span>&nbsp;what you&apos;re on
         </h2>
         <p className="font-['Inter'] font-normal text-[15px] md:text-[18px] lg:text-[20px] max-w-[600px] mt-4 leading-relaxed">
           From the book on your nightstand to the song on repeat show the world what makes you,{' '}
@@ -189,10 +190,10 @@ export default function Landing() {
         </p>
 
         {/* Telefone Único */}
-        <img
+        <Image
           alt="Template Terminal Single"
           className="w-[200px] md:w-[248px] mt-12 shadow-lg rounded-md"
-          src={imgThePresentTerminal1}
+          src={template2}
         />
       </section>
 
@@ -203,14 +204,14 @@ export default function Landing() {
         </h2>
         <p className="font-['Inter'] font-normal text-[15px] md:text-[18px] lg:text-[20px] max-w-[600px] mt-4 leading-relaxed">
           The more you share, the smarter it gets. Our AI learns your taste and surfaces people,
-          books, music and ideas you'll actually care about, not just what's trending
+          books, music and ideas you&apos;ll actually care about, not just what&apos;s trending
         </p>
 
         {/* Telefone Único */}
-        <img
+        <Image
           alt="Template Terminal Single"
-          className="w-[00px] md:w-[248px] mt-12 shadow-lg rounded-md"
-          src={imgSuggestions}
+          className="w-[100px] md:w-[248px] mt-12 shadow-lg rounded-md"
+          src={suggestions}
         />
       </section>
 
@@ -236,21 +237,21 @@ export default function Landing() {
             aria-hidden
           />
 
-          <img
+          <Image
             alt="Template Terminal"
             className="w-[200px] md:w-[238px] h-auto aspect-[1/2] object-cover rounded-[20px] snap-center shrink-0 shadow-sm"
-            src={imgNatureTemplate}
+            src={template5}
           />
-          <img
+          <Image
             ref={middleCardRef}
             alt="Template Minecraft"
             className="w-[200px] md:w-[238px] h-auto aspect-[1/2] object-cover rounded-[20px] snap-center shrink-0 shadow-sm"
-            src={imgOthers}
+            src={others}
           />
-          <img
+          <Image
             alt="Template Nostalgic"
             className="w-[200px] md:w-[238px] h-auto aspect-[1/2] object-cover rounded-[20px] snap-center shrink-0 shadow-sm"
-            src={imgPinkTempate}
+            src={template6}
           />
 
           <div
@@ -287,7 +288,7 @@ export default function Landing() {
         </div>
         {/* Copyright Centro/Direita */}
         <p className="font-['Inter'] font-normal text-[8px] md:text-[10px] lg:text-[12px] sm:text-[12px] text-black">
-          © 2026 what i'm on. All rights reserved.
+          © 2026 what i&apos;m on. All rights reserved.
         </p>
         {/* Redes Sociais */}
         <div className="flex items-center gap-4">
