@@ -122,9 +122,9 @@ async function getUserProfile(username: string) {
     isOwner,
     preferences: preferencesData,
   };
-  }
+}
 
-  export default async function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
+export default async function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
   const { username } = await params;
   const profile = await getUserProfile(username);
 
