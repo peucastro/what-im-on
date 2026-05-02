@@ -6,11 +6,12 @@ import { motion } from 'framer-motion';
 import { signup } from '@/app/(main)/auth/actions';
 import OnboardingButton from '@/components/OnboardingButton';
 import { useState, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { containerVariants, itemVariants } from '@/utils/animations';
 import FormMessage from '@/components/FormMessage';
 
 function RegisterForm() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const initialMessage = searchParams.get('message');
 
@@ -30,29 +31,26 @@ function RegisterForm() {
     const redirectTo = searchParams.get('next') || undefined;
 
     try {
-      await signup(formData, redirectTo);
-    } catch (error) {
-      const digest = (error as { digest?: string }).digest;
-      if (digest?.startsWith('NEXT_REDIRECT')) {
-        const parts = digest.split(';');
-        const url = parts[2];
-        if (url?.includes('message=')) {
-          setIsError(true);
-          const params = new URLSearchParams(url.split('?')[1]);
-          setErrorMessage(params.get('message') || 'Registration failed. Please try again');
-          setIsLoading(false);
-        } else {
-          setIsSuccess(true);
-          setTimeout(() => {
-            setShowExit(true);
-          }, 1000);
-        }
-        throw error;
-      }
+      const result = await signup(formData, redirectTo);
 
+      if (result.success) {
+        setIsSuccess(true);
+        setTimeout(() => {
+          setShowExit(true);
+          setTimeout(() => {
+            router.push(result.redirectUrl || '/');
+          }, 300);
+        }, 1500);
+      } else {
+        setIsError(true);
+        setErrorMessage(result.error || 'Registration failed. Please try again');
+        setIsLoading(false);
+      }
+    } catch (error) {
       setIsError(true);
       setErrorMessage('An unexpected error occurred. Please try again');
       setIsLoading(false);
+      console.error('Registration error:', error);
     }
   };
 

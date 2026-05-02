@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { updateAvatar, skipAvatar } from '@/app/(auth)/onboarding/actions';
+import { updateAvatar } from '@/app/(auth)/onboarding/actions';
 import OnboardingButton from '@/components/OnboardingButton';
 import ProgressIndicator from '@/components/ProgressIndicator';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -108,31 +108,6 @@ function AvatarForm() {
     } catch (error) {
       setIsError(true);
       setErrorMessage('An unexpected error occurred');
-      console.error('Error:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSkip = async () => {
-    setIsLoading(true);
-
-    try {
-      const result = await skipAvatar();
-
-      if (result.success) {
-        setIsSuccess(true);
-        triggerConfetti();
-
-        setTimeout(() => {
-          setShowExit(true);
-          setTimeout(() => {
-            const nextParam = searchParams.get('next');
-            router.push(nextParam || '/');
-          }, 300);
-        }, 1000);
-      }
-    } catch (error) {
       console.error('Error:', error);
     } finally {
       setIsLoading(false);
@@ -255,20 +230,12 @@ function AvatarForm() {
             isLoading={isLoading}
             isSuccess={isSuccess}
             isError={isError}
-            disabled={isError || !selectedImage}
+            disabled={isError}
             loadingText="uploading avatar..."
             successText="welcome onboard!"
           >
             finish onboarding
           </OnboardingButton>
-          <button
-            type="button"
-            onClick={handleSkip}
-            disabled={isLoading || isSuccess}
-            className="text-sm text-zinc-600 hover:text-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            skip for now
-          </button>
         </div>
       </motion.form>
 

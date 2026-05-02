@@ -101,8 +101,3 @@ export async function updateAvatar(file?: File): Promise<ActionResult> {
   revalidatePath('/');
   return { success: true };
 }
-
-export async function skipAvatar(): Promise<ActionResult> {
-  revalidatePath('/');
-  return { success: true };
-}

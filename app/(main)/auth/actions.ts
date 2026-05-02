@@ -53,7 +53,13 @@ function getSignupErrorMessage(code?: string, fallbackMessage?: string): string 
   }
 }
 
-export async function login(formData: FormData, redirectTo?: string) {
+export type AuthActionResult = {
+  success: boolean;
+  error?: string;
+  redirectUrl?: string;
+};
+
+export async function login(formData: FormData, redirectTo?: string): Promise<AuthActionResult> {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
@@ -67,10 +73,10 @@ export async function login(formData: FormData, redirectTo?: string) {
 
   if (error) {
     const message = getAuthErrorMessage(error.code);
-    redirect(
-      `/login?message=${encodeURIComponent(message)}${redirectTo ? `&next=${redirectTo}` : ''}`
-    );
+    return { success: false, error: message };
   }
+
+  let redirectUrl = redirectTo || '/';
 
   if (data.user) {
     const { data: profile } = await supabase
@@ -80,15 +86,15 @@ export async function login(formData: FormData, redirectTo?: string) {
       .single();
 
     if (!profile?.username) {
-      redirect('/onboarding/username');
+      redirectUrl = '/onboarding/username';
     }
   }
 
   revalidatePath('/', 'layout');
-  redirect(redirectTo || '/');
+  return { success: true, redirectUrl };
 }
 
-export async function signup(formData: FormData, redirectTo?: string) {
+export async function signup(formData: FormData, redirectTo?: string): Promise<AuthActionResult> {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
@@ -106,20 +112,21 @@ export async function signup(formData: FormData, redirectTo?: string) {
 
   if (error) {
     const message = getSignupErrorMessage(error.code);
-    redirect(
-      `/register?message=${encodeURIComponent(message)}${redirectTo ? `&next=${redirectTo}` : ''}`
-    );
+    return { success: false, error: message };
   }
 
   revalidatePath('/', 'layout');
 
   const nextParam = redirectTo ? `?next=${redirectTo}` : '';
+  let redirectUrl: string;
 
   if (data.session) {
-    redirect(`/onboarding/username${nextParam}`);
+    redirectUrl = `/onboarding/username${nextParam}`;
   } else {
-    redirect(`/login?message=Check email to continue sign in process${nextParam}`);
+    redirectUrl = `/login?message=Check email to continue sign in process${nextParam}`;
   }
+
+  return { success: true, redirectUrl };
 }
 
 export async function signOut() {
