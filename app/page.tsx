@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import svgPaths from '../public/svg-gfj0lalzlp';
+import { FaFacebook, FaInstagram } from 'react-icons/fa';
 
 const imgLogo = '/logo.svg';
 const imgThePresentDefault1 = '/template1.png';
@@ -13,8 +14,6 @@ const imgDancingDuckKarlo1 = '/duck.png';
 const imgThePresentMinecraft1 = '/template3.png';
 const imgNatureTemplate = '/template5.png';
 const imgPinkTempate = '/template6.png';
-const imgFacebook1 = '/facebook.png';
-const imgInstagram1 = '/instagram.png';
 const imgOthers = '/others.png';
 const imgSuggestions = '/suggestions.png';
 
@@ -77,7 +76,7 @@ export default function Landing() {
         </p>
 
         {/* Botão */}
-        <button 
+        <button
           onClick={() => router.push('/register')}
           className="bg-[#d9d9d9] rounded-[20px] px-8 py-3 mt-12 font-['Inter'] font-medium text-[12px] tracking-[-0.5px] hover:bg-orange-500 hover:text-white transition"
         >
@@ -292,8 +291,8 @@ export default function Landing() {
         </p>
         {/* Redes Sociais */}
         <div className="flex items-center gap-4">
-          <img alt="Instagram" className="w-4 h-4 cursor-pointer" src={imgInstagram1} />
-          <img alt="Facebook" className="w-4 h-4 cursor-pointer" src={imgFacebook1} />
+          <FaInstagram className="w-4 h-4 cursor-pointer" />
+          <FaFacebook className="w-4 h-4 cursor-pointer" />
         </div>
       </footer>
     </div>
