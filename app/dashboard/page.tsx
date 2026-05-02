@@ -15,12 +15,29 @@ export default async function DashboardPage() {
     return redirect('/login');
   }
 
+  const { data: profile } = await supabase
+    .from('users')
+    .select('*')
+    .eq('id', user.id)
+    .single();
+
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>Hello {user.email}</p>
+    <div className="flex flex-col gap-6">
+      <h1 className="text-2xl font-bold">Dashboard</h1>
+      <img
+        src={profile?.avatar_url || `https://ui-avatars.com/api/?name=${user.email}&background=random&color=fff`}
+        alt="Avatar"
+        className="h-16 w-16 rounded-full object-cover"
+      />
+      <p>Hello {profile?.display_name || user.email}</p>
+      <p>Username: {profile?.username}</p>
       <form action={signOut}>
-        <button type="submit">Sign Out</button>
+        <button
+          type="submit"
+          className="rounded-md bg-black px-4 py-2 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+        >
+          Sign Out
+        </button>
       </form>
     </div>
   );

@@ -12,13 +12,25 @@ export async function login(formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
   if (error) {
     redirect('/login?message=Could not authenticate user');
+  }
+
+  if (data.user) {
+    const { data: profile } = await supabase
+      .from('users')
+      .select('username')
+      .eq('id', data.user.id)
+      .single();
+
+    if (!profile?.username) {
+      redirect('/onboarding/username');
+    }
   }
 
   revalidatePath('/', 'layout');
@@ -33,7 +45,7 @@ export async function signup(formData: FormData) {
   const password = formData.get('password') as string;
   const origin = (await headers()).get('origin');
 
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -46,7 +58,12 @@ export async function signup(formData: FormData) {
   }
 
   revalidatePath('/', 'layout');
-  redirect('/login?message=Check email to continue sign in process');
+
+  if (data.session) {
+    redirect('/onboarding/username');
+  } else {
+    redirect('/login?message=Check email to continue sign in process');
+  }
 }
 
 export async function signOut() {
