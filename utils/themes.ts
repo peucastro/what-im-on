@@ -35,7 +35,7 @@ export const THEMES: Record<string, ThemeDefinition> = {
       accent: '#000000',
       overlay: 'none',
       navBackground: '#ffffff',
-      pageBackground: '#f7fafc',
+      pageBackground: '#ffffff',
     },
   },
   cyberpunk: {

@@ -24,7 +24,7 @@ export default async function Header() {
   }
 
   return (
-    <header className="w-full bg-app-header bg-cover bg-center">
+    <header className="w-full bg-app-header bg-cover bg-center bg-transparent">
       <nav className="m-2 border border-app-border bg-app-nav rounded-app">
         <div className="mx-auto flex max-w-3xl items-center justify-between sm:px-6 px-4">
           <Link
