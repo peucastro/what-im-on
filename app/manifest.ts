@@ -4,7 +4,8 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "what i'm on",
     short_name: "what i'm on",
-    description: "A personal space to showcase your current obsessions and crowdsource your next favorite thing.",
+    description:
+      'A personal space to showcase your current obsessions and crowdsource your next favorite thing.',
     id: '/',
     start_url: '.',
     display: 'standalone',
