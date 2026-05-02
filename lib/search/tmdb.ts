@@ -2,13 +2,23 @@ import type { SearchResult, SearchCategory } from './types';
 
 const BASE_URL = 'https://api.themoviedb.org/3';
 
+interface TMDBItem {
+  id: number;
+  title?: string;
+  name?: string;
+  release_date?: string;
+  first_air_date?: string;
+  poster_path?: string;
+  overview?: string;
+}
+
 export async function searchTMDB(query: string, category: 'movie' | 'tv'): Promise<SearchResult[]> {
   const res = await fetch(
     `${BASE_URL}/search/${category}?api_key=${process.env.TMDB_API_KEY}&query=${encodeURIComponent(query)}`
   );
   if (!res.ok) return [];
   const data = await res.json();
-  return data.results.map((item: any) => ({
+  return data.results.map((item: TMDBItem) => ({
     id: `${category}_${item.id}`,
     category: category as SearchCategory,
     title: category === 'movie' ? item.title : item.name,

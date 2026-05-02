@@ -1,12 +1,23 @@
 import type { SearchResult } from './types';
 
+interface GoogleBookItem {
+  id: string;
+  volumeInfo: {
+    title: string;
+    authors?: string[];
+    imageLinks?: { thumbnail?: string };
+    publishedDate?: string;
+    description?: string;
+  };
+}
+
 export async function searchBooks(query: string): Promise<SearchResult[]> {
   const res = await fetch(
     `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`
   );
   if (!res.ok) return [];
   const data = await res.json();
-  return (data.items || []).map((item: any) => ({
+  return (data.items || []).map((item: GoogleBookItem) => ({
     id: `book_${item.id}`,
     category: 'book' as const,
     title: item.volumeInfo.title,

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useState } from 'react';
+import Image from 'next/image';
 import type { SearchResult } from '@/lib/search/types';
 
 const CATEGORIES = [
@@ -36,8 +37,9 @@ export default function SearchBar() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'search failed');
       setResults(data.results || []);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'search failed';
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -84,10 +86,12 @@ export default function SearchBar() {
             className="flex items-center gap-3 p-3 border border-zinc-200 rounded-md"
           >
             {item.imageUrl && (
-              <img
+              <Image
                 src={item.imageUrl}
                 alt={item.title}
-                className="w-12 h-12 object-cover rounded"
+                width={48}
+                height={48}
+                className="object-cover rounded"
               />
             )}
             <div>

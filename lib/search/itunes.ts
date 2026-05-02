@@ -6,6 +6,16 @@ const ENTITY_MAP: Record<string, string> = {
   podcast: 'podcast',
 };
 
+interface iTunesItem {
+  trackId?: number;
+  collectionId?: number;
+  trackName?: string;
+  collectionName?: string;
+  artistName?: string;
+  artworkUrl100?: string;
+  releaseDate?: string;
+}
+
 export async function searchiTunes(
   query: string,
   category: 'music' | 'album' | 'podcast'
@@ -16,7 +26,7 @@ export async function searchiTunes(
   );
   if (!res.ok) return [];
   const data = await res.json();
-  return (data.results || []).map((item: any) => ({
+  return (data.results || []).map((item: iTunesItem) => ({
     id: `${category}_${item.trackId || item.collectionId}`,
     category: category as SearchCategory,
     title: item.trackName || item.collectionName,
