@@ -1,28 +1,34 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import { 
   THEMES, 
   BORDER_RADIUS_MAP, 
   FONT_FAMILY_MAP, 
-  BorderRadius, 
-  FontFamily,
-  UserPreferences
+  UserPreferences 
 } from '@/utils/themes';
 
 interface ThemeContextType {
   preferences: UserPreferences;
+  setPreferences: (prefs: UserPreferences) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ 
   children, 
-  preferences 
+  preferences: initialPreferences 
 }: { 
   children: React.ReactNode;
   preferences: UserPreferences;
 }) {
+  const [preferences, setPreferences] = useState<UserPreferences>(initialPreferences);
+
+  // Sync with initialPreferences if they change (e.g., from server)
+  useEffect(() => {
+    setPreferences(initialPreferences);
+  }, [initialPreferences]);
+
   const theme = useMemo(() => THEMES[preferences.theme_id] || THEMES.default, [preferences.theme_id]);
 
   useEffect(() => {
@@ -44,14 +50,11 @@ export function ThemeProvider({
   }, [theme, preferences]);
 
   return (
-    <ThemeContext.Provider value={{ preferences }}>
-      {/* The overlay is rendered here so it stays on top of everything */}
+    <ThemeContext.Provider value={{ preferences, setPreferences }}>
       <div className="app-overlay" />
       {children}
-      {/* The pet would be rendered here or somewhere else depending on logic */}
       {preferences.pet_id !== 'none' && (
         <div className="fixed bottom-4 right-4 z-50 pointer-events-none">
-          {/* Pet implementation will go here when gifs are provided */}
           <img 
             src={`/assets/pets/${preferences.pet_id}.gif`} 
             alt="pet" 

@@ -48,7 +48,7 @@ export default async function RootLayout({
     const { data } = await supabase
       .from('user_preferences')
       .select('theme_id, border_radius, font_family, pet_id')
-      .eq('id', user.id)
+      .eq('user_id', user.id)
       .single();
     
     if (data) {

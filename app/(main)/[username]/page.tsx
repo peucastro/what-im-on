@@ -3,6 +3,7 @@ import { createClient } from '@/utils/supabase/server';
 import { notFound } from 'next/navigation';
 import ItemCard from '@/components/ItemCard';
 import ProfileHeader from '@/components/ProfileHeader';
+import VibeEditor from '@/components/VibeEditor';
 
 interface Item {
   id: string;
@@ -33,7 +34,11 @@ async function getUserProfile(username: string) {
     return null;
   }
 
-  // 2. Get items with categories
+  // 2. Get current logged in user to check ownership
+  const { data: { user: authUser } } = await supabase.auth.getUser();
+  const isOwner = authUser?.id === userData.id;
+
+  // 3. Get items with categories
   const { data: itemsData, error: itemsError } = await supabase
     .from('items')
     .select(
@@ -86,6 +91,7 @@ async function getUserProfile(username: string) {
   return {
     username: userData.display_name || userData.username,
     itemGroups: itemsByCategory,
+    isOwner,
   };
 }
 
@@ -99,7 +105,14 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
 
   return (
     <div className="space-y-12 w-full mx-auto max-w-sm">
-      <ProfileHeader username={profile.username} />
+      <div className="relative">
+        <ProfileHeader username={profile.username} />
+        {profile.isOwner && (
+          <div className="mt-4 flex justify-end">
+            <VibeEditor />
+          </div>
+        )}
+      </div>
 
       {profile.itemGroups.length === 0 ? (
         <p className="text-zinc-600">no current interests yet</p>
@@ -112,7 +125,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
                 <h2 className="text-xl font-semibold text-app-font">{group.category_label}</h2>
               </div>
               <div className="border-b border-app-border pb-6">
-                {profile.itemGroups.length > 0 && group.items.map((item: Item) => (
+                {group.items.map((item: Item) => (
                   <ItemCard key={item.id} item={item} />
                 ))}
               </div>

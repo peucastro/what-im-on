@@ -32,7 +32,7 @@ export const THEMES: Record<string, ThemeDefinition> = {
       border: '#e2e8f0',
       headerImage: 'url("/assets/headers/default.png")',
       font: '#1a202c',
-      accent: '#3182ce',
+      accent: '#000000',
       overlay: 'url("/assets/overlays/subtle-noise.png")',
       navBackground: '#ffffff',
       pageBackground: '#f7fafc',

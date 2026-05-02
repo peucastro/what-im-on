@@ -27,7 +27,7 @@
   /* Default values for our custom theme */
   --app-border: #e2e8f0;
   --app-font: #1a202c;
-  --app-accent: #3182ce;
+  --app-accent: #000000;
   --app-nav: #ffffff;
   --app-radius: 4px;
   --app-font-family: var(--font-geist-sans), ui-sans-serif, system-ui;
