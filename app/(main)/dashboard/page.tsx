@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import Image from 'next/image';
 import { createClient } from '@/utils/supabase/server';
-import { signOut } from '@/app/auth/actions';
+import { signOut } from '@/app/(main)/auth/actions';
 
 export default async function DashboardPage() {
   const cookieStore = await cookies();
@@ -30,6 +30,7 @@ export default async function DashboardPage() {
         width={64}
         height={64}
         className="rounded-full object-cover"
+        unoptimized
       />
       <p>Hello {profile?.display_name || user.email}</p>
       <p>Username: {profile?.username}</p>
