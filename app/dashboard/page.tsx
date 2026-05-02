@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
+import Image from 'next/image';
 import { createClient } from '@/utils/supabase/server';
 import { signOut } from '@/app/auth/actions';
 
@@ -20,20 +21,22 @@ export default async function DashboardPage() {
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-2xl font-bold">Dashboard</h1>
-      <img
+      <Image
         src={
           profile?.avatar_url ||
           `https://ui-avatars.com/api/?name=${user.email}&background=random&color=fff`
         }
         alt="Avatar"
-        className="h-16 w-16 rounded-full object-cover"
+        width={64}
+        height={64}
+        className="rounded-full object-cover"
       />
       <p>Hello {profile?.display_name || user.email}</p>
       <p>Username: {profile?.username}</p>
       <form action={signOut}>
         <button
           type="submit"
-          className="rounded-md bg-black px-4 py-2 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+          className="rounded-md bg-black px-4 py-2 text-white hover:bg-zinc-800"
         >
           Sign Out
         </button>
