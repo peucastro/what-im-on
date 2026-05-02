@@ -8,12 +8,12 @@ interface ProfileHeaderProps {
 export default function ProfileHeader({ username, isOwner }: ProfileHeaderProps) {
   return (
     <div className="relative group">
-      <h1 className="text-xl font-normal text-app-font lowercase border border-app-border sm:p-4 px-4 py-8 rounded-app bg-app-nav font-sans">
-        what
+      <h1 className="text-xl font-normal text-app-font border border-app-border sm:p-4 px-4 py-8 rounded-app bg-app-nav font-sans">
+        <span className="lowercase">what</span>
         <br />
         <span className="font-semibold font-app">{username}&apos;s</span>
         <br />
-        on
+        <span className="lowercase">on</span>
       </h1>
       
       {isOwner && (

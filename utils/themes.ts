@@ -63,7 +63,7 @@ export const FONT_FAMILY_MAP: Record<FontFamily, string> = {
   sans: 'var(--font-geist-sans), ui-sans-serif, system-ui',
   mono: 'var(--font-geist-mono), ui-monospace, SFMono-Regular',
   pixel: 'var(--font-pixel), cursive',
-  serif: 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
+  serif: 'ui-serif, "Times New Roman", Times, serif',
   comic: '"Comic Sans MS", "Comic Sans", cursive',
 };
 
