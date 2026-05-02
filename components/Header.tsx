@@ -1,9 +1,10 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { signOut } from '@/app/auth/actions';
 
-export default async function Navbar() {
+export default async function Header() {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
@@ -14,39 +15,37 @@ export default async function Navbar() {
   return (
     <nav className="w-full border-b border-zinc-200 bg-white/80 backdrop-blur-md dark:border-zinc-800 dark:bg-black/80">
       <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
-        {/* Logo / Home Link */}
-        <Link href="/" className="text-xl font-bold tracking-tight text-black dark:text-white">
-          what i&apos;m on
+        {/* Logo */}
+        <Link href="/" className="flex items-center">
+          <Image src="/logo.svg" alt="logo" width={32} height={32} />
         </Link>
 
-        {/* Auth State Links */}
-        <div className="flex items-center gap-4 text-sm font-medium">
+        {/* Auth Links */}
+        <div className="flex items-center gap-4">
           {user ? (
             <>
               <Link
-                href="/dashboard"
-                className="text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white"
+                href="/account"
+                className="rounded-full bg-black px-4 py-2 text-sm text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
               >
-                dashboard
+                account
               </Link>
               <form action={signOut}>
                 <button
                   type="submit"
-                  className="rounded-full bg-black px-4 py-2 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+                  className="text-sm text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white"
                 >
                   sign out
                 </button>
               </form>
             </>
           ) : (
-            <>
-              <Link
-                href="/register"
-                className="rounded-full bg-black px-4 py-2 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
-              >
-                join us
-              </Link>
-            </>
+            <Link
+              href="/register"
+              className="rounded-full bg-black px-4 py-2 text-sm text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+            >
+              join
+            </Link>
           )}
         </div>
       </div>
