@@ -55,7 +55,7 @@ export default function RegisterPage() {
         >
           <motion.div className="flex flex-col items-center gap-6 text-center" variants={itemVariants}>
             <Link href="/">
-              <Image src="/logo.svg" alt="logo" width={40} height={40} className="hover:opacity-80 transition-opacity" />
+              <Image src="/logo.svg" alt="logo" width={64} height={64} className="hover:opacity-80 transition-opacity" />
             </Link>
             <div>
               <h1 className="text-3xl font-bold tracking-tight">join what i'm on</h1>

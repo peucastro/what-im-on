@@ -40,8 +40,8 @@ export default async function Header() {
           <Image
             src="/logo.svg"
             alt="logo"
-            width={32}
-            height={32}
+            width={64}
+            height={64}
             style={logoStyle ? { filter: logoStyle } : undefined}
           />
         </Link>
