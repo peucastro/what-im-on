@@ -1,3 +1,6 @@
+'use client';
+
+import { useEffect, useRef } from 'react';
 import svgPaths from '../../public/svg-gfj0lalzlp';
 import Image from 'next/image';
 
@@ -8,34 +11,58 @@ const imgThePresentNostalgic1 = '/template4.png';
 const imgAlbumArt = '/riverMan.png';
 const imgDancingDuckKarlo1 = '/duck.png';
 const imgThePresentMinecraft1 = '/template3.png';
+const imgNatureTemplate = '/template5.png';
+const imgPinkTempate = '/template6.png';
 const imgFacebook1 = '/facebook.png';
 const imgInstagram1 = '/instagram.png';
+const imgOthers = '/others.png';
+const imgSuggestions = '/suggestions.png';
 
 export default function Landing() {
+  const galleryRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (galleryRef.current) {
+      // Scroll to the middle image on mount
+      const scrollAmount = (galleryRef.current.scrollWidth - galleryRef.current.clientWidth) / 2;
+      galleryRef.current.scrollLeft = scrollAmount;
+    }
+  }, []);
+
   return (
     <div className="bg-white min-h-screen w-full overflow-x-hidden font-sans text-black flex flex-col items-center">
       
       {/* 1. HERO SECTION */}
       <section className="flex flex-col items-center text-center mt-16 px-4 md:mt-24">
-        {/* Logo */}
-        <div className="relative w-32 h-32 sm:w-44 sm:h-44 md:w-56 md:h-56">
-          <Image 
-            src={imgLogo} 
-            alt="logo" 
-            fill 
-            className="object-contain" 
-            priority 
-          />
+        {/* Logo: mobile image / desktop svg (responsive) */}
+        <div className="relative w-[203px] h-[145px] md:w-[406px] md:h-[290px]">
+          {/* mobile: use simple img for small screens */}
+          <img src={imgLogo} alt="logo" className="object-contain block md:hidden w-full h-full" />
+
+          {/* desktop: vector logo for larger screens */}
+          <svg className="hidden md:block w-full h-full" fill="none" preserveAspectRatio="xMidYMid meet" viewBox="0 0 64 35" aria-hidden>
+            <g id="Vector">
+              <path d={svgPaths.p3a023d00} fill="black" />
+              <path d={svgPaths.p49ea180} fill="black" />
+              <path d={svgPaths.p77d0f00} fill="black" />
+              <path d={svgPaths.p7424600} fill="black" />
+              <path d={svgPaths.p8da6d80} fill="black" />
+              <path d={svgPaths.p257400} fill="black" />
+              <path d={svgPaths.p23066e20} fill="black" />
+              <path d={svgPaths.p3fe22200} fill="black" />
+              <path d={svgPaths.peb30200} fill="black" />
+            </g>
+          </svg>
         </div>
         
         
         {/* Descrição */}
-        <p className="font-['Inter'] font-light text-[15px] max-w-[340px] tracking-tight mt-6 text-center leading-relaxed">
+        <p className="font-['Inter'] font-light text-[15px] md:text-[18px] lg:text-[20px] max-w-[600px] tracking-tight mt-6 text-center leading-relaxed">
           A personal space to showcase your current obsessions and crowdsource your next favorite thing. Share what you’re into and get curated recommendations.
         </p>
         
         {/* Botão */}
-        <button className="bg-[#d9d9d9] rounded-[20px] px-8 py-3 mt-8 font-['Inter'] font-bold text-[12px] tracking-[-0.5px] hover:bg-gray-300 transition">
+        <button className="bg-[#d9d9d9] rounded-[20px] px-8 py-3 mt-12 font-['Inter'] font-medium text-[12px] tracking-[-0.5px] hover:bg-orange-500 hover:text-white transition">
           Create your profile
         </button>
       </section>
@@ -43,42 +70,42 @@ export default function Landing() {
       {/* 2. MY SONG SECTION */}
       <section className="flex flex-col items-center w-full mt-24 px-4">
         {/* Caixas de Música */}
-        <div className="flex items-center justify-center gap-2 md:gap-4 overflow-hidden w-full max-w-lg">
-          <div className="w-[50px] h-[50px] md:w-[67px] md:h-[67px] bg-[#d9d9d9] rounded-[2px] shrink-0 opacity-50" />
-          <div className="w-[60px] h-[60px] md:w-[75px] md:h-[75px] bg-[#d9d9d9] rounded-[2px] shrink-0 opacity-75" />
+        <div className="flex items-center justify-center gap-3 md:gap-8 lg:gap-12 overflow-hidden w-full max-w-5xl">
+          <div className="w-[60px] h-[60px] md:w-[100px] md:h-[100px] lg:w-[130px] lg:h-[130px] bg-[#d9d9d9] rounded-[2px] shrink-0 opacity-50" />
+          <div className="w-[75px] h-[75px] md:w-[125px] md:h-[125px] lg:w-[160px] lg:h-[160px] bg-[#d9d9d9] rounded-[2px] shrink-0 opacity-75" />
           
-          <div className="w-[80px] h-[80px] md:w-[95px] md:h-[95px] relative rounded-[2px] shrink-0 border border-[#ddd] shadow-md">
+          <div className="w-[100px] h-[100px] md:w-[150px] md:h-[150px] lg:w-[190px] lg:h-[190px] relative rounded-[2px] shrink-0 border border-[#ddd] shadow-md">
             <img alt="Album Art" className="w-full h-full object-cover rounded-[2px]" src={imgAlbumArt} />
           </div>
           
-          <div className="w-[60px] h-[60px] md:w-[75px] md:h-[75px] bg-[#d9d9d9] rounded-[2px] shrink-0 opacity-75" />
-          <div className="w-[50px] h-[50px] md:w-[67px] md:h-[67px] bg-[#d9d9d9] rounded-[2px] shrink-0 opacity-50" />
+          <div className="w-[75px] h-[75px] md:w-[125px] md:h-[125px] lg:w-[160px] lg:h-[160px] bg-[#d9d9d9] rounded-[2px] shrink-0 opacity-75" />
+          <div className="w-[60px] h-[60px] md:w-[100px] md:h-[100px] lg:w-[130px] lg:h-[130px] bg-[#d9d9d9] rounded-[2px] shrink-0 opacity-50" />
         </div>
 
         {/* Info da Música */}
-        <div className="text-center mt-6">
-          <p className="font-['SF_Pro'] font-bold text-[16px]">River Man (1969)</p>
-          <p className="font-['SF_Pro'] font-normal text-[14px] mt-1">Nick Drake</p>
+        <div className="text-center mt-8">
+          <p className="font-['Inter'] font-bold text-[18px] md:text-[24px] lg:text-[32px]">River Man (1969)</p>
+          <p className="font-['Inter'] font-normal text-[16px] md:text-[18px] lg:text-[20px] mt-2">Nick Drake</p>
         </div>
 
         {/* Comentário & Pato */}
-        <div className="flex items-center gap-3 mt-4">
-          <div className="bg-[rgba(217,217,217,0.5)] rounded-[10px] px-4 py-2 flex items-center justify-center">
-            <p className="font-['Inter'] font-normal text-[10px]">
-              I can’t stop listening to this masterpiece!
+        <div className="flex items-center gap-4 mt-6">
+          <div className="bg-[rgba(217,217,217,0.5)] rounded-[10px] px-5 py-3 flex items-center justify-center">
+            <p className="font-['Inter'] font-normal text-[11px] md:text-[13px] lg:text-[14px]">
+              I can't stop listening to this masterpiece!
             </p>
           </div>
-          <img alt="Dancing Duck" className="w-[36px] h-[36px] object-cover" src={imgDancingDuckKarlo1} />
+          <img alt="Dancing Duck" className="w-[25px] h-[25px] md:w-[px] md:h-[35px] lg:w-[45px] lg:h-[45px] object-cover" src={imgDancingDuckKarlo1} />
         </div>
       </section>
 
       {/* 3. PERSONALIZE SECTION */}
       <section className="flex flex-col items-center text-center mt-32 px-4 w-full max-w-4xl">
-        <h2 className="font-['Inter'] font-bold text-[20px] md:text-[24px] tracking-tight">
-          Personalize Your Profile
+        <h2 className="font-['Inter'] font-bold text-[24px] md:text-[30px] lg:text-[40px] tracking-tight">
+          <span className="text-[#e47e2b] font-bold" >Personalize</span> Your Profile
         </h2>
-        <p className="font-['Inter'] font-normal text-[15px] max-w-[360px] mt-4 leading-relaxed">
-          We respect your <span className="text-[#e47e2b] font-medium">identity</span> and style and encourage you to create the most <span className="text-[#683a14] font-medium">authentic</span> profile page you can!
+        <p className="font-['Inter'] font-normal text-[15px] md:text-[18px] lg:text-[20px] max-w-[600px] mt-4 leading-relaxed">
+          We respect your identity and style and encourage you to create the most authentic profile page you can!
         </p>
 
         {/* Galeria de Telefones Sobrepostos */}
@@ -91,10 +118,10 @@ export default function Landing() {
 
       {/* 4. ADD WHAT YOU'RE ON SECTION */}
       <section className="flex flex-col items-center text-center mt-32 px-4">
-        <h2 className="font-['Inter'] font-bold text-[20px] md:text-[24px] tracking-tight">
-          Add what you’re on
+        <h2 className="font-['Inter'] font-bold text-[24px] md:text-[30px] lg:text-[40px] tracking-tight">
+          <span className="text-[#2AADA2] font-bold" >Add</span> what you’re on
         </h2>
-        <p className="font-['Inter'] font-normal text-[15px] max-w-[360px] mt-4 leading-relaxed">
+        <p className="font-['Inter'] font-normal text-[15px] md:text-[18px] lg:text-[20px] max-w-[600px] mt-4 leading-relaxed">
           From the book on your nightstand to the song on repeat show the world what makes you, <span className="font-bold text-[#830527]">you</span>
         </p>
         
@@ -104,23 +131,23 @@ export default function Landing() {
 
       {/* 4. ADD WHAT YOU'RE ON SECTION */}
       <section className="flex flex-col items-center text-center mt-32 px-4">
-        <h2 className="font-['Inter'] font-bold text-[20px] md:text-[24px] tracking-tight">
-          See recomendations based on you
+        <h2 className="font-['Inter'] font-bold text-[24px] md:text-[30px] lg:text-[40px] tracking-tight">
+          See <span className="text-[#006A00] font-bold" >recomendations</span> based on you
         </h2>
-        <p className="font-['Inter'] font-normal text-[15px] max-w-[360px] mt-4 leading-relaxed">
+        <p className="font-['Inter'] font-normal text-[15px] md:text-[18px] lg:text-[20px] max-w-[600px] mt-4 leading-relaxed">
           The more you share, the smarter it gets. Our AI learns your taste and surfaces people, books, music and ideas you'll actually care about, not just what's trending
         </p>
         
         {/* Telefone Único */}
-        <img alt="Template Terminal Single" className="w-[200px] md:w-[248px] mt-12 shadow-lg rounded-md" src={imgThePresentTerminal1} />
+        <img alt="Template Terminal Single" className="w-[200px] md:w-[248px] mt-12 shadow-lg rounded-md" src={imgSuggestions} />
       </section>
 
       {/* 4. ADD WHAT YOU'RE ON SECTION */}
       <section className="flex flex-col items-center text-center mt-32 px-4">
-        <h2 className="font-['Inter'] font-bold text-[20px] md:text-[24px] tracking-tight">
-          Add friends and see what they are on
+        <h2 className="font-['Inter'] font-bold text-[24px] md:text-[30px] lg:text-[40px] tracking-tight">
+          Add <span className="text-[#AB0AAB] font-bold" >friends</span> and see what they are on
         </h2>
-        <p className="font-['Inter'] font-normal text-[15px] max-w-[360px] mt-4 leading-relaxed">
+        <p className="font-['Inter'] font-normal text-[15px] md:text-[18px] lg:text-[20px] max-w-[600px] mt-4 leading-relaxed">
           See what your friends are reading, watching and obsessing over.
  in real time, no filter.
         </p>
@@ -128,16 +155,15 @@ export default function Landing() {
 
       {/* 5. HORIZONTAL GALLERY */}
       <section className="w-full flex justify-center mt-24 px-4 overflow-hidden">
-        <div className="flex flex-row gap-6 items-center overflow-x-auto pb-8 snap-x w-full max-w-5xl">
-          <img alt="Template Terminal" className="w-[200px] md:w-[238px] rounded-[20px] snap-center shrink-0 shadow-sm" src={imgThePresentTerminal1} />
-          <img alt="Template Minecraft" className="w-[200px] md:w-[238px] rounded-[20px] snap-center shrink-0 shadow-sm" src={imgThePresentMinecraft1} />
-          <img alt="Template Nostalgic" className="w-[200px] md:w-[238px] rounded-[20px] snap-center shrink-0 shadow-sm" src={imgThePresentNostalgic1} />
+        <div ref={galleryRef} className="flex flex-row gap-6 items-center overflow-x-auto pb-8 snap-x w-full max-w-5xl" style={{ paddingLeft: 'calc((100% - 238px) / 2)', paddingRight: 'calc((100% - 238px) / 2)' }}>
+          <img alt="Template Terminal" className="w-[200px] md:w-[238px] rounded-[20px] snap-center shrink-0 shadow-sm" src={imgNatureTemplate} />
+          <img alt="Template Minecraft" className="w-[200px] md:w-[238px] rounded-[20px] snap-center shrink-0 shadow-sm" src={imgOthers} />
+          <img alt="Template Nostalgic" className="w-[200px] md:w-[238px] rounded-[20px] snap-center shrink-0 shadow-sm" src={imgPinkTempate} />
         </div>
       </section>
 
       {/* 6. FOOTER */}
-      <footer className="w-full bg-[#d9d9d9] mt-12 py-6 px-6 md:px-12 flex flex-col sm:flex-row justify-between items-center gap-4">
-        {/* Vector Logo Esquerda */}
+<footer className="w-full bg-[#d9d9d9] mt-12 py-6 px-6 md:px-12 flex flex-col sm:flex-row justify-between items-center gap-4">        {/* Vector Logo Esquerda */}
         <div className="w-[64px] h-[35px] relative">
           <svg className="block w-full h-full" fill="none" preserveAspectRatio="xMidYMid meet" viewBox="0 0 64 35">
             <g id="Vector">
@@ -155,7 +181,7 @@ export default function Landing() {
         </div>
 
         {/* Copyright Centro/Direita */}
-        <p className="font-['Inter'] font-normal text-[10px] sm:text-[12px] text-black">
+        <p className="font-['Inter'] font-normal text-[8px] md:text-[10px] lg:text-[12px] sm:text-[12px] text-black">
           © 2026 what i’m on. All rights reserved.
         </p>
 
