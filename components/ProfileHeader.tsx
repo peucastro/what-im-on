@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import VibeEditor from './VibeEditor';
 import { useTheme } from './ThemeProvider';
 
@@ -27,11 +28,13 @@ export default function ProfileHeader({ username, isOwner }: ProfileHeaderProps)
       {/* Pet at the bottom */}
       {preferences.pet_id !== 'none' && (
         <div className="absolute top-16 right-20 pointer-events-none">
-          <img
+          <Image
             src={`/assets/pets/${preferences.pet_id}.gif`}
             alt="pet"
+            width={64}
+            height={64}
             className="w-16 h-16 object-contain"
-            onError={(e) => (e.currentTarget.style.display = 'none')}
+            unoptimized
           />
         </div>
       )}

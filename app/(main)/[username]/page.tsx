@@ -68,7 +68,20 @@ async function getUserProfile(username: string) {
   // Group items by category
   const groups: Record<string, ItemGroup> = {};
 
-  (itemsData || []).forEach((item: any) => {
+  interface RawItem {
+    id: string;
+    title: string;
+    description: string | null;
+    image_url: string | null;
+    category_id: string;
+    categories: {
+      id: string;
+      label: string;
+      icon: string | null;
+    } | null;
+  }
+
+  (itemsData as unknown as RawItem[] || []).forEach((item) => {
     const categoryLabel = item.categories?.label || 'Other';
     const categoryIcon = item.categories?.icon;
 
