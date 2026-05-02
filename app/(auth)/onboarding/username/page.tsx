@@ -4,12 +4,13 @@ import { updateUsername } from '@/app/(auth)/onboarding/actions';
 import OnboardingButton from '@/components/OnboardingButton';
 import ProgressIndicator from '@/components/ProgressIndicator';
 import { motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
-import { useState, useRef } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useRef, Suspense } from 'react';
 import { containerVariants, itemVariants } from '@/utils/animations';
 
-export default function UsernamePage() {
+function UsernameForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -35,7 +36,8 @@ export default function UsernamePage() {
         setTimeout(() => {
           setShowExit(true);
           setTimeout(() => {
-            router.push('/onboarding/display-name');
+            const nextParam = searchParams.get('next');
+            router.push(`/onboarding/display-name${nextParam ? `?next=${nextParam}` : ''}`);
           }, 300);
         }, 1000);
       } else {
@@ -100,5 +102,13 @@ export default function UsernamePage() {
         </motion.div>
       )}
     </motion.div>
+  );
+}
+
+export default function UsernamePage() {
+  return (
+    <Suspense fallback={null}>
+      <UsernameForm />
+    </Suspense>
   );
 }

@@ -26,9 +26,10 @@ function LoginForm() {
     setErrorMessage(null);
 
     const formData = new FormData(e.currentTarget);
+    const redirectTo = searchParams.get('next') || undefined;
 
     try {
-      await login(formData);
+      await login(formData, redirectTo);
     } catch (error) {
       if ((error as { digest?: string }).digest?.startsWith('NEXT_REDIRECT')) {
         setIsSuccess(true);
@@ -125,7 +126,7 @@ function LoginForm() {
       <motion.p className="text-sm text-zinc-600 text-center" variants={itemVariants}>
         don&apos;t have an account?{' '}
         <Link
-          href="/register"
+          href={`/register${searchParams.get('next') ? `?next=${searchParams.get('next')}` : ''}`}
           className="font-semibold text-black hover:text-zinc-700 transition-colors"
         >
           sign up

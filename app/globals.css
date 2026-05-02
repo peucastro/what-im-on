@@ -21,4 +21,5 @@
 body {
   background-color: var(--background);
   color: var(--foreground);
+  padding-top: env(safe-area-inset-top);
 }

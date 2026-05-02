@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import { cookies, headers } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 
-export async function login(formData: FormData) {
+export async function login(formData: FormData, redirectTo?: string) {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
@@ -18,7 +18,9 @@ export async function login(formData: FormData) {
   });
 
   if (error) {
-    redirect('/login?message=Could not authenticate user');
+    redirect(
+      `/login?message=Could not authenticate user${redirectTo ? `&next=${redirectTo}` : ''}`
+    );
   }
 
   if (data.user) {
@@ -34,10 +36,10 @@ export async function login(formData: FormData) {
   }
 
   revalidatePath('/', 'layout');
-  redirect('/');
+  redirect(redirectTo || '/');
 }
 
-export async function signup(formData: FormData) {
+export async function signup(formData: FormData, redirectTo?: string) {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
@@ -54,15 +56,19 @@ export async function signup(formData: FormData) {
   });
 
   if (error) {
-    redirect('/register?message=Could not authenticate user');
+    redirect(
+      `/register?message=Could not authenticate user${redirectTo ? `&next=${redirectTo}` : ''}`
+    );
   }
 
   revalidatePath('/', 'layout');
 
+  const nextParam = redirectTo ? `?next=${redirectTo}` : '';
+
   if (data.session) {
-    redirect('/onboarding/username');
+    redirect(`/onboarding/username${nextParam}`);
   } else {
-    redirect('/login?message=Check email to continue sign in process');
+    redirect(`/login?message=Check email to continue sign in process${nextParam}`);
   }
 }
 
