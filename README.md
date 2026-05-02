@@ -44,21 +44,27 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Team
 
-<div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
-  <div style="text-align: center;">
-    <img src="assets/team/goncalo_pinto.jpg" alt="Gonçalo Pinto" width="150" />
-    <a href="https://github.com/goncalopinto1"><p>Gonçalo Pinto</p></a>
-  </div>
-  <div style="text-align: center;">
-    <img src="assets/team/peucastro.jpg" alt="Peu Castro" width="150" />
-    <a href="https://github.com/peucastro"><p>Pedro Castro</p></a>
-  </div>
-  <div style="text-align: center;">
-    <img src="assets/team/pimpy.jpg" alt="Pimpy" width="150" />
-    <a href="https://github.com/pedroafmonteiro"><p>Pedro Monteiro</p></a>
-  </div>
-  <div style="text-align: center;">
-    <img src="assets/team/pimpao_sarbosa.jpg" alt="Pimpão Sarbosa" width="150" />
-    <a href="https://github.com/simaopsbarbosa"><p>Simão Barbosa</p></a>
-  </div>
-</div>
+<table>
+  <tr>
+    <td align="center">
+      <img src="assets/team/goncalo_pinto.jpg" width="auto" height="auto" alt="Gonçalo Pinto">
+      <br>
+      <a href="https://github.com/goncalo_pinto1"><a>Gonçalo Pinto<b></a>
+    </td>
+    <td align="center">
+      <img src="assets/team/peucastro.jpg" width="auto" height="auto" alt="Pedro Castro">
+      <br>
+      <a href="https://github.com/peucastro"><a>Pedro Castro<b></a>
+    </td>
+    <td align="center">
+      <img src="assets/team/pimpy.jpg" width="auto" height="auto" alt="Pedro Monteiro">
+      <br>
+      <a href="https://github.com/pedroafmonteiro"><a>Pedro Monteiro<b></a>
+    </td>
+    <td align="center">
+      <img src="assets/team/pimpao_sarbosa.jpg" width="auto" height="auto" alt="Simão Barbosa">
+      <br>
+      <a href="https://github.com/simaopsbarbosa"><a>Simão Barbosa<b></a>
+    </td>
+  </tr>
+</table>
