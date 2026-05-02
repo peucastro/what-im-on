@@ -1,6 +1,7 @@
 'use client';
 
 import VibeEditor from './VibeEditor';
+import Image from 'next/image';
 import { useTheme } from './ThemeProvider';
 import { UserPreferences } from '@/utils/themes';
 
@@ -39,7 +40,7 @@ export default function ProfileHeader({
       {/* Pet at the bottom */}
       {activePreferences.pet_id !== 'none' && (
         <div className="absolute top-16 right-20 pointer-events-none">
-          <img
+          <Image
             src={`/assets/pets/${activePreferences.pet_id}.gif`}
             alt="pet"
             width={64}

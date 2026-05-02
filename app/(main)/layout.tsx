@@ -15,6 +15,7 @@ export default function MainLayout({
     <>
       <Header />
       <main className="mx-auto w-full flex-1">{children}</main>
+      <Navbar />
     </>
   );
 }
