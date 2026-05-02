@@ -2,40 +2,13 @@
 
 import { updateUsername } from '@/app/(auth)/onboarding/actions';
 import OnboardingButton from '@/components/OnboardingButton';
+import ProgressIndicator from '@/components/ProgressIndicator';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useState, useRef } from 'react';
+import { containerVariants, itemVariants } from '@/utils/animations';
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
-  exit: {
-    opacity: 0,
-    y: -10,
-    transition: { duration: 0.3 },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4 },
-  },
-};
-
-export default function UsernamePage({
-  searchParams,
-}: {
-  searchParams: Promise<{ error: string }>;
-}) {
+export default function UsernamePage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -59,7 +32,6 @@ export default function UsernamePage({
 
       if (result.success) {
         setIsSuccess(true);
-        // Exit animation and redirect
         setTimeout(() => {
           setShowExit(true);
           setTimeout(() => {
@@ -86,6 +58,10 @@ export default function UsernamePage({
       initial="hidden"
       animate={showExit ? 'exit' : 'visible'}
     >
+      <motion.div variants={itemVariants}>
+        <ProgressIndicator currentStep={1} totalSteps={3} />
+      </motion.div>
+
       <motion.div className="text-center" variants={itemVariants}>
         <h1 className="text-3xl font-bold tracking-tight">choose your username</h1>
         <p className="text-zinc-500 text-sm mt-2">this is how people will find you</p>
@@ -111,7 +87,8 @@ export default function UsernamePage({
           isLoading={isLoading}
           isSuccess={isSuccess}
           isError={isError}
-          disabled={isError}
+          loadingText="setting username..."
+          successText="username set"
         >
           next step
         </OnboardingButton>

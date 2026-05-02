@@ -1,7 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 type ButtonState = 'idle' | 'loading' | 'success' | 'error';
 
@@ -11,8 +10,12 @@ interface OnboardingButtonProps {
   isError: boolean;
   onClick?: () => void;
   children?: React.ReactNode;
+  loadingText?: string;
+  successText?: string;
+  errorText?: string;
   disabled?: boolean;
   className?: string;
+  type?: 'button' | 'submit';
 }
 
 export default function OnboardingButton({
@@ -21,8 +24,12 @@ export default function OnboardingButton({
   isError,
   onClick,
   children = 'next step',
+  loadingText = 'saving...',
+  successText = 'saved',
+  errorText = 'error',
   disabled = false,
   className = '',
+  type = 'submit',
 }: OnboardingButtonProps) {
   const getButtonState = (): ButtonState => {
     if (isError) return 'error';
@@ -35,66 +42,79 @@ export default function OnboardingButton({
   const isButtonDisabled = disabled || isLoading || isSuccess;
 
   const baseClasses =
-    'w-full py-2.5 font-medium rounded-lg transition-colors relative overflow-hidden flex items-center justify-center gap-2';
+    'w-full py-2.5 font-medium rounded-lg transition-all relative overflow-hidden flex items-center justify-center gap-2 border-2 border-transparent';
 
-  const stateClasses = {
+  const stateStyles = {
     idle: 'bg-black text-white hover:bg-zinc-800',
-    loading: 'bg-black text-white',
-    success: 'bg-green-600 text-white hover:bg-green-700',
-    error: 'bg-red-500 text-white hover:bg-red-600',
+    loading: 'bg-black text-white cursor-default',
+    success: 'bg-black text-white border-green-500/50 cursor-default',
+    error: 'bg-black text-white border-red-500/50 cursor-default',
   };
 
   return (
     <button
+      type={type}
       onClick={onClick}
       disabled={isButtonDisabled}
-      className={`${baseClasses} ${stateClasses[state]} ${className} ${
-        isButtonDisabled ? 'cursor-default' : 'cursor-pointer'
-      }`}
+      className={`${baseClasses} ${stateStyles[state]} ${className}`}
     >
-      {state === 'loading' && (
-        <motion.div
-          className="flex items-center gap-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-          <span>saving...</span>
-        </motion.div>
-      )}
-      {state === 'success' && (
-        <motion.div
-          className="flex items-center gap-2"
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.8, opacity: 0 }}
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-          <span>saved</span>
-        </motion.div>
-      )}
-      {state === 'error' && (
-        <motion.div
-          className="flex items-center gap-2"
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.8, opacity: 0 }}
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <span>error</span>
-        </motion.div>
-      )}
-      {state === 'idle' && <span>{children}</span>}
+      <AnimatePresence mode="wait">
+        {state === 'loading' && (
+          <motion.div
+            key="loading"
+            className="flex items-center gap-2"
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -5 }}
+          >
+            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            <span>{loadingText}</span>
+          </motion.div>
+        )}
+        {state === 'success' && (
+          <motion.div
+            key="success"
+            className="flex items-center gap-2"
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -5 }}
+          >
+            <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            <span>{successText}</span>
+          </motion.div>
+        )}
+        {state === 'error' && (
+          <motion.div
+            key="error"
+            className="flex items-center gap-2"
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -5 }}
+          >
+            <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>{errorText}</span>
+          </motion.div>
+        )}
+        {state === 'idle' && (
+          <motion.span
+            key="idle"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            {children}
+          </motion.span>
+        )}
+      </AnimatePresence>
     </button>
   );
 }

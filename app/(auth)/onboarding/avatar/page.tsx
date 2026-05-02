@@ -2,37 +2,14 @@
 
 import { updateAvatar, skipAvatar } from '@/app/(auth)/onboarding/actions';
 import OnboardingButton from '@/components/OnboardingButton';
+import ProgressIndicator from '@/components/ProgressIndicator';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useState, useRef } from 'react';
 import { triggerConfetti } from '@/utils/confetti';
+import { containerVariants, itemVariants } from '@/utils/animations';
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
-  exit: {
-    opacity: 0,
-    y: -10,
-    transition: { duration: 0.3 },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4 },
-  },
-};
-
-export default function AvatarPage({ searchParams }: { searchParams: Promise<{ error: string }> }) {
+export default function AvatarPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -112,10 +89,8 @@ export default function AvatarPage({ searchParams }: { searchParams: Promise<{ e
 
       if (result.success) {
         setIsSuccess(true);
-        // Trigger confetti
         triggerConfetti();
 
-        // Exit animation and redirect
         setTimeout(() => {
           setShowExit(true);
           setTimeout(() => {
@@ -143,10 +118,8 @@ export default function AvatarPage({ searchParams }: { searchParams: Promise<{ e
 
       if (result.success) {
         setIsSuccess(true);
-        // Trigger confetti
         triggerConfetti();
 
-        // Exit animation and redirect
         setTimeout(() => {
           setShowExit(true);
           setTimeout(() => {
@@ -168,6 +141,10 @@ export default function AvatarPage({ searchParams }: { searchParams: Promise<{ e
       initial="hidden"
       animate={showExit ? 'exit' : 'visible'}
     >
+      <motion.div variants={itemVariants}>
+        <ProgressIndicator currentStep={3} totalSteps={3} />
+      </motion.div>
+
       <motion.div className="text-center" variants={itemVariants}>
         <h1 className="text-3xl font-bold tracking-tight">add an avatar</h1>
         <p className="text-zinc-500 text-sm mt-2">upload a picture to personalize your profile</p>
@@ -189,7 +166,6 @@ export default function AvatarPage({ searchParams }: { searchParams: Promise<{ e
           className="hidden"
         />
 
-        {/* Drag and Drop Zone */}
         <motion.div
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
@@ -267,13 +243,14 @@ export default function AvatarPage({ searchParams }: { searchParams: Promise<{ e
           </AnimatePresence>
         </motion.div>
 
-        {/* Action Buttons */}
         <div className="flex flex-col gap-3">
           <OnboardingButton
             isLoading={isLoading}
             isSuccess={isSuccess}
             isError={isError}
             disabled={isError || !selectedImage}
+            loadingText="uploading avatar..."
+            successText="welcome onboard!"
           >
             finish onboarding
           </OnboardingButton>

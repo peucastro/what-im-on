@@ -2,40 +2,13 @@
 
 import { updateDisplayName } from '@/app/(auth)/onboarding/actions';
 import OnboardingButton from '@/components/OnboardingButton';
+import ProgressIndicator from '@/components/ProgressIndicator';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useState, useRef } from 'react';
+import { containerVariants, itemVariants } from '@/utils/animations';
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
-  exit: {
-    opacity: 0,
-    y: -10,
-    transition: { duration: 0.3 },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4 },
-  },
-};
-
-export default function DisplayNamePage({
-  searchParams,
-}: {
-  searchParams: Promise<{ error: string }>;
-}) {
+export default function DisplayNamePage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -59,7 +32,6 @@ export default function DisplayNamePage({
 
       if (result.success) {
         setIsSuccess(true);
-        // Exit animation and redirect
         setTimeout(() => {
           setShowExit(true);
           setTimeout(() => {
@@ -86,6 +58,10 @@ export default function DisplayNamePage({
       initial="hidden"
       animate={showExit ? 'exit' : 'visible'}
     >
+      <motion.div variants={itemVariants}>
+        <ProgressIndicator currentStep={2} totalSteps={3} />
+      </motion.div>
+
       <motion.div className="text-center" variants={itemVariants}>
         <h1 className="text-3xl font-bold tracking-tight">what should we call you?</h1>
         <p className="text-zinc-500 text-sm mt-2">this is your public name on the platform</p>
@@ -110,7 +86,8 @@ export default function DisplayNamePage({
           isLoading={isLoading}
           isSuccess={isSuccess}
           isError={isError}
-          disabled={isError}
+          loadingText="updating name..."
+          successText="name saved"
         >
           next step
         </OnboardingButton>

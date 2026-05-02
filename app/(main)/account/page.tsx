@@ -7,25 +7,7 @@ import { updateProfile, updateEmail, updatePassword, deleteAccount } from './act
 import OnboardingButton from '@/components/OnboardingButton';
 import { useRouter } from 'next/navigation';
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4 },
-  },
-};
+import { containerVariants, itemVariants } from '@/utils/animations';
 
 export default function AccountPage() {
   const router = useRouter();
@@ -222,6 +204,8 @@ export default function AccountPage() {
                 isLoading={profileLoading}
                 isSuccess={profileSuccess}
                 isError={profileError}
+                loadingText="saving profile..."
+                successText="profile saved"
               >
                 save profile
               </OnboardingButton>
@@ -262,6 +246,8 @@ export default function AccountPage() {
                 isLoading={emailLoading}
                 isSuccess={emailSuccess}
                 isError={emailError}
+                loadingText="updating email..."
+                successText="check your inbox"
               >
                 update email
               </OnboardingButton>
@@ -340,6 +326,8 @@ export default function AccountPage() {
                 isLoading={passwordLoading}
                 isSuccess={passwordSuccess}
                 isError={passwordError}
+                loadingText="updating password..."
+                successText="password updated"
               >
                 update password
               </OnboardingButton>
