@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
@@ -12,10 +12,19 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
+export const viewport: Viewport = {
+  themeColor: '#ffffff',
+};
+
 export const metadata: Metadata = {
   title: "what i'm on",
   description:
     "A personal space to showcase your current obsessions and crowdsource your next favorite thing. Share what you're into and get curated recommendations.",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: "what i'm on",
+  },
 };
 
 export default function RootLayout({
