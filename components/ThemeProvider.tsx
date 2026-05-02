@@ -82,7 +82,12 @@ export function ThemeProvider({
 
   // Debug logging
   useEffect(() => {
-    console.log('[Theme] Current State - Theme:', activePreferences.theme_id, '| Override active:', !!override);
+    console.log(
+      '[Theme] Current State - Theme:',
+      activePreferences.theme_id,
+      '| Override active:',
+      !!override
+    );
   }, [activePreferences, override]);
 
   const theme = useMemo(() => {
