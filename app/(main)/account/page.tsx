@@ -160,10 +160,12 @@ export default function AccountPage() {
     );
   }
 
-  const inputClasses = "w-full px-4 py-2.5 bg-app-nav border border-app-border rounded-app text-sm text-app-font placeholder:opacity-30 focus:outline-none focus:ring-1 focus:ring-app-accent transition-all font-app";
-  const labelClasses = "text-[10px] font-bold uppercase tracking-wider text-app-font opacity-40 ml-1";
-  const sectionTitleClasses = "text-xl font-bold tracking-tight text-app-font lowercase";
-  const sectionDescClasses = "text-app-font opacity-50 text-sm lowercase mb-6";
+  const inputClasses =
+    'w-full px-4 py-2.5 bg-app-nav border border-app-border rounded-app text-sm text-app-font placeholder:opacity-30 focus:outline-none focus:ring-1 focus:ring-app-accent transition-all font-app';
+  const labelClasses =
+    'text-[10px] font-bold uppercase tracking-wider text-app-font opacity-40 ml-1';
+  const sectionTitleClasses = 'text-xl font-bold tracking-tight text-app-font lowercase';
+  const sectionDescClasses = 'text-app-font opacity-50 text-sm lowercase mb-6';
 
   return (
     <div className="flex flex-col items-center px-4 py-12 min-h-screen">
@@ -283,9 +285,7 @@ export default function AccountPage() {
           <motion.section variants={itemVariants} className="flex flex-col">
             <div>
               <h2 className={sectionTitleClasses}>password</h2>
-              <p className={sectionDescClasses}>
-                change your password to keep your account secure
-              </p>
+              <p className={sectionDescClasses}>change your password to keep your account secure</p>
             </div>
 
             <form onSubmit={handleUpdatePassword} className="flex flex-col gap-6">
@@ -304,10 +304,7 @@ export default function AccountPage() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label
-                  htmlFor="confirm_current_password"
-                  className={labelClasses}
-                >
+                <label htmlFor="confirm_current_password" className={labelClasses}>
                   confirm current password
                 </label>
                 <input
@@ -321,10 +318,7 @@ export default function AccountPage() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label
-                  htmlFor="new_password"
-                  className={labelClasses}
-                >
+                <label htmlFor="new_password" className={labelClasses}>
                   new password
                 </label>
                 <input

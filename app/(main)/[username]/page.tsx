@@ -38,7 +38,8 @@ async function getUserProfile(username: string) {
   const [itemsResult, authResult] = await Promise.all([
     supabase
       .from('items')
-      .select(`
+      .select(
+        `
         id,
         title,
         description,
@@ -48,10 +49,11 @@ async function getUserProfile(username: string) {
           label,
           icon
         )
-      `)
+      `
+      )
       .eq('user_id', userData.id)
       .order('created_at', { ascending: false }),
-    supabase.auth.getUser()
+    supabase.auth.getUser(),
   ]);
 
   const itemsData = itemsResult.data;
@@ -112,17 +114,13 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
         <div className="flex flex-col items-center justify-center py-4 text-center space-y-2 px-4">
           <div className="space-y-2">
             {!profile.isOwner && (
-              <p className="text-app-font lowercase">
-              no current interests yet
-            </p>
+              <p className="text-app-font lowercase">no current interests yet</p>
             )}
             {profile.isOwner && (
-              <p className="text-app-font lowercase">
-                your profile is looking a bit empty...
-              </p>
+              <p className="text-app-font lowercase">your profile is looking a bit empty...</p>
             )}
           </div>
-          
+
           {profile.isOwner && (
             <VibeButton variant="outline" className="hover:opacity-100">
               ➕ &nbsp; add something

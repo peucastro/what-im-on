@@ -2,12 +2,12 @@
 
 import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import { usePathname } from 'next/navigation';
-import { 
-  THEMES, 
-  BORDER_RADIUS_MAP, 
-  FONT_FAMILY_MAP, 
+import {
+  THEMES,
+  BORDER_RADIUS_MAP,
+  FONT_FAMILY_MAP,
   UserPreferences,
-  THEME_CACHE_KEY
+  THEME_CACHE_KEY,
 } from '@/utils/themes';
 
 interface ThemeContextType {
@@ -24,16 +24,16 @@ const DEFAULT_PREFERENCES: UserPreferences = {
   pet_id: 'none',
 };
 
-export function ThemeProvider({ 
-  children, 
-  preferences: serverPreferences 
-}: { 
+export function ThemeProvider({
+  children,
+  preferences: serverPreferences,
+}: {
   children: React.ReactNode;
   preferences: UserPreferences;
 }) {
   const pathname = usePathname();
   const isHomePage = pathname === '/';
-  
+
   const [preferences, setPreferences] = useState<UserPreferences>(serverPreferences);
 
   // Sync with server preferences
@@ -66,7 +66,7 @@ export function ThemeProvider({
 
   useEffect(() => {
     const root = document.documentElement;
-    
+
     // Apply Theme Colors
     root.style.setProperty('--app-border', theme.colors.border);
     root.style.setProperty('--app-font', theme.colors.font);
@@ -79,7 +79,6 @@ export function ThemeProvider({
     // Apply Overrides
     root.style.setProperty('--app-radius', BORDER_RADIUS_MAP[activePreferences.border_radius]);
     root.style.setProperty('--app-font-family', FONT_FAMILY_MAP[activePreferences.font_family]);
-    
   }, [theme, activePreferences]);
 
   return (

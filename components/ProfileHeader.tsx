@@ -20,18 +20,16 @@ export default function ProfileHeader({ username, isOwner }: ProfileHeaderProps)
         <br />
         <span className="lowercase">on</span>
       </h1>
-      
+
       {/* Vibe Editor at the top */}
-      <div className="absolute top-4 right-4">
-        {isOwner && <VibeEditor />}
-      </div>
-      
+      <div className="absolute top-4 right-4">{isOwner && <VibeEditor />}</div>
+
       {/* Pet at the bottom */}
       {preferences.pet_id !== 'none' && (
         <div className="absolute top-16 right-20 pointer-events-none">
-          <img 
-            src={`/assets/pets/${preferences.pet_id}.gif`} 
-            alt="pet" 
+          <img
+            src={`/assets/pets/${preferences.pet_id}.gif`}
+            alt="pet"
             className="w-16 h-16 object-contain"
             onError={(e) => (e.currentTarget.style.display = 'none')}
           />

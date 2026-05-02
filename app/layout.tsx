@@ -47,7 +47,9 @@ export default async function RootLayout({
 }>) {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   let preferences: UserPreferences = {
     theme_id: 'default',
@@ -62,7 +64,7 @@ export default async function RootLayout({
       .select('theme_id, border_radius, font_family, pet_id')
       .eq('user_id', user.id)
       .single();
-    
+
     if (data) {
       preferences = data as UserPreferences;
     }
@@ -74,9 +76,7 @@ export default async function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${pixelFont.variable} h-full antialiased light`}
     >
       <body className="min-h-full flex flex-col">
-        <ThemeProvider preferences={preferences}>
-          {children}
-        </ThemeProvider>
+        <ThemeProvider preferences={preferences}>{children}</ThemeProvider>
       </body>
     </html>
   );

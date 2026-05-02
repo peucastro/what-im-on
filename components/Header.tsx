@@ -27,7 +27,10 @@ export default async function Header() {
     <header className="w-full bg-app-header bg-cover bg-center">
       <nav className="m-2 border border-app-border bg-app-nav rounded-app">
         <div className="mx-auto flex max-w-3xl items-center justify-between sm:px-6 px-4">
-          <Link href="/" className="flex items-center text-app-font hover:opacity-70 transition-opacity">
+          <Link
+            href="/"
+            className="flex items-center text-app-font hover:opacity-70 transition-opacity"
+          >
             <Logo className="rounded-app" />
           </Link>
 

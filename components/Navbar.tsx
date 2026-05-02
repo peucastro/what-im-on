@@ -7,19 +7,10 @@ import { motion } from 'framer-motion';
 export default function Navbar() {
   const pathname = usePathname();
   const visibleRoutes = new Set(['/present', '/future', '/others']);
-  const reservedRoutes = new Set([
-    '/',
-    '/login',
-    '/register',
-    '/onboarding',
-    '/account',
-    '/auth',
-  ]);
+  const reservedRoutes = new Set(['/', '/login', '/register', '/onboarding', '/account', '/auth']);
 
-  const isProfileRoute = 
-    /^\/[^/]+$/.test(pathname) && 
-    !reservedRoutes.has(pathname) && 
-    !visibleRoutes.has(pathname);
+  const isProfileRoute =
+    /^\/[^/]+$/.test(pathname) && !reservedRoutes.has(pathname) && !visibleRoutes.has(pathname);
   const isVisible = visibleRoutes.has(pathname) || isProfileRoute;
 
   if (!isVisible) {
@@ -37,7 +28,7 @@ export default function Navbar() {
       <div className="flex gap-1 rounded-app border border-app-border bg-app-nav p-1 shadow-lg backdrop-blur-md">
         {navItems.map((item) => {
           const isActive = pathname === item.href || (item.href === '/present' && isProfileRoute);
-          
+
           return (
             <Link
               key={item.href}

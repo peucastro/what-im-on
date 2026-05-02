@@ -9,11 +9,11 @@
   --color-app-font: var(--app-font);
   --color-app-accent: var(--app-accent);
   --color-app-nav: var(--app-nav);
-  
+
   --radius-app: var(--app-radius);
-  
+
   --font-app: var(--app-font-family);
-  
+
   --background-image-app-header: var(--app-header-image);
   --background-image-app-overlay: var(--app-overlay-image);
   --background-image-app-page: var(--app-page-background);

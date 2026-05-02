@@ -13,7 +13,7 @@ interface ItemCardProps {
 
 export default function ItemCard({ item }: ItemCardProps) {
   const { title, description, image_url: imageUrl } = item;
-  
+
   return (
     <div className="rounded-app border border-app-border bg-app-nav p-6 mb-4">
       {imageUrl && (
