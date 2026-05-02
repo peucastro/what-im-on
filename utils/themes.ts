@@ -38,19 +38,6 @@ export const THEMES: Record<string, ThemeDefinition> = {
       pageBackground: '#ffffff',
     },
   },
-  cyberpunk: {
-    id: 'cyberpunk',
-    name: 'Cyberpunk',
-    colors: {
-      border: '#ff00ff',
-      headerImage: 'none',
-      font: '#00ffff',
-      accent: '#ffff00',
-      overlay: 'none',
-      navBackground: '#120458',
-      pageBackground: '#000000',
-    },
-  },
   forest: {
     id: 'forest',
     name: 'Forest',
