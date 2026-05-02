@@ -40,7 +40,7 @@ export default async function Header() {
             ) : (
               <Link
                 href="/register"
-                className="rounded-app bg-app-accent px-4 py-2 text-sm text-app-font hover:opacity-90 transition-opacity"
+                className="rounded-app px-4 py-2 text-sm bg-gray-100 text-app-font hover:opacity-90 transition-opacity"
               >
                 join
               </Link>
