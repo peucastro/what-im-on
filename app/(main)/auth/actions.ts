@@ -5,6 +5,54 @@ import { redirect } from 'next/navigation';
 import { cookies, headers } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 
+function getAuthErrorMessage(code?: string, fallbackMessage?: string): string {
+  if (code && /^\d{3}$/.test(code)) {
+    return 'Authentication failed. Please try again';
+  }
+  const cleanCode = code?.split(';')[0] || code;
+  switch (cleanCode) {
+    case 'invalid_credentials':
+      return 'Invalid email or password';
+    case 'user_not_found':
+      return 'No account found with this email';
+    case 'invalid_email':
+      return 'Please enter a valid email address';
+    case 'user_disabled':
+      return 'This account has been disabled';
+    case 'too_many_requests':
+      return 'Too many attempts. Please try again later';
+    case 'network_error':
+      return 'Network error. Please check your connection';
+    case 'invalid_password':
+      return 'Incorrect password';
+    default:
+      return fallbackMessage || 'Could not sign in. Please try again';
+  }
+}
+
+function getSignupErrorMessage(code?: string, fallbackMessage?: string): string {
+  if (code && /^\d{3}$/.test(code)) {
+    return 'Registration failed. Please try again';
+  }
+  const cleanCode = code?.split(';')[0] || code;
+  switch (cleanCode) {
+    case 'already_in_use':
+      return 'An account with this email already exists';
+    case 'invalid_email':
+      return 'Please enter a valid email address';
+    case 'weak_password':
+      return 'Password is too weak. Use at least 6 characters';
+    case 'signup_disabled':
+      return 'Sign up is currently disabled';
+    case 'too_many_requests':
+      return 'Too many attempts. Please try again later';
+    case 'network_error':
+      return 'Network error. Please check your connection';
+    default:
+      return fallbackMessage || 'Could not create account. Please try again';
+  }
+}
+
 export async function login(formData: FormData, redirectTo?: string) {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
@@ -18,8 +66,9 @@ export async function login(formData: FormData, redirectTo?: string) {
   });
 
   if (error) {
+    const message = getAuthErrorMessage(error.code);
     redirect(
-      `/login?message=Could not authenticate user${redirectTo ? `&next=${redirectTo}` : ''}`
+      `/login?message=${encodeURIComponent(message)}${redirectTo ? `&next=${redirectTo}` : ''}`
     );
   }
 
@@ -56,8 +105,9 @@ export async function signup(formData: FormData, redirectTo?: string) {
   });
 
   if (error) {
+    const message = getSignupErrorMessage(error.code);
     redirect(
-      `/register?message=Could not authenticate user${redirectTo ? `&next=${redirectTo}` : ''}`
+      `/register?message=${encodeURIComponent(message)}${redirectTo ? `&next=${redirectTo}` : ''}`
     );
   }
 

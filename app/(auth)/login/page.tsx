@@ -31,16 +31,26 @@ function LoginForm() {
     try {
       await login(formData, redirectTo);
     } catch (error) {
-      if ((error as { digest?: string }).digest?.startsWith('NEXT_REDIRECT')) {
-        setIsSuccess(true);
-        setTimeout(() => {
-          setShowExit(true);
-        }, 1000);
+      const digest = (error as { digest?: string }).digest;
+      if (digest?.startsWith('NEXT_REDIRECT')) {
+        const parts = digest.split(';');
+        const url = parts[2];
+        if (url?.includes('message=')) {
+          setIsError(true);
+          const params = new URLSearchParams(url.split('?')[1]);
+          setErrorMessage(params.get('message') || 'Sign in failed. Please try again');
+          setIsLoading(false);
+        } else {
+          setIsSuccess(true);
+          setTimeout(() => {
+            setShowExit(true);
+          }, 1000);
+        }
         throw error;
       }
 
       setIsError(true);
-      setErrorMessage('Could not authenticate user');
+      setErrorMessage('An unexpected error occurred. Please try again');
       setIsLoading(false);
     }
   };
