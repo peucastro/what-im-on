@@ -58,19 +58,17 @@ export default function AccountPage() {
 
   useEffect(() => {
     async function loadData() {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) {
         router.push('/login');
         return;
       }
       setUser(user);
 
-      const { data: profile } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-      
+      const { data: profile } = await supabase.from('users').select('*').eq('id', user.id).single();
+
       setProfile(profile);
       setIsLoading(false);
     }
@@ -175,7 +173,9 @@ export default function AccountPage() {
       <div className="w-full max-w-sm">
         <div className="mb-12 text-center">
           <h1 className="text-3xl font-bold tracking-tight">account settings</h1>
-          <p className="text-zinc-500 text-sm mt-2">manage your personal information and security</p>
+          <p className="text-zinc-500 text-sm mt-2">
+            manage your personal information and security
+          </p>
         </div>
 
         <motion.div
@@ -227,7 +227,9 @@ export default function AccountPage() {
               </OnboardingButton>
 
               {profileMsg && (
-                <p className={`text-sm text-center ${profileError ? 'text-red-500' : 'text-zinc-600'}`}>
+                <p
+                  className={`text-sm text-center ${profileError ? 'text-red-500' : 'text-zinc-600'}`}
+                >
                   {profileMsg}
                 </p>
               )}
@@ -265,7 +267,9 @@ export default function AccountPage() {
               </OnboardingButton>
 
               {emailMsg && (
-                <p className={`text-sm text-center ${emailError ? 'text-red-500' : 'text-zinc-600'}`}>
+                <p
+                  className={`text-sm text-center ${emailError ? 'text-red-500' : 'text-zinc-600'}`}
+                >
                   {emailMsg}
                 </p>
               )}
@@ -276,7 +280,9 @@ export default function AccountPage() {
           <motion.section variants={itemVariants} className="flex flex-col gap-6">
             <div>
               <h2 className="text-xl font-bold tracking-tight">password</h2>
-              <p className="text-zinc-500 text-sm">change your password to keep your account secure</p>
+              <p className="text-zinc-500 text-sm">
+                change your password to keep your account secure
+              </p>
             </div>
 
             <form onSubmit={handleUpdatePassword} className="flex flex-col gap-6">
@@ -295,7 +301,10 @@ export default function AccountPage() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label htmlFor="confirm_current_password" className="text-xs font-semibold text-zinc-700">
+                <label
+                  htmlFor="confirm_current_password"
+                  className="text-xs font-semibold text-zinc-700"
+                >
                   confirm current password
                 </label>
                 <input
@@ -309,7 +318,11 @@ export default function AccountPage() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label htmlFor="new_password" title="Password" className="text-xs font-semibold text-zinc-700">
+                <label
+                  htmlFor="new_password"
+                  title="Password"
+                  className="text-xs font-semibold text-zinc-700"
+                >
                   new password
                 </label>
                 <input
@@ -332,7 +345,9 @@ export default function AccountPage() {
               </OnboardingButton>
 
               {passwordMsg && (
-                <p className={`text-sm text-center ${passwordError ? 'text-red-500' : 'text-zinc-600'}`}>
+                <p
+                  className={`text-sm text-center ${passwordError ? 'text-red-500' : 'text-zinc-600'}`}
+                >
                   {passwordMsg}
                 </p>
               )}
@@ -340,7 +355,10 @@ export default function AccountPage() {
           </motion.section>
 
           {/* Danger Zone */}
-          <motion.section variants={itemVariants} className="flex flex-col gap-4 pt-12 border-t border-zinc-100">
+          <motion.section
+            variants={itemVariants}
+            className="flex flex-col gap-4 pt-12 border-t border-zinc-100"
+          >
             {!showDeleteConfirm ? (
               <button
                 onClick={() => setShowDeleteConfirm(true)}
