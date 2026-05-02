@@ -98,11 +98,11 @@ export async function updateAvatar(file?: File): Promise<ActionResult> {
     }
   }
 
-  revalidatePath('/dashboard');
+  revalidatePath('/');
   return { success: true };
 }
 
 export async function skipAvatar(): Promise<ActionResult> {
-  revalidatePath('/dashboard');
+  revalidatePath('/');
   return { success: true };
 }
