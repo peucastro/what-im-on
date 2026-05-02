@@ -82,11 +82,11 @@ export default function AccountPage() {
     setProfileLoading(false);
     if (result.success) {
       setProfileSuccess(true);
-      setProfileMsg(result.message || 'Profile updated');
+      setProfileMsg(result.message || 'profile updated');
       setTimeout(() => setProfileSuccess(false), 3000);
     } else {
       setProfileError(true);
-      setProfileMsg(result.error || 'Failed to update profile');
+      setProfileMsg(result.error || 'failed to update profile');
     }
   };
 
@@ -104,10 +104,10 @@ export default function AccountPage() {
     setEmailLoading(false);
     if (result.success) {
       setEmailSuccess(true);
-      setEmailMsg(result.message || 'Check your email for confirmation');
+      setEmailMsg(result.message || 'check your email for confirmation');
     } else {
       setEmailError(true);
-      setEmailMsg(result.error || 'Failed to update email');
+      setEmailMsg(result.error || 'failed to update email');
     }
   };
 
@@ -126,7 +126,7 @@ export default function AccountPage() {
     if (currentPassword !== confirmCurrent) {
       setPasswordLoading(false);
       setPasswordError(true);
-      setPasswordMsg('Current passwords do not match');
+      setPasswordMsg('current passwords do not match');
       return;
     }
 
@@ -134,12 +134,12 @@ export default function AccountPage() {
     setPasswordLoading(false);
     if (result.success) {
       setPasswordSuccess(true);
-      setPasswordMsg(result.message || 'Password updated');
+      setPasswordMsg(result.message || 'password updated');
       setTimeout(() => setPasswordSuccess(false), 3000);
       (e.target as HTMLFormElement).reset();
     } else {
       setPasswordError(true);
-      setPasswordMsg(result.error || 'Failed to update password');
+      setPasswordMsg(result.error || 'failed to update password');
     }
   };
 
@@ -148,24 +148,29 @@ export default function AccountPage() {
     const result = await deleteAccount();
     if (!result.success) {
       setDeleteLoading(false);
-      alert(result.error || 'Failed to delete account');
+      alert(result.error || 'failed to delete account');
     }
   };
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="w-6 h-6 border-2 border-zinc-200 border-t-black rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-app-border border-t-app-accent rounded-full animate-spin" />
       </div>
     );
   }
+
+  const inputClasses = "w-full px-4 py-2.5 bg-app-nav border border-app-border rounded-app text-sm text-app-font placeholder:opacity-30 focus:outline-none focus:ring-1 focus:ring-app-accent transition-all font-app";
+  const labelClasses = "text-[10px] font-bold uppercase tracking-wider text-app-font opacity-40 ml-1";
+  const sectionTitleClasses = "text-xl font-bold tracking-tight text-app-font lowercase";
+  const sectionDescClasses = "text-app-font opacity-50 text-sm lowercase mb-6";
 
   return (
     <div className="flex flex-col items-center px-4 py-12 min-h-screen">
       <div className="w-full max-w-sm">
         <div className="mb-12 text-center">
-          <h1 className="text-3xl font-bold tracking-tight">account settings</h1>
-          <p className="text-zinc-500 text-sm mt-2">
+          <h1 className="text-3xl font-bold tracking-tight text-app-font lowercase">settings</h1>
+          <p className="text-app-font opacity-50 text-sm mt-2 lowercase">
             manage your personal information and security
           </p>
         </div>
@@ -177,15 +182,15 @@ export default function AccountPage() {
           animate="visible"
         >
           {/* Profile Section */}
-          <motion.section variants={itemVariants} className="flex flex-col gap-6">
+          <motion.section variants={itemVariants} className="flex flex-col">
             <div>
-              <h2 className="text-xl font-bold tracking-tight">profile</h2>
-              <p className="text-zinc-500 text-sm">how others see you on the platform</p>
+              <h2 className={sectionTitleClasses}>profile</h2>
+              <p className={sectionDescClasses}>how others see you on the platform</p>
             </div>
 
             <form onSubmit={handleUpdateProfile} className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
-                <label htmlFor="username" className="text-xs font-semibold text-zinc-700">
+                <label htmlFor="username" className={labelClasses}>
                   username
                 </label>
                 <input
@@ -193,12 +198,12 @@ export default function AccountPage() {
                   name="username"
                   defaultValue={profile?.username || ''}
                   placeholder="username"
-                  className="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-colors"
+                  className={inputClasses}
                 />
               </div>
 
               <div className="flex flex-col gap-2">
-                <label htmlFor="display_name" className="text-xs font-semibold text-zinc-700">
+                <label htmlFor="display_name" className={labelClasses}>
                   display name
                 </label>
                 <input
@@ -206,7 +211,7 @@ export default function AccountPage() {
                   name="display_name"
                   defaultValue={profile?.display_name || ''}
                   placeholder="display name"
-                  className="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-colors"
+                  className={inputClasses}
                 />
               </div>
 
@@ -216,13 +221,14 @@ export default function AccountPage() {
                 isError={profileError}
                 loadingText="saving profile..."
                 successText="profile saved"
+                className="rounded-app bg-app-accent text-white py-3 lowercase font-bold"
               >
                 save profile
               </OnboardingButton>
 
               {profileMsg && (
                 <p
-                  className={`text-sm text-center ${profileError ? 'text-red-500' : 'text-zinc-600'}`}
+                  className={`text-xs text-center lowercase ${profileError ? 'text-red-500' : 'text-app-font opacity-60'}`}
                 >
                   {profileMsg}
                 </p>
@@ -231,15 +237,15 @@ export default function AccountPage() {
           </motion.section>
 
           {/* Email Section */}
-          <motion.section variants={itemVariants} className="flex flex-col gap-6">
+          <motion.section variants={itemVariants} className="flex flex-col">
             <div>
-              <h2 className="text-xl font-bold tracking-tight">email address</h2>
-              <p className="text-zinc-500 text-sm">update the email associated with your account</p>
+              <h2 className={sectionTitleClasses}>email address</h2>
+              <p className={sectionDescClasses}>update the email associated with your account</p>
             </div>
 
             <form onSubmit={handleUpdateEmail} className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
-                <label htmlFor="email" className="text-xs font-semibold text-zinc-700">
+                <label htmlFor="email" className={labelClasses}>
                   email
                 </label>
                 <input
@@ -248,7 +254,7 @@ export default function AccountPage() {
                   type="email"
                   defaultValue={user?.email || ''}
                   placeholder="you@example.com"
-                  className="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-colors"
+                  className={inputClasses}
                 />
               </div>
 
@@ -258,13 +264,14 @@ export default function AccountPage() {
                 isError={emailError}
                 loadingText="updating email..."
                 successText="check your inbox"
+                className="rounded-app bg-app-accent text-white py-3 lowercase font-bold"
               >
                 update email
               </OnboardingButton>
 
               {emailMsg && (
                 <p
-                  className={`text-sm text-center ${emailError ? 'text-red-500' : 'text-zinc-600'}`}
+                  className={`text-xs text-center lowercase ${emailError ? 'text-red-500' : 'text-app-font opacity-60'}`}
                 >
                   {emailMsg}
                 </p>
@@ -273,17 +280,17 @@ export default function AccountPage() {
           </motion.section>
 
           {/* Password Section */}
-          <motion.section variants={itemVariants} className="flex flex-col gap-6">
+          <motion.section variants={itemVariants} className="flex flex-col">
             <div>
-              <h2 className="text-xl font-bold tracking-tight">password</h2>
-              <p className="text-zinc-500 text-sm">
+              <h2 className={sectionTitleClasses}>password</h2>
+              <p className={sectionDescClasses}>
                 change your password to keep your account secure
               </p>
             </div>
 
             <form onSubmit={handleUpdatePassword} className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
-                <label htmlFor="current_password" className="text-xs font-semibold text-zinc-700">
+                <label htmlFor="current_password" className={labelClasses}>
                   current password
                 </label>
                 <input
@@ -292,14 +299,14 @@ export default function AccountPage() {
                   type="password"
                   placeholder="••••••••"
                   required
-                  className="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-colors"
+                  className={inputClasses}
                 />
               </div>
 
               <div className="flex flex-col gap-2">
                 <label
                   htmlFor="confirm_current_password"
-                  className="text-xs font-semibold text-zinc-700"
+                  className={labelClasses}
                 >
                   confirm current password
                 </label>
@@ -309,15 +316,14 @@ export default function AccountPage() {
                   type="password"
                   placeholder="••••••••"
                   required
-                  className="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-colors"
+                  className={inputClasses}
                 />
               </div>
 
               <div className="flex flex-col gap-2">
                 <label
                   htmlFor="new_password"
-                  title="Password"
-                  className="text-xs font-semibold text-zinc-700"
+                  className={labelClasses}
                 >
                   new password
                 </label>
@@ -328,7 +334,7 @@ export default function AccountPage() {
                   placeholder="••••••••"
                   required
                   minLength={6}
-                  className="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-colors"
+                  className={inputClasses}
                 />
               </div>
 
@@ -338,13 +344,14 @@ export default function AccountPage() {
                 isError={passwordError}
                 loadingText="updating password..."
                 successText="password updated"
+                className="rounded-app bg-app-accent text-white py-3 lowercase font-bold"
               >
                 update password
               </OnboardingButton>
 
               {passwordMsg && (
                 <p
-                  className={`text-sm text-center ${passwordError ? 'text-red-500' : 'text-zinc-600'}`}
+                  className={`text-xs text-center lowercase ${passwordError ? 'text-red-500' : 'text-app-font opacity-60'}`}
                 >
                   {passwordMsg}
                 </p>
@@ -355,31 +362,31 @@ export default function AccountPage() {
           {/* Danger Zone */}
           <motion.section
             variants={itemVariants}
-            className="flex flex-col gap-4 pt-12 border-t border-zinc-100"
+            className="flex flex-col gap-4 pt-12 border-t border-app-border"
           >
             {!showDeleteConfirm ? (
               <button
                 onClick={() => setShowDeleteConfirm(true)}
-                className="text-sm font-medium text-red-600 hover:text-red-700 transition-colors w-fit mx-auto"
+                className="text-sm font-medium text-red-500 hover:text-red-600 transition-colors w-fit mx-auto lowercase"
               >
                 delete account
               </button>
             ) : (
               <div className="flex flex-col items-center gap-4">
-                <p className="text-sm text-zinc-500 text-center">
+                <p className="text-xs text-app-font opacity-40 text-center lowercase">
                   this will permanently delete your account and all associated data.
                 </p>
                 <div className="flex gap-4">
                   <button
                     onClick={() => setShowDeleteConfirm(false)}
-                    className="text-sm font-semibold text-zinc-600 hover:text-black transition-colors"
+                    className="text-sm font-bold text-app-font opacity-60 hover:opacity-100 transition-colors lowercase"
                   >
                     cancel
                   </button>
                   <button
                     onClick={handleDeleteAccount}
                     disabled={deleteLoading}
-                    className="text-sm font-semibold text-red-600 hover:text-red-700 transition-colors disabled:opacity-50"
+                    className="text-sm font-bold text-red-500 hover:text-red-600 transition-colors disabled:opacity-50 lowercase"
                   >
                     {deleteLoading ? 'deleting...' : 'yes, delete'}
                   </button>
