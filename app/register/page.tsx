@@ -20,7 +20,7 @@ export default async function RegisterPage({
             name="email"
             placeholder="you@example.com"
             required
-            className="rounded-md border border-zinc-200 px-3 py-2 dark:border-zinc-800 dark:bg-black"
+            className="rounded-md border border-zinc-200 px-3 py-2"
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -32,21 +32,21 @@ export default async function RegisterPage({
             name="password"
             placeholder="••••••••"
             required
-            className="rounded-md border border-zinc-200 px-3 py-2 dark:border-zinc-800 dark:bg-black"
+            className="rounded-md border border-zinc-200 px-3 py-2"
           />
         </div>
         <button
           formAction={signup}
-          className="rounded-md bg-black px-4 py-2 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+          className="rounded-md bg-black px-4 py-2 text-white hover:bg-zinc-800"
         >
           Sign Up
         </button>
         {message && <p className="text-sm text-red-500">{message}</p>}
       </form>
 
-      <p className="text-sm text-zinc-600 dark:text-zinc-400">
+      <p className="text-sm text-zinc-600">
         Already have an account?{' '}
-        <Link href="/login" className="font-medium text-black underline dark:text-white">
+        <Link href="/login" className="font-medium text-black underline">
           Sign In
         </Link>
       </p>
