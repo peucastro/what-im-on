@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
@@ -26,9 +27,14 @@ export default async function RegisterPage({
     <div className="fixed inset-0 flex flex-col items-center justify-center px-4">
       <div className="w-full max-w-sm shrink-0">
         <div className="flex flex-col gap-8">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold tracking-tight">join what i'm on</h1>
-            <p className="text-zinc-500 text-sm mt-2">create an account to get started</p>
+          <div className="flex flex-col items-center gap-6 text-center">
+            <Link href="/">
+              <Image src="/logo.svg" alt="logo" width={40} height={40} className="hover:opacity-80 transition-opacity" />
+            </Link>
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight">join what i'm on</h1>
+              <p className="text-zinc-500 text-sm mt-2">create an account to get started</p>
+            </div>
           </div>
 
           <form className="flex flex-col gap-6">
