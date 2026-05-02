@@ -1,6 +1,9 @@
+import SearchBar from '@/components/SearchBar';
+
 export default function Home() {
   return (
     <div className="flex flex-col items-center gap-12 py-12 text-center sm:items-start sm:text-left">
+      <SearchBar />
       <div className="flex flex-col items-center gap-6 sm:items-start">
         <h1 className="text-4xl font-bold tracking-tight text-black sm:text-5xl lowercase">
           What i&apos;m on
