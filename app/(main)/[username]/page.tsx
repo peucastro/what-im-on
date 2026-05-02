@@ -81,7 +81,7 @@ async function getUserProfile(username: string) {
     } | null;
   }
 
-  (itemsData as unknown as RawItem[] || []).forEach((item) => {
+  ((itemsData as unknown as RawItem[]) || []).forEach((item) => {
     const categoryLabel = item.categories?.label || 'Other';
     const categoryIcon = item.categories?.icon;
 
