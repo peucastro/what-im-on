@@ -1,4 +1,5 @@
 import SearchBar from '@/components/SearchBar';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -15,12 +16,12 @@ export default function Home() {
       </div>
 
       <div className="flex flex-col gap-4 sm:flex-row">
-        <a
+        <Link
           className="flex h-12 items-center justify-center gap-2 rounded-full bg-black px-8 text-white transition-colors hover:bg-zinc-800 lowercase"
           href="/register"
         >
           Get started
-        </a>
+        </Link>
       </div>
     </div>
   );
