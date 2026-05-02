@@ -1,6 +1,10 @@
-import { Geist, Geist_Mono, Inter } from 'next/font/google';
+import { Geist, Geist_Mono, Inter, Silkscreen } from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+import { ThemeProvider } from '@/components/ThemeProvider';
+import { createClient } from '@/utils/supabase/server';
+import { cookies } from 'next/headers';
+import { UserPreferences } from '@/utils/themes';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -9,6 +13,12 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
+  subsets: ['latin'],
+});
+
+const pixelFont = Silkscreen({
+  weight: '400',
+  variable: '--font-pixel',
   subsets: ['latin'],
 });
 
@@ -34,17 +44,44 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  let preferences: UserPreferences = {
+    theme_id: 'default',
+    border_radius: 'low',
+    font_family: 'sans',
+    pet_id: 'none',
+  };
+
+  if (user) {
+    const { data } = await supabase
+      .from('user_preferences')
+      .select('theme_id, border_radius, font_family, pet_id')
+      .eq('user_id', user.id)
+      .single();
+
+    if (data) {
+      preferences = data as UserPreferences;
+    }
+  }
+
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} h-full antialiased light`}
+      className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${pixelFont.variable} h-full antialiased light`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <ThemeProvider preferences={preferences}>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }

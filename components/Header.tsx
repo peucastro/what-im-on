@@ -1,16 +1,8 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import Logo from './Logo';
 import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
-import { signOut } from '@/app/(main)/auth/actions';
-
-function isLightColor(hex: string): boolean {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  return luminance > 0.5;
-}
+import UserDropdown from './UserDropdown';
 
 export default async function Header() {
   const cookieStore = await cookies();
@@ -20,58 +12,42 @@ export default async function Header() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  let logoStyle = '';
-  if (user) {
-    const { data } = await supabase
-      .from('user_preferences')
-      .select('background_color')
-      .eq('user_id', user.id)
-      .single();
+  let username = '';
 
-    const bgColor = data?.background_color || '#ffffff';
-    logoStyle = isLightColor(bgColor) ? 'invert(0)' : 'invert(1)';
+  if (user) {
+    const { data: userData } = await supabase
+      .from('users')
+      .select('username')
+      .eq('id', user.id)
+      .single();
+    username = userData?.username || '';
   }
 
   return (
-    <nav className="w-full border-b border-zinc-200 bg-white">
-      <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
-        {/* Logo */}
-        <Link href="/" className="flex items-center">
-          <Image
-            src="/logo.svg"
-            alt="logo"
-            width={64}
-            height={64}
-            style={logoStyle ? { filter: logoStyle } : undefined}
-          />
-        </Link>
+    <header className="w-full bg-app-header bg-cover bg-center bg-transparent">
+      <nav className="m-2 border border-app-border bg-app-nav rounded-app">
+        <div className="mx-auto flex max-w-3xl items-center justify-between sm:px-6 px-4">
+          <Link
+            href="/"
+            className="flex items-center text-app-font hover:opacity-70 transition-opacity"
+          >
+            <Logo className="rounded-app" />
+          </Link>
 
-        {/* Auth Links */}
-        <div className="flex items-center gap-4">
-          {user ? (
-            <>
+          <div className="flex items-center gap-4">
+            {user ? (
+              <UserDropdown username={username} />
+            ) : (
               <Link
-                href="/account"
-                className="rounded-full bg-black px-4 py-2 text-sm text-white hover:bg-zinc-800"
+                href="/register"
+                className="rounded-app px-4 py-2 text-sm bg-gray-100 text-app-font hover:opacity-90 transition-opacity"
               >
-                account
+                join
               </Link>
-              <form action={signOut}>
-                <button type="submit" className="text-sm text-zinc-600 hover:text-black">
-                  sign out
-                </button>
-              </form>
-            </>
-          ) : (
-            <Link
-              href="/register"
-              className="rounded-full bg-black px-4 py-2 text-sm text-white hover:bg-zinc-800"
-            >
-              join
-            </Link>
-          )}
+            )}
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </header>
   );
 }

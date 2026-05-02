@@ -3,12 +3,37 @@
 @theme {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* App Specific Theme Variables */
+  --color-app-border: var(--app-border);
+  --color-app-font: var(--app-font);
+  --color-app-accent: var(--app-accent);
+  --color-app-nav: var(--app-nav);
+
+  --radius-app: var(--app-radius);
+
+  --font-app: var(--app-font-family);
+
+  --background-image-app-header: var(--app-header-image);
+  --background-image-app-overlay: var(--app-overlay-image);
+  --background-image-app-page: var(--app-page-background);
 }
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
   color-scheme: light;
+
+  /* Default values for our custom theme */
+  --app-border: #e2e8f0;
+  --app-font: #1a202c;
+  --app-accent: #000000;
+  --app-nav: #ffffff;
+  --app-radius: 4px;
+  --app-font-family: var(--font-geist-sans), ui-sans-serif, system-ui;
+  --app-header-image: none;
+  --app-overlay-image: none;
+  --app-page-background: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,9 +44,28 @@
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
-  padding-top: env(safe-area-inset-top);
+  background-color: var(--app-page-background);
+  color: var(--app-font);
+  font-family: var(--app-font-family);
+}
+
+@layer utilities {
+  .bg-app-header {
+    background-image: var(--app-header-image);
+  }
+
+  .bg-app-page {
+    background: var(--app-page-background);
+  }
+}
+
+/* Helper class for the overlay */
+.app-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: var(--app-overlay-image);
+  z-index: 50;
 }
 
 @layer utilities {

@@ -1,15 +1,54 @@
+'use client';
+
+import VibeEditor from './VibeEditor';
+import Image from 'next/image';
+import { useTheme } from './ThemeProvider';
+import { UserPreferences } from '@/utils/themes';
+
 interface ProfileHeaderProps {
   username: string;
+  isOwner?: boolean;
+  preferences?: UserPreferences | null;
 }
 
-export default function ProfileHeader({ username }: ProfileHeaderProps) {
+export default function ProfileHeader({
+  username,
+  isOwner,
+  preferences: propPreferences,
+}: ProfileHeaderProps) {
+  const { activePreferences: globalActivePreferences } = useTheme();
+
+  // If we are the owner, we want the live 'context' preferences so edits show up immediately (optimistic update).
+  // If we are a visitor, we prefer the propPreferences (from SSR) to avoid theme/pet flashes.
+  const activePreferences = isOwner
+    ? globalActivePreferences
+    : propPreferences || globalActivePreferences;
+
   return (
-    <h1 className="text-3xl font-normal text-black lowercase">
-      what
-      <br />
-      <span className="font-semibold">{username}&apos;s</span>
-      <br />
-      on
-    </h1>
+    <div className="relative group">
+      <h1 className="text-xl font-normal text-app-font border border-app-border sm:p-4 p-4 bg-app-nav font-sans">
+        <span className="lowercase">what</span>
+        <br />
+        <span className="font-semibold font-app">{username}&apos;s</span>
+        <br />
+        <span className="lowercase">on</span>
+      </h1>
+
+      {/* Vibe Editor at the top */}
+      <div className="absolute top-4 right-4">{isOwner && <VibeEditor />}</div>
+
+      {/* Pet at the bottom */}
+      {activePreferences.pet_id !== 'none' && (
+        <div className="absolute top-16 right-20 pointer-events-none">
+          <Image
+            src={`/assets/pets/${activePreferences.pet_id}.gif`}
+            alt="pet"
+            width={64}
+            height={64}
+            className="w-16 h-16 object-contain"
+          />
+        </div>
+      )}
+    </div>
   );
 }

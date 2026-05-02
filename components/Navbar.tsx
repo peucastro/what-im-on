@@ -1,36 +1,53 @@
 'use client';
 
 import Link from 'next/link';
-
 import { usePathname } from 'next/navigation';
+import { motion } from 'framer-motion';
 
 export default function Navbar() {
   const pathname = usePathname();
+  const visibleRoutes = new Set(['/present', '/future', '/others']);
+  const reservedRoutes = new Set(['/', '/login', '/register', '/onboarding', '/account', '/auth']);
 
-  const getLinkStyle = (path: string) => {
-    const isActive = pathname === path;
+  const isProfileRoute =
+    /^\/[^/]+$/.test(pathname) && !reservedRoutes.has(pathname) && !visibleRoutes.has(pathname);
+  const isVisible = visibleRoutes.has(pathname) || isProfileRoute;
 
-    return `flex-1 rounded-xl border-2 py-3 text-center transition-all ${
-      isActive
-        ? 'bg-zinc-100 text-black font-bold border-zinc-300'
-        : 'bg-transparent text-black border-zinc-300 hover:text-zinc-800'
-    }`;
-  };
+  if (!isVisible) {
+    return null;
+  }
+
+  const navItems = [
+    { label: 'present', href: '/present' },
+    { label: 'future', href: '/future' },
+    { label: 'others', href: '/others' },
+  ];
 
   return (
-    <nav className="mx-auto w-full max-w-3xl p-4">
-      <div className="flex gap-3 rounded-2xl border-2 p-3 bg-white">
-        <Link href="/present" className={getLinkStyle('/present')}>
-          present
-        </Link>
+    <nav className="fixed bottom-6 left-1/2 z-[60] w-fit -translate-x-1/2">
+      <div className="flex gap-1 rounded-app border border-app-border bg-app-nav p-1 shadow-lg backdrop-blur-md">
+        {navItems.map((item) => {
+          const isActive = pathname === item.href || (item.href === '/present' && isProfileRoute);
 
-        <Link href="/future" className={getLinkStyle('/future')}>
-          future
-        </Link>
-
-        <Link href="/others" className={getLinkStyle('/others')}>
-          others
-        </Link>
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`relative px-5 py-2 text-sm lowercase transition-colors border-app-border border rounded-app duration-300 ${
+                isActive ? 'text-white' : 'text-app-font hover:opacity-70'
+              }`}
+            >
+              {isActive && (
+                <motion.div
+                  layoutId="nav-pill"
+                  className="absolute inset-0 z-0 bg-app-accent rounded-app"
+                  transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+              <span className="relative z-10">{item.label}</span>
+            </Link>
+          );
+        })}
       </div>
     </nav>
   );
