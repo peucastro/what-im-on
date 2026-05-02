@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import svgPaths from '../../public/svg-gfj0lalzlp';
 
 const imgLogo = '/logo.svg';
@@ -83,7 +84,7 @@ export default function Landing() {
       {/* 2. MY SONG SECTION */}
       <section className="flex flex-col items-center w-full mt-24 px-4">
         {/* Caixas de Música */}
-        <div className="flex items-center justify-center gap-3 md:gap-8 lg:gap-12 overflow-hidden w-full max-w-5xl">
+        <div className="flex items-center justify-center gap-3 md:gap-6 lg:gap-8 overflow-hidden w-full max-w-5xl">
           <div className="w-[60px] h-[60px] md:w-[100px] md:h-[100px] lg:w-[130px] lg:h-[130px] bg-[#d9d9d9] rounded-[2px] shrink-0 opacity-50" />
           <div className="w-[75px] h-[75px] md:w-[125px] md:h-[125px] lg:w-[160px] lg:h-[160px] bg-[#d9d9d9] rounded-[2px] shrink-0 opacity-75" />
 
@@ -125,35 +126,55 @@ export default function Landing() {
       </section>
 
       {/* 3. PERSONALIZE SECTION */}
-      <section className="flex flex-col items-center text-center mt-32 px-4 w-full max-w-4xl">
-        <h2 className="font-['Inter'] font-bold text-[24px] md:text-[30px] lg:text-[40px] tracking-tight">
+      <section className="flex flex-col items-center text-center mt-32 px-4 w-full max-w-6xl mx-auto">
+        <h2 className="font-['Inter'] font-bold text-[24px] md:text-[40px] lg:text-[48px] tracking-tight">
           <span className="text-[#e47e2b] font-bold">Personalize</span> Your Profile
         </h2>
-        <p className="font-['Inter'] font-normal text-[15px] md:text-[18px] lg:text-[20px] max-w-[600px] mt-4 leading-relaxed">
+        <p className="font-['Inter'] font-normal text-[15px] md:text-[20px] max-w-[700px] mt-6 mb-16 leading-relaxed">
           We respect your identity and style and encourage you to create the most authentic profile
           page you can!
         </p>
 
-        {/* Galeria de Telefones Sobrepostos */}
-        <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-0 mt-12 relative w-full">
-          <img
+        {/* Contentor com altura generosa para o layout em cascata */}
+        <div className="relative w-full flex justify-center min-h-[700px] md:min-h-[900px] mb-20">
+          {/* Foto 1 - Topo Esquerda */}
+          <motion.img
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true, margin: '-100px' }}
             alt="Template Default"
-            className="w-[200px] md:w-[238px] shadow-[0px_4px_10px_rgba(0,0,0,0.15)] rounded-md z-10"
+            /* Aumentamos para w-[280px] no mobile e w-[320px] no desktop */
+            className="absolute z-10 w-[200px] md:w-[320px] shadow-xl rounded-[30px] border border-gray-100 
+                 left-1/2 -translate-x-[110%] md:-translate-x-[130%] top-0"
             src={imgThePresentDefault1}
           />
-          <img
+
+          {/* Foto 2 - Centro (Sobrepõe ligeiramente a 1) */}
+          <motion.img
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 150 }}
+            transition={{ duration: 0.8, delay: 0.8 }} /* Delay maior para dar tempo à primeira */
+            viewport={{ once: true, margin: '-100px' }}
             alt="Template Terminal"
-            className="w-[200px] md:w-[238px] shadow-[0px_4px_15px_rgba(0,0,0,0.25)] rounded-md z-20 md:-ml-8 md:mt-24"
+            className="absolute z-20 w-[200px] md:w-[320px] shadow-2xl rounded-[30px] border-4 border-white 
+                 left-1/2 -translate-x-1/2 top-0"
             src={imgThePresentTerminal1}
           />
-          <img
+
+          {/* Foto 3 - Baixo Direita (Sobrepõe ligeiramente a 2) */}
+          <motion.img
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 300 }}
+            transition={{ duration: 0.8, delay: 1.4 }} /* Delay ainda maior */
+            viewport={{ once: true, margin: '-100px' }}
             alt="Template Nostalgic"
-            className="w-[200px] md:w-[238px] shadow-[0px_4px_10px_rgba(0,0,0,0.15)] rounded-md z-10 md:-ml-8"
-            src={imgThePresentNostalgic1}
+            className="absolute z-30 w-[200px] md:w-[320px] shadow-xl rounded-[30px] border border-gray-100
+                 left-1/2 translate-x-[10%] md:translate-x-[30%] top-0"
+            src={imgPinkTempate}
           />
         </div>
       </section>
-
       {/* 4. ADD WHAT YOU'RE ON SECTION */}
       <section className="flex flex-col items-center text-center mt-32 px-4">
         <h2 className="font-['Inter'] font-bold text-[24px] md:text-[30px] lg:text-[40px] tracking-tight">
@@ -185,7 +206,7 @@ export default function Landing() {
         {/* Telefone Único */}
         <img
           alt="Template Terminal Single"
-          className="w-[200px] md:w-[248px] mt-12 shadow-lg rounded-md"
+          className="w-[00px] md:w-[248px] mt-12 shadow-lg rounded-md"
           src={imgSuggestions}
         />
       </section>
