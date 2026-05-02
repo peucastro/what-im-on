@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
-import { signOut } from '@/app/auth/actions';
+import { signOut } from '@/app/(main)/auth/actions';
 
 function isLightColor(hex: string): boolean {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -40,8 +40,8 @@ export default async function Header() {
           <Image
             src="/logo.svg"
             alt="logo"
-            width={32}
-            height={32}
+            width={64}
+            height={64}
             style={logoStyle ? { filter: logoStyle } : undefined}
           />
         </Link>
