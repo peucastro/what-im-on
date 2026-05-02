@@ -1,16 +1,23 @@
 import Image from 'next/image';
 
-interface ItemCardProps {
+interface Item {
+  id: string;
   title: string;
   description?: string;
-  imageUrl?: string;
+  image_url?: string;
 }
 
-export default function ItemCard({ title, description, imageUrl }: ItemCardProps) {
+interface ItemCardProps {
+  item: Item;
+}
+
+export default function ItemCard({ item }: ItemCardProps) {
+  const { title, description, image_url: imageUrl } = item;
+  
   return (
-    <div className="rounded border border-zinc-200 bg-white p-6">
+    <div className="rounded-app border border-app-border bg-app-nav p-6 mb-4">
       {imageUrl && (
-        <div className="relative mb-4 h-48 w-full overflow-hidden rounded-sm">
+        <div className="relative mb-4 h-48 w-full overflow-hidden rounded-app">
           <Image
             src={imageUrl}
             alt={title}
@@ -20,8 +27,8 @@ export default function ItemCard({ title, description, imageUrl }: ItemCardProps
           />
         </div>
       )}
-      <h3 className="text-lg font-bold text-black">{title}</h3>
-      {description && <p className="mt-2 text-sm text-zinc-600">{description}</p>}
+      <h3 className="text-lg font-bold text-app-font">{title}</h3>
+      {description && <p className="mt-2 text-sm text-app-font opacity-80">{description}</p>}
     </div>
   );
 }

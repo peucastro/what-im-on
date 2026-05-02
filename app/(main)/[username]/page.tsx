@@ -18,16 +18,11 @@ interface ItemGroup {
   items: Item[];
 }
 
-interface ProfileData {
-  username: string;
-  itemGroups: ItemGroup[];
-}
-
-async function getUserProfile(username: string): Promise<ProfileData | null> {
+async function getUserProfile(username: string) {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
-  // First get user info including display_name
+  // 1. Get user by username
   const { data: userData, error: userError } = await supabase
     .from('users')
     .select('id, username, display_name')
@@ -38,8 +33,8 @@ async function getUserProfile(username: string): Promise<ProfileData | null> {
     return null;
   }
 
-  // Get current items
-  const { data: items, error: itemsError } = await supabase
+  // 2. Get items with categories
+  const { data: itemsData, error: itemsError } = await supabase
     .from('items')
     .select(
       `
@@ -47,62 +42,46 @@ async function getUserProfile(username: string): Promise<ProfileData | null> {
       title,
       description,
       image_url,
-      category_id
+      category_id,
+      categories (
+        label,
+        icon
+      )
     `
     )
     .eq('user_id', userData.id)
-    .eq('is_current', true)
-    .order('category_id');
-
-  // Get all categories for lookup
-  const { data: allCategories } = await supabase.from('categories').select('id, label, icon');
+    .order('created_at', { ascending: false });
 
   if (itemsError) {
     console.error('Error fetching items:', itemsError);
-    return { username: userData.display_name || userData.username, itemGroups: [] };
+    return null;
   }
 
-  if (!items || items.length === 0) {
-    return {
-      username: userData.display_name || userData.username,
-      itemGroups: [],
-    };
-  }
+  // Group items by category
+  const groups: Record<string, ItemGroup> = {};
 
-  // Transform data and group by category
-  const itemsByCategory: ItemGroup[] = [];
-  const categoryMap = new Map(allCategories?.map((c) => [c.id, c]) || []);
+  itemsData.forEach((item: any) => {
+    const categoryLabel = item.categories?.label || 'Other';
+    const categoryIcon = item.categories?.icon;
 
-  items?.forEach((item) => {
-    const category = categoryMap.get(item.category_id);
-    const categoryLabel = category?.label || 'Other';
-    const categoryIcon = category?.icon;
-    const existingCategory = itemsByCategory.find(
-      (group) => group.category_label === categoryLabel
-    );
-
-    if (existingCategory) {
-      existingCategory.items.push({
-        id: item.id,
-        title: item.title,
-        description: item.description,
-        image_url: item.image_url,
-      });
-    } else {
-      itemsByCategory.push({
+    if (!groups[categoryLabel]) {
+      groups[categoryLabel] = {
         category_label: categoryLabel,
         category_icon: categoryIcon,
-        items: [
-          {
-            id: item.id,
-            title: item.title,
-            description: item.description,
-            image_url: item.image_url,
-          },
-        ],
-      });
+        items: [],
+      };
     }
+
+    groups[categoryLabel].items.push({
+      id: item.id,
+      title: item.title,
+      description: item.description,
+      image_url: item.image_url,
+      category_id: item.category_id,
+    });
   });
+
+  const itemsByCategory = Object.values(groups);
 
   return {
     username: userData.display_name || userData.username,
@@ -119,7 +98,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
   }
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 w-full mx-auto max-w-sm">
       <ProfileHeader username={profile.username} />
 
       {profile.itemGroups.length === 0 ? (
@@ -130,16 +109,11 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
             <div key={group.category_label}>
               <div className="mb-4 flex items-center gap-2">
                 {group.category_icon && <span className="text-2xl">{group.category_icon}</span>}
-                <h2 className="text-xl font-semibold text-black">{group.category_label}</h2>
+                <h2 className="text-xl font-semibold text-app-font">{group.category_label}</h2>
               </div>
-              <div className="border-b border-zinc-200 pb-6">
-                {group.items.map((item: Item) => (
-                  <ItemCard
-                    key={item.id}
-                    title={item.title}
-                    description={item.description}
-                    imageUrl={item.image_url}
-                  />
+              <div className="border-b border-app-border pb-6">
+                {profile.itemGroups.length > 0 && group.items.map((item: Item) => (
+                  <ItemCard key={item.id} item={item} />
                 ))}
               </div>
             </div>
