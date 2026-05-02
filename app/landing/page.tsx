@@ -7,7 +7,6 @@ import svgPaths from '../../public/svg-gfj0lalzlp';
 const imgLogo = '/logo.svg';
 const imgThePresentDefault1 = '/template1.png';
 const imgThePresentTerminal1 = '/template2.png';
-const imgThePresentNostalgic1 = '/template4.png';
 const imgAlbumArt = '/riverMan.png';
 const imgDancingDuckKarlo1 = '/duck.png';
 const imgThePresentMinecraft1 = '/template3.png';
