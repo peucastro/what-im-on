@@ -5,13 +5,14 @@ import { updateAvatar, skipAvatar } from '@/app/(auth)/onboarding/actions';
 import OnboardingButton from '@/components/OnboardingButton';
 import ProgressIndicator from '@/components/ProgressIndicator';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useRouter } from 'next/navigation';
-import { useState, useRef } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useRef, Suspense } from 'react';
 import { triggerConfetti } from '@/utils/confetti';
 import { containerVariants, itemVariants } from '@/utils/animations';
 
-export default function AvatarPage() {
+function AvatarForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -95,7 +96,8 @@ export default function AvatarPage() {
         setTimeout(() => {
           setShowExit(true);
           setTimeout(() => {
-            router.push('/');
+            const nextParam = searchParams.get('next');
+            router.push(nextParam || '/');
           }, 300);
         }, 1000);
       } else {
@@ -124,7 +126,8 @@ export default function AvatarPage() {
         setTimeout(() => {
           setShowExit(true);
           setTimeout(() => {
-            router.push('/');
+            const nextParam = searchParams.get('next');
+            router.push(nextParam || '/');
           }, 300);
         }, 1000);
       }
@@ -274,5 +277,13 @@ export default function AvatarPage() {
         </motion.div>
       )}
     </motion.div>
+  );
+}
+
+export default function AvatarPage() {
+  return (
+    <Suspense fallback={null}>
+      <AvatarForm />
+    </Suspense>
   );
 }

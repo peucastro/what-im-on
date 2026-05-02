@@ -1,5 +1,5 @@
-import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Inter } from 'next/font/google';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
 const geistSans = Geist({
@@ -16,11 +16,22 @@ const inter = Inter({
   variable: '--font-inter',
   subsets: ['latin'],
 });
+export const viewport: Viewport = {
+  themeColor: '#ffffff',
+};
 
 export const metadata: Metadata = {
   title: "what i'm on",
   description:
     "A personal space to showcase your current obsessions and crowdsource your next favorite thing. Share what you're into and get curated recommendations.",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: "what i'm on",
+  },
+  other: {
+    'mobile-web-app-capable': 'yes',
+  },
 };
 
 export default function RootLayout({
