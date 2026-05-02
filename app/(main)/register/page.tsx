@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { signup } from '@/app/auth/actions';
+import { signup } from '@/app/(main)/auth/actions';
 
 export default async function RegisterPage({
   searchParams,
@@ -31,7 +31,11 @@ export default async function RegisterPage({
             </div>
 
             <div className="flex flex-col gap-2">
-              <label htmlFor="password" title="Password" className="text-xs font-semibold text-zinc-700">
+              <label
+                htmlFor="password"
+                title="Password"
+                className="text-xs font-semibold text-zinc-700"
+              >
                 password
               </label>
               <input
@@ -64,7 +68,10 @@ export default async function RegisterPage({
 
           <p className="text-sm text-zinc-600 text-center">
             already have an account?{' '}
-            <Link href="/login" className="font-semibold text-black hover:text-zinc-700 transition-colors">
+            <Link
+              href="/login"
+              className="font-semibold text-black hover:text-zinc-700 transition-colors"
+            >
               sign in
             </Link>
           </p>
