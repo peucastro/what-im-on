@@ -8,6 +8,7 @@ import OnboardingButton from '@/components/OnboardingButton';
 import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { containerVariants, itemVariants } from '@/utils/animations';
+import FormMessage from '@/components/FormMessage';
 
 function LoginForm() {
   const searchParams = useSearchParams();
@@ -121,7 +122,7 @@ function LoginForm() {
           sign in
         </OnboardingButton>
 
-        {errorMessage && <p className="text-sm text-red-500 text-center">{errorMessage}</p>}
+        <FormMessage message={errorMessage} type="error" />
       </motion.form>
 
       <motion.div className="relative" variants={itemVariants}>

@@ -4,6 +4,7 @@ import React from 'react';
 import { useState } from 'react';
 import Image from 'next/image';
 import type { SearchResult } from '@/lib/search/types';
+import FormMessage from './FormMessage';
 
 const CATEGORIES = [
   { value: 'all', label: 'All' },
@@ -77,7 +78,7 @@ export default function SearchBar() {
         </button>
       </form>
 
-      {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+      <FormMessage message={error} type="error" className="mb-4" />
 
       <div className="space-y-3">
         {results.map((item) => (

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { createClient } from '@/utils/supabase/client';
 import { updateProfile, updateEmail, updatePassword, deleteAccount } from './actions';
 import OnboardingButton from '@/components/OnboardingButton';
+import FormMessage from '@/components/FormMessage';
 import { useRouter } from 'next/navigation';
 
 import { containerVariants, itemVariants } from '@/utils/animations';
@@ -220,13 +221,7 @@ export default function AccountPage() {
                 save profile
               </OnboardingButton>
 
-              {profileMsg && (
-                <p
-                  className={`text-sm text-center ${profileError ? 'text-red-500' : 'text-zinc-600'}`}
-                >
-                  {profileMsg}
-                </p>
-              )}
+              <FormMessage message={profileMsg} type={profileError ? 'error' : 'success'} />
             </form>
           </motion.section>
 
@@ -262,13 +257,7 @@ export default function AccountPage() {
                 update email
               </OnboardingButton>
 
-              {emailMsg && (
-                <p
-                  className={`text-sm text-center ${emailError ? 'text-red-500' : 'text-zinc-600'}`}
-                >
-                  {emailMsg}
-                </p>
-              )}
+              <FormMessage message={emailMsg} type={emailError ? 'error' : 'success'} />
             </form>
           </motion.section>
 
@@ -342,13 +331,7 @@ export default function AccountPage() {
                 update password
               </OnboardingButton>
 
-              {passwordMsg && (
-                <p
-                  className={`text-sm text-center ${passwordError ? 'text-red-500' : 'text-zinc-600'}`}
-                >
-                  {passwordMsg}
-                </p>
-              )}
+              <FormMessage message={passwordMsg} type={passwordError ? 'error' : 'success'} />
             </form>
           </motion.section>
 
