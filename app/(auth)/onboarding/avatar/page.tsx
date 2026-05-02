@@ -95,7 +95,7 @@ export default function AvatarPage() {
         setTimeout(() => {
           setShowExit(true);
           setTimeout(() => {
-            router.push('/dashboard');
+            router.push('/');
           }, 300);
         }, 1000);
       } else {
@@ -124,7 +124,7 @@ export default function AvatarPage() {
         setTimeout(() => {
           setShowExit(true);
           setTimeout(() => {
-            router.push('/dashboard');
+            router.push('/');
           }, 300);
         }, 1000);
       }

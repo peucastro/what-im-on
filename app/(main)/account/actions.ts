@@ -33,7 +33,7 @@ export async function updateProfile(data: {
   }
 
   revalidatePath('/account');
-  revalidatePath('/dashboard');
+  revalidatePath('/');
   return { success: true, message: 'Profile updated successfully' };
 }
 
