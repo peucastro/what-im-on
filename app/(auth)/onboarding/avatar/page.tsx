@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { updateAvatar, skipAvatar } from '@/app/(auth)/onboarding/actions';
 import OnboardingButton from '@/components/OnboardingButton';
 import ProgressIndicator from '@/components/ProgressIndicator';
@@ -190,10 +191,12 @@ export default function AvatarPage() {
                 className="flex flex-col items-center gap-4"
               >
                 <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-black">
-                  <img
+                  <Image
                     src={selectedImage}
                     alt="Avatar preview"
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
+                    unoptimized
                   />
                 </div>
                 <div className="text-center">

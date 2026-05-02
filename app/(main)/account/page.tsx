@@ -9,11 +9,20 @@ import { useRouter } from 'next/navigation';
 
 import { containerVariants, itemVariants } from '@/utils/animations';
 
+interface UserData {
+  id: string;
+  email?: string;
+}
+
+interface ProfileData {
+  username?: string;
+  display_name?: string;
+}
+
 export default function AccountPage() {
   const router = useRouter();
-  const supabase = createClient();
-  const [user, setUser] = useState<any>(null);
-  const [profile, setProfile] = useState<any>(null);
+  const [user, setUser] = useState<UserData | null>(null);
+  const [profile, setProfile] = useState<ProfileData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   // Profile State
@@ -40,6 +49,7 @@ export default function AccountPage() {
 
   useEffect(() => {
     async function loadData() {
+      const supabase = createClient();
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -55,7 +65,7 @@ export default function AccountPage() {
       setIsLoading(false);
     }
     loadData();
-  }, [supabase, router]);
+  }, [router]);
 
   const handleUpdateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

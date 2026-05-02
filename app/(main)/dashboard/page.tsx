@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { signOut } from '@/app/(main)/auth/actions';
+import Image from 'next/image';
 
 export default async function DashboardPage() {
   const cookieStore = await cookies();
@@ -20,13 +21,16 @@ export default async function DashboardPage() {
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-2xl font-bold">Dashboard</h1>
-      <img
+      <Image
         src={
           profile?.avatar_url ||
           `https://ui-avatars.com/api/?name=${user.email}&background=random&color=fff`
         }
         alt="Avatar"
-        className="h-16 w-16 rounded-full object-cover"
+        width={64}
+        height={64}
+        className="rounded-full object-cover"
+        unoptimized
       />
       <p>Hello {profile?.display_name || user.email}</p>
       <p>Username: {profile?.username}</p>

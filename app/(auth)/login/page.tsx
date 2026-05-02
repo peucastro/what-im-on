@@ -6,13 +6,13 @@ import { motion } from 'framer-motion';
 import { login } from '@/app/(main)/auth/actions';
 import OnboardingButton from '@/components/OnboardingButton';
 import { useState, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { containerVariants, itemVariants } from '@/utils/animations';
 
 function LoginForm() {
   const searchParams = useSearchParams();
   const initialMessage = searchParams.get('message');
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -29,15 +29,15 @@ function LoginForm() {
 
     try {
       await login(formData);
-    } catch (error: any) {
-      if (error.digest?.startsWith('NEXT_REDIRECT')) {
+    } catch (error) {
+      if ((error as { digest?: string }).digest?.startsWith('NEXT_REDIRECT')) {
         setIsSuccess(true);
         setTimeout(() => {
           setShowExit(true);
         }, 1000);
         throw error;
       }
-      
+
       setIsError(true);
       setErrorMessage('Could not authenticate user');
       setIsLoading(false);
@@ -53,7 +53,13 @@ function LoginForm() {
     >
       <motion.div className="flex flex-col items-center gap-6 text-center" variants={itemVariants}>
         <Link href="/">
-          <Image src="/logo.svg" alt="logo" width={64} height={64} className="hover:opacity-80 transition-opacity" />
+          <Image
+            src="/logo.svg"
+            alt="logo"
+            width={64}
+            height={64}
+            className="hover:opacity-80 transition-opacity"
+          />
         </Link>
         <div>
           <h1 className="text-3xl font-bold tracking-tight">welcome back</h1>
@@ -133,11 +139,13 @@ export default function LoginPage() {
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center px-4">
       <div className="w-full max-w-sm shrink-0">
-        <Suspense fallback={
-          <div className="flex items-center justify-center">
-            <div className="w-6 h-6 border-2 border-zinc-200 border-t-black rounded-full animate-spin" />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center">
+              <div className="w-6 h-6 border-2 border-zinc-200 border-t-black rounded-full animate-spin" />
+            </div>
+          }
+        >
           <LoginForm />
         </Suspense>
       </div>
