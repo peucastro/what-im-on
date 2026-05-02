@@ -8,14 +8,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  color-scheme: light dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #000000;
-    --foreground: #ffffff;
-  }
+  color-scheme: light;
 }
 
 body {
