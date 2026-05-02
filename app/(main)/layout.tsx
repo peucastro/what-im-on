@@ -14,8 +14,8 @@ export default function MainLayout({
   return (
     <>
       <Header />
-      <main className="mx-auto w-full max-w-3xl flex-1 sm:px-6 px-0 py-8">{children}</main>
-      <Navbar />
+      <main className="mx-auto w-full flex-1">{children}</main>
+      
     </>
   );
 }

@@ -1,5 +1,5 @@
+import { Geist, Geist_Mono, Inter , Press_Start_2P} from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono, Press_Start_2P } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { createClient } from '@/utils/supabase/server';
@@ -22,6 +22,10 @@ const pixelFont = Press_Start_2P({
   subsets: ['latin'],
 });
 
+const inter = Inter({
+  variable: '--font-inter',
+  subsets: ['latin'],
+});
 export const viewport: Viewport = {
   themeColor: '#ffffff',
 };
@@ -73,7 +77,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${pixelFont.variable} h-full antialiased light`}
+      className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} h-full antialiased light`}
     >
       <body className="min-h-full flex flex-col">
         <ThemeProvider preferences={preferences}>{children}</ThemeProvider>
