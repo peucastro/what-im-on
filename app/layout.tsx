@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono, Inter , Press_Start_2P} from 'next/font/google';
+import { Geist, Geist_Mono, Inter, Silkscreen } from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-const pixelFont = Press_Start_2P({
+const pixelFont = Silkscreen({
   weight: '400',
   variable: '--font-pixel',
   subsets: ['latin'],
@@ -77,7 +77,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} h-full antialiased light`}
+      className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${pixelFont.variable} h-full antialiased light`}
     >
       <body className="min-h-full flex flex-col">
         <ThemeProvider preferences={preferences}>{children}</ThemeProvider>
