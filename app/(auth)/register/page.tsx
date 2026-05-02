@@ -26,9 +26,10 @@ function RegisterForm() {
     setErrorMessage(null);
 
     const formData = new FormData(e.currentTarget);
+    const redirectTo = searchParams.get('next') || undefined;
 
     try {
-      await signup(formData);
+      await signup(formData, redirectTo);
     } catch (error) {
       if ((error as { digest?: string }).digest?.startsWith('NEXT_REDIRECT')) {
         setIsSuccess(true);
@@ -125,7 +126,7 @@ function RegisterForm() {
       <motion.p className="text-sm text-zinc-600 text-center" variants={itemVariants}>
         already have an account?{' '}
         <Link
-          href="/login"
+          href={`/login${searchParams.get('next') ? `?next=${searchParams.get('next')}` : ''}`}
           className="font-semibold text-black hover:text-zinc-700 transition-colors"
         >
           sign in

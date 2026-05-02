@@ -1,6 +1,8 @@
 # what i'm on
 
-A personal space to showcase your current obsessions and crowdsource your next favorite thing. Built for Shift APPens 2026.
+![Project Banner](assets/banner.png)
+
+A personal space to showcase your current obsessions and crowdsource your next favorite thing. Built for Shift APPens 2026. Now with cross-media search across movies, TV shows, books, music, podcasts, albums, and games.
 
 ## Overview
 
@@ -12,6 +14,7 @@ Share what you're into and get curated recommendations. A community-driven platf
 - Supabase (Authentication and Backend)
 - TypeScript
 - Tailwind CSS
+- Search APIs: TMDB, Google Books, iTunes, RAWG
 
 ## Getting Started
 
@@ -19,7 +22,7 @@ Share what you're into and get curated recommendations. A community-driven platf
 
 - Node.js 18+ installed
 - Supabase account and project configured
-- Environment variables set up (.env.local)
+- Copy `.env.example` to `.env.local` and fill in the required variables
 
 ### Installation
 
@@ -38,3 +41,30 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Team
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="assets/team/goncalo_pinto.jpg" width="auto" height="auto" alt="Gonçalo Pinto">
+      <br>
+      <a href="https://github.com/goncalo_pinto1"><a>Gonçalo Pinto<b></a>
+    </td>
+    <td align="center">
+      <img src="assets/team/peucastro.jpg" width="auto" height="auto" alt="Pedro Castro">
+      <br>
+      <a href="https://github.com/peucastro"><a>Pedro Castro<b></a>
+    </td>
+    <td align="center">
+      <img src="assets/team/pimpy.jpg" width="auto" height="auto" alt="Pedro Monteiro">
+      <br>
+      <a href="https://github.com/pedroafmonteiro"><a>Pedro Monteiro<b></a>
+    </td>
+    <td align="center">
+      <img src="assets/team/pimpao_sarbosa.jpg" width="auto" height="auto" alt="Simão Barbosa">
+      <br>
+      <a href="https://github.com/simaopsbarbosa"><a>Simão Barbosa<b></a>
+    </td>
+  </tr>
+</table>

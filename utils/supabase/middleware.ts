@@ -2,6 +2,8 @@ import { createServerClient } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
 
 export const updateSession = async (request: NextRequest) => {
+  const isAPIRoute = (pathname: string) => pathname.startsWith('/api/');
+
   let supabaseResponse = NextResponse.next({
     request: {
       headers: request.headers,
@@ -33,14 +35,23 @@ export const updateSession = async (request: NextRequest) => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user && request.nextUrl.pathname.startsWith('/')) {
+  if (
+    !user &&
+    !isAPIRoute(request.nextUrl.pathname) &&
+    request.nextUrl.pathname !== '/' &&
+    !request.nextUrl.pathname.startsWith('/login') &&
+    !request.nextUrl.pathname.startsWith('/register') &&
+    !request.nextUrl.pathname.startsWith('/onboarding')
+  ) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
+    url.searchParams.set('next', request.nextUrl.pathname);
     return NextResponse.redirect(url);
   }
 
   if (
     user &&
+    !isAPIRoute(request.nextUrl.pathname) &&
     !request.nextUrl.pathname.startsWith('/onboarding') &&
     !request.nextUrl.pathname.startsWith('/auth')
   ) {
