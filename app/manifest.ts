@@ -4,24 +4,22 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "what i'm on",
     short_name: "what i'm on",
-    description:
-      'A personal space to showcase your current obsessions and crowdsource your next favorite thing.',
-    start_url: '/',
+    description: "A personal space to showcase your current obsessions and crowdsource your next favorite thing.",
+    id: '/',
+    start_url: '.',
     display: 'standalone',
-    display_override: ['standalone', 'minimal-ui'],
     background_color: '#ffffff',
     theme_color: '#ffffff',
     orientation: 'portrait',
-    categories: ['social', 'lifestyle'],
     icons: [
       {
-        src: '/icons/icon-192x192.png',
+        src: '/icons/icon-192x192-maskable.png',
         sizes: '192x192',
         type: 'image/png',
         purpose: 'maskable',
       },
       {
-        src: '/icons/icon-512x512.png',
+        src: '/icons/icon-512x512-maskable.png',
         sizes: '512x512',
         type: 'image/png',
         purpose: 'maskable',
