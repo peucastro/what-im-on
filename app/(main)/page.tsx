@@ -27,7 +27,17 @@ export default function Landing() {
     if (window.innerWidth >= 768) return;
 
     const centerMiddleCard = () => {
-      middleCardRef.current?.scrollIntoView({ block: 'nearest', inline: 'center' });
+      const gallery = galleryRef.current;
+      const card = middleCardRef.current;
+      if (!gallery || !card) return;
+
+      const galleryRect = gallery.getBoundingClientRect();
+      const cardRect = card.getBoundingClientRect();
+
+      const cardCenterViewport = cardRect.left + cardRect.width / 2;
+      const galleryCenterViewport = galleryRect.left + galleryRect.width / 2;
+
+      gallery.scrollLeft += cardCenterViewport - galleryCenterViewport;
     };
 
     const frame = requestAnimationFrame(centerMiddleCard);
