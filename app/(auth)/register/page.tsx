@@ -28,6 +28,16 @@ function RegisterForm() {
     setErrorMessage(null);
 
     const formData = new FormData(e.currentTarget);
+    const password = formData.get('password') as string;
+    const confirmPassword = formData.get('confirmPassword') as string;
+
+    if (password !== confirmPassword) {
+      setIsError(true);
+      setErrorMessage('Passwords do not match');
+      setIsLoading(false);
+      return;
+    }
+
     const redirectTo = searchParams.get('next') || undefined;
 
     try {
@@ -102,6 +112,24 @@ function RegisterForm() {
           <input
             type="password"
             name="password"
+            placeholder="••••••••"
+            required
+            disabled={isLoading || isSuccess}
+            className="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-colors disabled:opacity-50"
+          />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="confirmPassword"
+            title="Confirm Password"
+            className="text-xs font-semibold text-zinc-700"
+          >
+            confirm password
+          </label>
+          <input
+            type="password"
+            name="confirmPassword"
             placeholder="••••••••"
             required
             disabled={isLoading || isSuccess}
