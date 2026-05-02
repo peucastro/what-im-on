@@ -13,7 +13,7 @@ export default function MainLayout({
   return (
     <>
       <Header />
-      <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-8">{children}</main>
+      <main className="mx-auto w-full flex-1">{children}</main>
     </>
   );
 }

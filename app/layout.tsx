@@ -1,5 +1,5 @@
+import { Geist, Geist_Mono, Inter } from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
 const geistSans = Geist({
@@ -12,6 +12,10 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
+const inter = Inter({
+  variable: '--font-inter',
+  subsets: ['latin'],
+});
 export const viewport: Viewport = {
   themeColor: '#ffffff',
 };
@@ -38,7 +42,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased light`}
+      className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} h-full antialiased light`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
