@@ -27,7 +27,7 @@ export default async function Header() {
     <header className="w-full">
       
       {/* Nav Bar */}
-      <nav className="w-full border-b border-app-border bg-app-nav">
+      <nav className="m-2 border border-app-border bg-app-nav">
         <div className="mx-auto flex max-w-3xl items-center justify-between sm:px-6 px-4 py-4">
           {/* Logo */}
           <Link href="/" className="flex items-center">
