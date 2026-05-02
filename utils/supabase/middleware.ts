@@ -39,5 +39,23 @@ export const updateSession = async (request: NextRequest) => {
     return NextResponse.redirect(url);
   }
 
+  if (
+    user &&
+    !request.nextUrl.pathname.startsWith('/onboarding') &&
+    !request.nextUrl.pathname.startsWith('/auth')
+  ) {
+    const { data: profile } = await supabase
+      .from('users')
+      .select('username')
+      .eq('id', user.id)
+      .single();
+
+    if (!profile?.username) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/onboarding/username';
+      return NextResponse.redirect(url);
+    }
+  }
+
   return supabaseResponse;
 };
