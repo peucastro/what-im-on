@@ -1,54 +1,36 @@
+'use client';
+
 import Link from 'next/link';
-import { cookies } from 'next/headers';
-import { createClient } from '@/utils/supabase/server';
-import { signOut } from '@/app/auth/actions';
 
-export default async function Navbar() {
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+import { usePathname } from 'next/navigation';
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+export default function Navbar() {
+  const pathname = usePathname();
+
+  const getLinkStyle = (path: string) => {
+    const isActive = pathname === path;
+
+    return `flex-1 rounded-xl border-2 py-3 text-center transition-all ${
+      isActive
+        ? 'bg-zinc-100 text-black font-bold border-zinc-300'
+        : 'bg-transparent text-black border-zinc-300 hover:text-zinc-800'
+    }`;
+  };
 
   return (
-    <nav className="w-full border-b border-zinc-200 bg-white/80 backdrop-blur-md dark:border-zinc-800 dark:bg-black/80">
-      <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
-        {/* Logo / Home Link */}
-        <Link href="/" className="text-xl font-bold tracking-tight text-black dark:text-white">
-          what i&apos;m on
+    <nav className="mx-auto w-full max-w-3xl p-4">
+      <div className="flex gap-3 rounded-2xl border-2 p-3 bg-white">
+        <Link href="/present" className={getLinkStyle('/present')}>
+          present
         </Link>
 
-        {/* Auth State Links */}
-        <div className="flex items-center gap-4 text-sm font-medium">
-          {user ? (
-            <>
-              <Link
-                href="/dashboard"
-                className="text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white"
-              >
-                dashboard
-              </Link>
-              <form action={signOut}>
-                <button
-                  type="submit"
-                  className="rounded-full bg-black px-4 py-2 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
-                >
-                  sign out
-                </button>
-              </form>
-            </>
-          ) : (
-            <>
-              <Link
-                href="/register"
-                className="rounded-full bg-black px-4 py-2 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
-              >
-                join us
-              </Link>
-            </>
-          )}
-        </div>
+        <Link href="/future" className={getLinkStyle('/future')}>
+          future
+        </Link>
+
+        <Link href="/others" className={getLinkStyle('/others')}>
+          others
+        </Link>
       </div>
     </nav>
   );
