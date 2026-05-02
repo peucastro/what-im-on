@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import svgPaths from '../../public/svg-gfj0lalzlp';
+import svgPaths from '../public/svg-gfj0lalzlp';
 
 const imgLogo = '/logo.svg';
 const imgThePresentDefault1 = '/template1.png';
@@ -18,6 +19,7 @@ const imgOthers = '/others.png';
 const imgSuggestions = '/suggestions.png';
 
 export default function Landing() {
+  const router = useRouter();
   const galleryRef = useRef<HTMLDivElement>(null);
   const middleCardRef = useRef<HTMLImageElement>(null);
 
@@ -71,11 +73,14 @@ export default function Landing() {
         {/* Descrição */}
         <p className="font-['Inter'] font-light text-[15px] md:text-[18px] lg:text-[20px] max-w-[600px] tracking-tight mt-6 text-center leading-relaxed">
           A personal space to showcase your current obsessions and crowdsource your next favorite
-          thing. Share what you’re into and get curated recommendations.
+          thing. Share what you're into and get curated recommendations.
         </p>
 
         {/* Botão */}
-        <button className="bg-[#d9d9d9] rounded-[20px] px-8 py-3 mt-12 font-['Inter'] font-medium text-[12px] tracking-[-0.5px] hover:bg-orange-500 hover:text-white transition">
+        <button 
+          onClick={() => router.push('/register')}
+          className="bg-[#d9d9d9] rounded-[20px] px-8 py-3 mt-12 font-['Inter'] font-medium text-[12px] tracking-[-0.5px] hover:bg-orange-500 hover:text-white transition"
+        >
           Create your profile
         </button>
       </section>
@@ -177,7 +182,7 @@ export default function Landing() {
       {/* 4. ADD WHAT YOU'RE ON SECTION */}
       <section className="flex flex-col items-center text-center mt-32 px-4">
         <h2 className="font-['Inter'] font-bold text-[24px] md:text-[30px] lg:text-[40px] tracking-tight">
-          <span className="text-[#2AADA2] font-bold">Add</span> what you’re on
+          <span className="text-[#2AADA2] font-bold">Add</span> what you're on
         </h2>
         <p className="font-['Inter'] font-normal text-[15px] md:text-[18px] lg:text-[20px] max-w-[600px] mt-4 leading-relaxed">
           From the book on your nightstand to the song on repeat show the world what makes you,{' '}
@@ -283,7 +288,7 @@ export default function Landing() {
         </div>
         {/* Copyright Centro/Direita */}
         <p className="font-['Inter'] font-normal text-[8px] md:text-[10px] lg:text-[12px] sm:text-[12px] text-black">
-          © 2026 what i’m on. All rights reserved.
+          © 2026 what i'm on. All rights reserved.
         </p>
         {/* Redes Sociais */}
         <div className="flex items-center gap-4">
