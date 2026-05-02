@@ -4,8 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "what i'm on",
     short_name: "what i'm on",
-    description:
-      'A personal space to showcase your current obsessions and crowdsource your next favorite thing.',
+    description: "A personal space to showcase your current obsessions and crowdsource your next favorite thing.",
     id: '/',
     start_url: '.',
     display: 'standalone',
@@ -48,7 +47,7 @@ export default function manifest(): MetadataRoute.Manifest {
         name: 'Account',
         url: '/account',
         description: 'Manage your profile and account settings',
-        icons: [{ src: '/icons/icon-192x192.png', sizes: '192x192' }],
+        icons: [{ src: '/icons/shortcut-icon-192x192.png', sizes: '192x192' }],
       },
     ],
   };
