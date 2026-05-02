@@ -83,7 +83,6 @@ export default function AccountPage() {
     setProfileLoading(false);
     if (result.success) {
       setProfileSuccess(true);
-      setProfileMsg(result.message || 'Profile updated');
       setTimeout(() => setProfileSuccess(false), 3000);
     } else {
       setProfileError(true);
@@ -105,7 +104,6 @@ export default function AccountPage() {
     setEmailLoading(false);
     if (result.success) {
       setEmailSuccess(true);
-      setEmailMsg(result.message || 'Check your email for confirmation');
     } else {
       setEmailError(true);
       setEmailMsg(result.error || 'Failed to update email');
@@ -252,7 +250,7 @@ export default function AccountPage() {
                 isSuccess={emailSuccess}
                 isError={emailError}
                 loadingText="updating email..."
-                successText="check your inbox"
+                successText="email updated"
               >
                 update email
               </OnboardingButton>
