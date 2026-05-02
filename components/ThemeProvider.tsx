@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
+import { usePathname } from 'next/navigation';
 import { 
   THEMES, 
   BORDER_RADIUS_MAP, 
@@ -16,6 +17,13 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+const DEFAULT_PREFERENCES: UserPreferences = {
+  theme_id: 'default',
+  border_radius: 'low',
+  font_family: 'sans',
+  pet_id: 'none',
+};
+
 export function ThemeProvider({ 
   children, 
   preferences: serverPreferences 
@@ -23,10 +31,18 @@ export function ThemeProvider({
   children: React.ReactNode;
   preferences: UserPreferences;
 }) {
-  // Initialize with server preferences, but try to load from cache immediately to avoid flash
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
+  
   const [preferences, setPreferences] = useState<UserPreferences>(serverPreferences);
 
-  // 1. On mount, check if we have a fresher version in localStorage
+  // Sync with server preferences
+  useEffect(() => {
+    setPreferences(serverPreferences);
+    localStorage.setItem(THEME_CACHE_KEY, JSON.stringify(serverPreferences));
+  }, [serverPreferences]);
+
+  // Load from cache on mount
   useEffect(() => {
     const cached = localStorage.getItem(THEME_CACHE_KEY);
     if (cached) {
@@ -39,14 +55,14 @@ export function ThemeProvider({
     }
   }, []);
 
-  // 2. If server preferences change (e.g. after a hard refresh or navigation), sync them
-  // but only if they are different to avoid unnecessary loops
-  useEffect(() => {
-    setPreferences(serverPreferences);
-    localStorage.setItem(THEME_CACHE_KEY, JSON.stringify(serverPreferences));
-  }, [serverPreferences]);
+  // Compute active preferences based on current page
+  const activePreferences = useMemo(() => {
+    return isHomePage ? DEFAULT_PREFERENCES : preferences;
+  }, [isHomePage, preferences]);
 
-  const theme = useMemo(() => THEMES[preferences.theme_id] || THEMES.default, [preferences.theme_id]);
+  const theme = useMemo(() => {
+    return THEMES[activePreferences.theme_id] || THEMES.default;
+  }, [activePreferences.theme_id]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -61,10 +77,10 @@ export function ThemeProvider({
     root.style.setProperty('--app-page-background', theme.colors.pageBackground);
 
     // Apply Overrides
-    root.style.setProperty('--app-radius', BORDER_RADIUS_MAP[preferences.border_radius]);
-    root.style.setProperty('--app-font-family', FONT_FAMILY_MAP[preferences.font_family]);
+    root.style.setProperty('--app-radius', BORDER_RADIUS_MAP[activePreferences.border_radius]);
+    root.style.setProperty('--app-font-family', FONT_FAMILY_MAP[activePreferences.font_family]);
     
-  }, [theme, preferences]);
+  }, [theme, activePreferences]);
 
   return (
     <ThemeContext.Provider value={{ preferences, setPreferences }}>

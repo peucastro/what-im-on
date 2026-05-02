@@ -42,7 +42,7 @@ export default function Navbar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`relative px-5 py-2 text-sm lowercase transition-colors border-app-border border duration-300 ${
+              className={`relative px-5 py-2 text-sm lowercase transition-colors border-app-border border rounded-app duration-300 ${
                 isActive ? 'text-white' : 'text-app-font hover:opacity-70'
               }`}
             >
