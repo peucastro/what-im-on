@@ -39,7 +39,11 @@ export const updateSession = async (request: NextRequest) => {
     return NextResponse.redirect(url);
   }
 
-  if (user && !request.nextUrl.pathname.startsWith('/onboarding') && !request.nextUrl.pathname.startsWith('/auth')) {
+  if (
+    user &&
+    !request.nextUrl.pathname.startsWith('/onboarding') &&
+    !request.nextUrl.pathname.startsWith('/auth')
+  ) {
     const { data: profile } = await supabase
       .from('users')
       .select('username')

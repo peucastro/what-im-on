@@ -15,17 +15,16 @@ export default async function DashboardPage() {
     return redirect('/login');
   }
 
-  const { data: profile } = await supabase
-    .from('users')
-    .select('*')
-    .eq('id', user.id)
-    .single();
+  const { data: profile } = await supabase.from('users').select('*').eq('id', user.id).single();
 
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-2xl font-bold">Dashboard</h1>
       <img
-        src={profile?.avatar_url || `https://ui-avatars.com/api/?name=${user.email}&background=random&color=fff`}
+        src={
+          profile?.avatar_url ||
+          `https://ui-avatars.com/api/?name=${user.email}&background=random&color=fff`
+        }
         alt="Avatar"
         className="h-16 w-16 rounded-full object-cover"
       />

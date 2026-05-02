@@ -19,10 +19,7 @@ export async function updateUsername(formData: FormData) {
 
   const username = formData.get('username') as string;
 
-  const { error } = await supabase
-    .from('users')
-    .update({ username })
-    .eq('id', user.id);
+  const { error } = await supabase.from('users').update({ username }).eq('id', user.id);
 
   if (error) {
     return redirect(`/onboarding/username?error=${encodeURIComponent(error.message)}`);
@@ -46,10 +43,7 @@ export async function updateDisplayName(formData: FormData) {
 
   const display_name = formData.get('display_name') as string;
 
-  const { error } = await supabase
-    .from('users')
-    .update({ display_name })
-    .eq('id', user.id);
+  const { error } = await supabase.from('users').update({ display_name }).eq('id', user.id);
 
   if (error) {
     return redirect(`/onboarding/display-name?error=${encodeURIComponent(error.message)}`);
@@ -80,21 +74,19 @@ export async function updateAvatar(formData: FormData) {
     const fileExt = file.name.split('.').pop();
     const filePath = `${user.id}/${Math.random()}.${fileExt}`;
 
-    const { error: uploadError } = await supabase.storage
-      .from('avatars')
-      .upload(filePath, file, {
-        upsert: true,
-        contentType: file.type,
-      });
+    const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file, {
+      upsert: true,
+      contentType: file.type,
+    });
 
     if (uploadError) {
       console.error('Upload error:', uploadError);
       return redirect(`/onboarding/avatar?error=${encodeURIComponent(uploadError.message)}`);
     }
 
-    const { data: { publicUrl } } = supabase.storage
-      .from('avatars')
-      .getPublicUrl(filePath);
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from('avatars').getPublicUrl(filePath);
 
     const { error: updateError } = await supabase
       .from('users')

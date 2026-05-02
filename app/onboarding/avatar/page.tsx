@@ -29,7 +29,7 @@ export default async function AvatarPage({
           />
         </div>
         <div className="flex flex-col gap-2">
-           <button
+          <button
             formAction={updateAvatar}
             className="rounded-md bg-black px-4 py-2 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
           >
