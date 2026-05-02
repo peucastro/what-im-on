@@ -70,16 +70,6 @@ export function ThemeProvider({
     <ThemeContext.Provider value={{ preferences, setPreferences }}>
       <div className="app-overlay" />
       {children}
-      {preferences.pet_id !== 'none' && (
-        <div className="fixed bottom-4 right-4 z-50 pointer-events-none">
-          <img 
-            src={`/assets/pets/${preferences.pet_id}.gif`} 
-            alt="pet" 
-            className="w-16 h-16"
-            onError={(e) => (e.currentTarget.style.display = 'none')}
-          />
-        </div>
-      )}
     </ThemeContext.Provider>
   );
 }

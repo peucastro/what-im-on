@@ -126,7 +126,8 @@ export default function VibeEditor() {
             <section>
               <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-app-font opacity-40 mb-3 ml-1">pet</label>
               <div className="grid grid-cols-3 gap-2">
-                {['none', 'cat', 'dog', 'frog', 'ghost', 'slime'].map((p) => (
+                {['none', 'clippy', 'dog', 'dolphin', 'duck', 'frog'].map((p) => (
+
                   <button
                     key={p}
                     onClick={() => setPreferences({ ...preferences, pet_id: p })}

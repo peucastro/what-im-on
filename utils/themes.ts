@@ -30,12 +30,25 @@ export const THEMES: Record<string, ThemeDefinition> = {
     name: 'Default',
     colors: {
       border: '#e2e8f0',
-      headerImage: 'url("/assets/headers/default.png")',
+      headerImage: 'none',
       font: '#1a202c',
       accent: '#000000',
-      overlay: 'url("/assets/overlays/subtle-noise.png")',
+      overlay: 'none',
       navBackground: '#ffffff',
       pageBackground: '#f7fafc',
+    },
+  },
+  cyberpunk: {
+    id: 'cyberpunk',
+    name: 'Cyberpunk',
+    colors: {
+      border: '#ff00ff',
+      headerImage: 'none',
+      font: '#00ffff',
+      accent: '#ffff00',
+      overlay: 'none',
+      navBackground: '#120458',
+      pageBackground: '#000000',
     },
   },
   forest: {
@@ -43,10 +56,10 @@ export const THEMES: Record<string, ThemeDefinition> = {
     name: 'Forest',
     colors: {
       border: '#2d3748',
-      headerImage: 'url("/assets/headers/forest.png")',
+      headerImage: 'none',
       font: '#f7fafc',
       accent: '#48bb78',
-      overlay: 'url("/assets/overlays/leaves.png")',
+      overlay: 'none',
       navBackground: '#1a202c',
       pageBackground: '#2d3748',
     },
@@ -63,7 +76,7 @@ export const FONT_FAMILY_MAP: Record<FontFamily, string> = {
   sans: 'var(--font-geist-sans), ui-sans-serif, system-ui',
   mono: 'var(--font-geist-mono), ui-monospace, SFMono-Regular',
   pixel: 'var(--font-pixel), cursive',
-  serif: 'ui-serif, "Times New Roman", Times, serif',
+  serif: 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
   comic: '"Comic Sans MS", "Comic Sans", cursive',
 };
 

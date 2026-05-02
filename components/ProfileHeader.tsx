@@ -1,4 +1,7 @@
+'use client';
+
 import VibeEditor from './VibeEditor';
+import { useTheme } from './ThemeProvider';
 
 interface ProfileHeaderProps {
   username: string;
@@ -6,9 +9,11 @@ interface ProfileHeaderProps {
 }
 
 export default function ProfileHeader({ username, isOwner }: ProfileHeaderProps) {
+  const { preferences } = useTheme();
+
   return (
     <div className="relative group">
-      <h1 className="text-xl font-normal text-app-font border border-app-border p-4 bg-app-nav font-sans">
+      <h1 className="text-xl font-normal text-app-font border border-app-border sm:p-4 p-4 rounded-app bg-app-nav font-sans">
         <span className="lowercase">what</span>
         <br />
         <span className="font-semibold font-app">{username}&apos;s</span>
@@ -16,9 +21,20 @@ export default function ProfileHeader({ username, isOwner }: ProfileHeaderProps)
         <span className="lowercase">on</span>
       </h1>
       
-      {isOwner && (
-        <div className="absolute top-4 right-4">
-          <VibeEditor />
+      {/* Vibe Editor at the top */}
+      <div className="absolute top-4 right-4">
+        {isOwner && <VibeEditor />}
+      </div>
+      
+      {/* Pet at the bottom */}
+      {preferences.pet_id !== 'none' && (
+        <div className="absolute top-16 right-20 pointer-events-none">
+          <img 
+            src={`/assets/pets/${preferences.pet_id}.gif`} 
+            alt="pet" 
+            className="w-16 h-16 object-contain"
+            onError={(e) => (e.currentTarget.style.display = 'none')}
+          />
         </div>
       )}
     </div>
