@@ -18,7 +18,9 @@ export async function login(formData: FormData, redirectTo?: string) {
   });
 
   if (error) {
-    redirect(`/login?message=Could not authenticate user${redirectTo ? `&next=${redirectTo}` : ''}`);
+    redirect(
+      `/login?message=Could not authenticate user${redirectTo ? `&next=${redirectTo}` : ''}`
+    );
   }
 
   if (data.user) {
@@ -54,7 +56,9 @@ export async function signup(formData: FormData, redirectTo?: string) {
   });
 
   if (error) {
-    redirect(`/register?message=Could not authenticate user${redirectTo ? `&next=${redirectTo}` : ''}`);
+    redirect(
+      `/register?message=Could not authenticate user${redirectTo ? `&next=${redirectTo}` : ''}`
+    );
   }
 
   revalidatePath('/', 'layout');
