@@ -35,7 +35,9 @@ export default function AddCategory({ categories }: AddCategoryProps) {
 
     setIsUpdating(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) throw new Error('not authenticated');
 
       // 1. Archive previous current items for this category (if any)
@@ -47,16 +49,14 @@ export default function AddCategory({ categories }: AddCategoryProps) {
         .eq('is_current', true);
 
       // 2. Insert new current item
-      const { error } = await supabase
-        .from('items')
-        .insert({
-          user_id: user.id,
-          category_id: selectedCategory.id,
-          title: result.title,
-          description: result.subtitle || result.description,
-          image_url: result.imageUrl,
-          is_current: true,
-        });
+      const { error } = await supabase.from('items').insert({
+        user_id: user.id,
+        category_id: selectedCategory.id,
+        title: result.title,
+        description: result.subtitle || result.description,
+        image_url: result.imageUrl,
+        is_current: true,
+      });
 
       if (error) throw error;
 
@@ -73,16 +73,12 @@ export default function AddCategory({ categories }: AddCategoryProps) {
   return (
     <div className="flex flex-col items-center justify-center">
       {!isSelectingCategory && !selectedCategory && (
-        <VibeButton 
-          onClick={() => setIsSelectingCategory(true)}
-        >
-          ➕ &nbsp; add category
-        </VibeButton>
+        <VibeButton onClick={() => setIsSelectingCategory(true)}>➕ &nbsp; add category</VibeButton>
       )}
 
       <AnimatePresence>
         {isSelectingCategory && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}

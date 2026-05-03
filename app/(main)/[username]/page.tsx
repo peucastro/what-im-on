@@ -46,7 +46,8 @@ async function getUserProfile(username: string) {
   const [itemsResult, preferencesResult, categoriesResult, authResult] = await Promise.all([
     supabase
       .from('items')
-      .select(`
+      .select(
+        `
         id,
         title,
         description,
@@ -56,7 +57,8 @@ async function getUserProfile(username: string) {
           label,
           icon
         )
-      `)
+      `
+      )
       .eq('user_id', userData.id)
       .eq('is_current', true)
       .order('created_at', { ascending: false }),
@@ -65,10 +67,7 @@ async function getUserProfile(username: string) {
       .select('theme_id, border_radius, font_family, pet_id, overlay_id')
       .eq('user_id', userData.id)
       .single(),
-    supabase
-      .from('categories')
-      .select('id, label, icon')
-      .order('label', { ascending: true }),
+    supabase.from('categories').select('id, label, icon').order('label', { ascending: true }),
     supabase.auth.getUser(),
   ]);
 
@@ -154,16 +153,12 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
         {profile.itemGroups.length === 0 && (
           <div className="flex flex-col items-center justify-center mt-16 text-center px-4">
             <p className="text-app-font lowercase opacity-40">
-              {profile.isOwner ? "your profile is looking very empty..." : "no content yet..."}
+              {profile.isOwner ? 'your profile is looking very empty...' : 'no content yet...'}
             </p>
           </div>
         )}
 
-        {profile.isOwner && (
-          <AddCategory 
-            categories={profile.allCategories} 
-          />
-        )}
+        {profile.isOwner && <AddCategory categories={profile.allCategories} />}
       </div>
     </div>
   );
