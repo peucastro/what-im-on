@@ -29,13 +29,17 @@ export default function CategoryMenu({ categoryLabel, categoryId, onEdit }: Cate
   }, []);
 
   const handleRemove = async () => {
-    if (!confirm(`Are you sure you want to remove all items from ${categoryLabel.toLowerCase()}?`)) {
+    if (
+      !confirm(`Are you sure you want to remove all items from ${categoryLabel.toLowerCase()}?`)
+    ) {
       return;
     }
 
     setIsRemoving(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
       const { error } = await supabase
@@ -64,8 +68,19 @@ export default function CategoryMenu({ categoryLabel, categoryId, onEdit }: Cate
         className="p-1 text-app-font opacity-20 hover:opacity-100 transition-opacity"
         aria-label="Category options"
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="12" cy="12" r="1" />
+          <circle cx="12" cy="5" r="1" />
+          <circle cx="12" cy="19" r="1" />
         </svg>
       </button>
 
