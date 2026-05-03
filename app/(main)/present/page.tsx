@@ -24,5 +24,5 @@ export default async function PresentPage() {
     redirect('/onboarding');
   }
 
-  redirect(`/${userData.username}`);
+  redirect(`/${encodeURIComponent(userData.username)}`);
 }

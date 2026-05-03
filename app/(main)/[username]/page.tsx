@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { notFound } from 'next/navigation';
+import { sanitizeUsernameToSlug } from '@/utils/username';
 import ProfileHeader from '@/components/ProfileHeader';
 import ProfileThemeOverride from '@/components/ProfileThemeOverride';
 import CategorySection from '@/components/CategorySection';
@@ -28,6 +29,8 @@ interface Category {
 }
 
 async function getUserProfile(username: string) {
+  const slug = sanitizeUsernameToSlug(username);
+  if (!slug) return null;
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
@@ -35,7 +38,7 @@ async function getUserProfile(username: string) {
   const { data: userData, error: userError } = await supabase
     .from('users')
     .select('id, username, display_name')
-    .eq('username', username)
+    .eq('username', slug)
     .single();
 
   if (userError || !userData) {

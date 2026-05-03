@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { encodeUserForPath } from '@/utils/username';
 import { motion, AnimatePresence } from 'framer-motion';
 import { signOut } from '@/app/(main)/auth/actions';
 
@@ -69,7 +70,7 @@ export default function UserDropdown({ username }: UserDropdownProps) {
           >
             <div className="flex flex-col gap-0.5">
               <Link
-                href={`/${username}`}
+                href={`/${encodeUserForPath(username)}`}
                 onClick={() => setIsOpen(false)}
                 className="rounded-app px-3 py-2 text-sm text-app-font hover:bg-app-accent hover:text-white transition-colors lowercase font-app"
               >
