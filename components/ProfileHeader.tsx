@@ -44,7 +44,7 @@ export default function ProfileHeader({
 
       {/* Pet at the bottom */}
       {activePreferences.pet_id !== 'none' && (
-        <div className="absolute top-16 right-16 pointer-events-none">
+        <div className="absolute top-16 right-14 pointer-events-none z-20">
           <img
             src={`/assets/pets/${activePreferences.pet_id}.gif`}
             alt="pet"
@@ -57,7 +57,7 @@ export default function ProfileHeader({
 
       {/* Overlay */}
       {activePreferences.overlay_id && activePreferences.overlay_id !== 'none' && (
-        <div className="absolute top-0 right-0 pointer-events-none">
+        <div className="absolute top-0 right-0 pointer-events-none z-10">
           <img
             src={`/assets/overlays/${activePreferences.overlay_id}.png`}
             alt="overlay"
