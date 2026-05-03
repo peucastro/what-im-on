@@ -58,7 +58,7 @@ async function getUserProfile(username: string) {
       .order('created_at', { ascending: false }),
     supabase
       .from('user_preferences')
-      .select('theme_id, border_radius, font_family, pet_id')
+      .select('theme_id, border_radius, font_family, pet_id, overlay_id')
       .eq('user_id', userData.id)
       .single(),
     supabase.auth.getUser(),

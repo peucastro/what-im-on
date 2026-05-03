@@ -97,6 +97,11 @@ export default function SearchModal({ isOpen, onClose, onSelect, category }: Sea
     }
   };
 
+  const handleSelectResult = (result: SearchResult) => {
+    onSelect(result);
+    // Note: FeaturedItem handles closing the modal after its async update
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -119,6 +124,9 @@ export default function SearchModal({ isOpen, onClose, onSelect, category }: Sea
           >
             <div className="p-4 border-b border-app-border bg-zinc-50/50">
               <div className="flex items-center justify-between mb-4">
+                <h2 className="text-[10px] font-bold text-app-font lowercase opacity-40 tracking-[0.2em] ml-1">
+                  adding to {category.toLowerCase()}
+                </h2>
                 <button 
                   onClick={onClose}
                   className="text-app-font opacity-20 hover:opacity-100 transition-opacity p-1"
@@ -154,7 +162,7 @@ export default function SearchModal({ isOpen, onClose, onSelect, category }: Sea
                 {results.map((item) => (
                   <button
                     key={item.id}
-                    onClick={() => onSelect(item)}
+                    onClick={() => handleSelectResult(item)}
                     className="w-full flex items-center gap-4 p-3 hover:bg-zinc-100 rounded-app transition-colors text-left group"
                   >
                     {item.imageUrl && (
@@ -169,9 +177,14 @@ export default function SearchModal({ isOpen, onClose, onSelect, category }: Sea
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-bold text-app-font truncate group-hover:text-app-accent transition-colors">
-                        {item.title}
-                      </h3>
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <span className="text-[10px] bg-zinc-200 px-1.5 py-0.5 rounded-sm lowercase opacity-60">
+                          {item.category}
+                        </span>
+                        <h3 className="text-sm font-bold text-app-font truncate group-hover:text-app-accent transition-colors">
+                          {item.title}
+                        </h3>
+                      </div>
                       {item.subtitle && (
                         <p className="text-xs text-app-font opacity-60 truncate">
                           {item.subtitle}
