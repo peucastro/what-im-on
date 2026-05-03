@@ -212,10 +212,10 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
 
       {activeItem && (
         <div className="text-center my-2">
-          <p className="text-[14px] md:text-[16px] font-bold text-app-font leading-tight">
+          <p className="text-lg font-bold text-app-font">
             {activeItem.title} ({activeItem.year})
           </p>
-          <p className="text-[12px] md:text-[14px] text-app-font opacity-60">
+          <p className="text-sm text-app-font opacity-80">
             {activeItem[creatorKey]}
           </p>
         </div>
