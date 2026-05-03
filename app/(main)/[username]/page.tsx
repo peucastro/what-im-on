@@ -167,8 +167,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
           {profile.itemGroups.map((group: ItemGroup) => (
             <div key={group.category_label}>
               <div className="mb-4 flex items-center gap-2 px-4 sm:px-0">
-                {group.category_icon && <span className="text-2xl">{group.category_icon}</span>}
-                <h2 className="text-xl font-semibold text-app-font">{group.category_label}</h2>
+                <h2 className="text-xl font-semibold text-app-font lowercase">{group.category_label}</h2>
               </div>
               <div className="border-b border-app-border pb-6">
                 {group.items.map((item: Item) => (
