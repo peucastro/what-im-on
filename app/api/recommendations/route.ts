@@ -1,32 +1,28 @@
 import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { searchOMDb } from '@/lib/search/omdb';
+import { searchTMDB } from '@/lib/search/tmdb';
 import { searchiTunes } from '@/lib/search/itunes';
 import { searchGames } from '@/lib/search/rawg';
 import { searchBooks } from '@/lib/search/openlibrary';
 
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 // ─── Image fetchers per category ─────────────────────────────────────────────
 
-async function getImageUrl(
-  title: string,
-  category: string,
-  subtitle?: string
-): Promise<string | undefined> {
+async function getImageUrl(title: string, category: string): Promise<string | undefined> {
   try {
     // Don't include subtitle in query for better results
     const query = title;
 
     switch (category) {
       case 'movie': {
-        const results = await searchOMDb(query, 'movie');
+        const results = await searchTMDB(query, 'movie');
         const imageUrl = results[0]?.imageUrl;
         return imageUrl;
       }
       case 'tv-show': {
-        const results = await searchOMDb(query, 'series');
+        const results = await searchTMDB(query, 'tv');
         const imageUrl = results[0]?.imageUrl;
         return imageUrl;
       }
@@ -53,24 +49,19 @@ async function getImageUrl(
       default:
         return undefined;
     }
-  } catch (err) {
+  } catch {
     return undefined;
   }
 }
 
 async function enrichWithImages<T extends { title: string; [key: string]: string }>(
   items: T[],
-  category: string,
-  subtitleKey?: keyof T
+  category: string
 ): Promise<(T & { imageUrl?: string })[]> {
   return Promise.all(
     items.map(async (item) => ({
       ...item,
-      imageUrl: await getImageUrl(
-        item.title,
-        category,
-        subtitleKey ? item[subtitleKey] : undefined
-      ),
+      imageUrl: await getImageUrl(item.title, category),
     }))
   );
 }
@@ -116,22 +107,22 @@ export async function GET() {
 
     const interestsSummary = currentItems
       .map(
-        (item) =>
+        (item: { category_label: string; title: string; description: string | null }) =>
           `${item.category_label}: ${item.title}${item.description ? ` — ${item.description}` : ''}`
       )
       .join('\n');
 
-    const userSlugs = new Set(currentItems.map((i) => i.category_slug));
+    const userSlugs = new Set(currentItems.map((i: { category_slug: string }) => i.category_slug));
 
-    // ── Groq ──────────────────────────────────────────────────────────────────
-    const groqRes = await fetch(GROQ_API_URL, {
+    // ── Openrouter ──────────────────────────────────────────────────────────────────
+    const openrouterRes = await fetch(OPENROUTER_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
+        model: 'openai/gpt-oss-20b:free',
         temperature: 0.7,
         max_tokens: 1500,
         messages: [
@@ -159,13 +150,13 @@ Use this exact structure (only include the keys relevant to the user's categorie
       }),
     });
 
-    if (!groqRes.ok) {
-      const err = await groqRes.text();
-      return NextResponse.json({ error: `Groq error: ${err}` }, { status: 500 });
+    if (!openrouterRes.ok) {
+      const err = await openrouterRes.text();
+      return NextResponse.json({ error: `Openrouter error: ${err}` }, { status: 500 });
     }
 
-    const groqData = await groqRes.json();
-    const raw = groqData.choices?.[0]?.message?.content ?? '{}';
+    const openrouterData = await openrouterRes.json();
+    const raw = openrouterData.choices?.[0]?.message?.content ?? '{}';
 
     let recommendations;
     try {
@@ -176,23 +167,13 @@ Use this exact structure (only include the keys relevant to the user's categorie
 
     // ── Enrich with real images in parallel ───────────────────────────────────
     const [songs, books, movies, tv_shows, games, podcasts, albums] = await Promise.all([
-      userSlugs.has('music')
-        ? enrichWithImages(recommendations.songs ?? [], 'music', 'artist')
-        : [],
-      userSlugs.has('book') ? enrichWithImages(recommendations.books ?? [], 'book', 'author') : [],
-      userSlugs.has('movie')
-        ? enrichWithImages(recommendations.movies ?? [], 'movie', 'director')
-        : [],
-      userSlugs.has('tv-show')
-        ? enrichWithImages(recommendations.tv_shows ?? [], 'tv-show', 'network')
-        : [],
-      userSlugs.has('game') ? enrichWithImages(recommendations.games ?? [], 'game', 'studio') : [],
-      userSlugs.has('podcast')
-        ? enrichWithImages(recommendations.podcasts ?? [], 'podcast', 'host')
-        : [],
-      userSlugs.has('album')
-        ? enrichWithImages(recommendations.albums ?? [], 'album', 'artist')
-        : [],
+      userSlugs.has('music') ? enrichWithImages(recommendations.songs ?? [], 'music') : [],
+      userSlugs.has('book') ? enrichWithImages(recommendations.books ?? [], 'book') : [],
+      userSlugs.has('movie') ? enrichWithImages(recommendations.movies ?? [], 'movie') : [],
+      userSlugs.has('tv-show') ? enrichWithImages(recommendations.tv_shows ?? [], 'tv-show') : [],
+      userSlugs.has('game') ? enrichWithImages(recommendations.games ?? [], 'game') : [],
+      userSlugs.has('podcast') ? enrichWithImages(recommendations.podcasts ?? [], 'podcast') : [],
+      userSlugs.has('album') ? enrichWithImages(recommendations.albums ?? [], 'album') : [],
     ]);
 
     const enriched = { songs, books, movies, tv_shows, games, podcasts, albums };
