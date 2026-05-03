@@ -72,9 +72,7 @@ export default function WhoIsIntoWhatYouAreOn({ recommendations }: WhoIsIntoWhat
 
   return (
     <section className="space-y-4">
-      <h2 className="text-xl text-app-font mb-4 lowercase">
-        who&apos;s into what you&apos;re on
-      </h2>
+      <h2 className="text-xl text-app-font mb-4 lowercase">who&apos;s into what you&apos;re on</h2>
       <div className="flex flex-col gap-2">
         {recommendations.slice(0, 3).map((rec) => (
           <Link
