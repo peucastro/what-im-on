@@ -19,6 +19,7 @@ const CATEGORY_MAP: Record<string, SearchCategory> = {
   songs: 'music',
   books: 'book',
   reading: 'book',
+  literature: 'book',
   films: 'movie',
   movies: 'movie',
   cinema: 'movie',
@@ -31,6 +32,7 @@ const CATEGORY_MAP: Record<string, SearchCategory> = {
   discography: 'album',
   games: 'game',
   gaming: 'game',
+  videogames: 'game',
 };
 
 export default function SearchModal({ isOpen, onClose, onSelect, category }: SearchModalProps) {
@@ -39,15 +41,36 @@ export default function SearchModal({ isOpen, onClose, onSelect, category }: Sea
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const searchCategory = CATEGORY_MAP[category.toLowerCase()] || 'movie';
+  // Robust category matching
+  const getSearchCategory = (label: string): SearchCategory | null => {
+    const clean = label.toLowerCase().trim();
+    if (CATEGORY_MAP[clean]) return CATEGORY_MAP[clean];
+    
+    // Try singular version
+    const singular = clean.replace(/s$/, '');
+    if (CATEGORY_MAP[singular]) return CATEGORY_MAP[singular];
+
+    // Try finding a keyword match
+    for (const [key, value] of Object.entries(CATEGORY_MAP)) {
+      if (clean.includes(key) || key.includes(clean)) return value;
+    }
+
+    return null;
+  };
+
+  const searchCategory = getSearchCategory(category);
 
   useEffect(() => {
+    if (isOpen) {
+      console.log('[SearchModal] Opening for category label:', category);
+      console.log('[SearchModal] Resolved search category:', searchCategory || 'all (no specific map found)');
+    }
     if (!isOpen) {
       setQuery('');
       setResults([]);
       setError('');
     }
-  }, [isOpen]);
+  }, [isOpen, category, searchCategory]);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,7 +79,12 @@ export default function SearchModal({ isOpen, onClose, onSelect, category }: Sea
     setLoading(true);
     setError('');
     try {
-      const url = `/api/search?q=${encodeURIComponent(query)}&categories=${searchCategory}`;
+      // If we don't have a specific category mapping, search all (empty categories param)
+      const categoriesParam = searchCategory ? `&categories=${searchCategory}` : '';
+      const url = `/api/search?q=${encodeURIComponent(query)}${categoriesParam}`;
+      
+      console.log('[SearchModal] Searching with URL:', url);
+      
       const res = await fetch(url);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'search failed');
@@ -91,9 +119,6 @@ export default function SearchModal({ isOpen, onClose, onSelect, category }: Sea
           >
             <div className="p-4 border-b border-app-border bg-zinc-50/50">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-[10px] font-bold text-app-font lowercase opacity-40 tracking-[0.2em] ml-1">
-                  adding to {category.toLowerCase()}
-                </h2>
                 <button 
                   onClick={onClose}
                   className="text-app-font opacity-20 hover:opacity-100 transition-opacity p-1"

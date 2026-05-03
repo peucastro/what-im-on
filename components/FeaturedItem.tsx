@@ -88,11 +88,11 @@ export default function FeaturedItem({ item, categoryLabel, isOwner }: FeaturedI
   };
 
   return (
-    <div className="flex flex-col items-center w-full py-6 overflow-hidden">
+    <div className="flex flex-col items-center w-full overflow-hidden">
       {/* The Shelf / Dock Effect */}
       <div 
         onClick={handleContainerClick}
-        className={`flex items-center justify-center gap-2 mb-4 w-full h-[120px] min-w-max px-4 ${isOwner ? 'cursor-pointer group/shelf' : ''}`}
+        className={`flex items-center justify-center gap-2 mb-1 w-full h-[120px] min-w-max px-4 ${isOwner ? 'cursor-pointer group/shelf' : ''}`}
       >
         {/* Extra Far Left - 50px (only for non-1:1) */}
         {isPortrait && (
@@ -143,7 +143,7 @@ export default function FeaturedItem({ item, categoryLabel, isOwner }: FeaturedI
       </div>
 
       {/* Title and Author/Artist */}
-      <div className="text-center px-4 mt-2">
+      <div className="text-center px-4">
         <h3 className="text-lg font-bold text-app-font tracking-tight leading-tight">
           {title}
         </h3>
