@@ -28,9 +28,11 @@ export default function FeaturedItem({ item, categoryLabel }: FeaturedItemProps)
   const isPortrait = aspectClass !== 'aspect-square';
 
   return (
-    <div className="flex flex-col items-center w-full">
+    <div className="flex flex-col items-center w-full py-6 overflow-hidden">
       {/* The Shelf / Dock Effect */}
-      <div className="flex items-center justify-center gap-2 mb-4 w-full px-2 h-[120px]">
+      {/* min-w-max ensures the flex container stays wide enough for all items to be centered, 
+          while overflow-hidden on the parent crops them if they exceed the screen width */}
+      <div className="flex items-center justify-center gap-2 mb-4 w-full h-[120px] min-w-max px-4">
         {/* Extra Far Left - 50px (only for non-1:1) */}
         {isPortrait && (
           <div className={`h-[50px] ${aspectClass} bg-app-accent opacity-[0.05] rounded-app flex-shrink-0`} />
@@ -43,7 +45,7 @@ export default function FeaturedItem({ item, categoryLabel }: FeaturedItemProps)
         <div className={`h-[75px] ${aspectClass} bg-app-accent opacity-40 rounded-app flex-shrink-0`} />
         
         {/* Main Featured Image - 100px */}
-        <div className={`relative z-10 h-[100px] ${aspectClass} rounded-app overflow-hidden border-2 border-app-accent bg-app-nav flex-shrink-0`}>
+        <div className={`relative z-10 h-[100px] ${aspectClass} shadow-2xl rounded-app overflow-hidden border-2 border-app-accent bg-app-nav flex-shrink-0`}>
           {imageUrl ? (
             <img 
               src={imageUrl} 
