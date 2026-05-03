@@ -107,12 +107,12 @@ export async function GET() {
 
     const interestsSummary = currentItems
       .map(
-        (item) =>
+        (item: { category_label: string; title: string; description: string | null }) =>
           `${item.category_label}: ${item.title}${item.description ? ` — ${item.description}` : ''}`
       )
       .join('\n');
 
-    const userSlugs = new Set(currentItems.map((i) => i.category_slug));
+    const userSlugs = new Set(currentItems.map((i: { category_slug: string }) => i.category_slug));
 
     // ── Openrouter ──────────────────────────────────────────────────────────────────
     const openrouterRes = await fetch(OPENROUTER_API_URL, {

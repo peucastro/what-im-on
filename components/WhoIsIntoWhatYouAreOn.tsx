@@ -75,14 +75,14 @@ export default function WhoIsIntoWhatYouAreOn({ recommendations }: WhoIsIntoWhat
       <h2 className="text-xl font-bold text-app-font mb-4 lowercase">
         who&apos;s into what you&apos;re on
       </h2>
-      <div className="grid gap-4 sm:grid-cols-2">
-        {recommendations.slice(0, 6).map((rec) => (
+      <div className="flex flex-col gap-2">
+        {recommendations.slice(0, 3).map((rec) => (
           <Link
             href={`/${rec.username}`}
             key={rec.user_id}
-            className="flex items-center gap-4 p-6 border border-app-border rounded-app bg-app-nav hover:opacity-90 transition-all shadow-sm group"
+            className="flex items-center gap-4 p-4 border border-app-border rounded-app bg-app-nav hover:opacity-90 transition-all shadow-sm group"
           >
-            <div className="relative w-16 h-16 flex-shrink-0">
+            <div className="relative w-24 h-24 shrink-0">
               <div className="w-full h-full bg-app-border rounded-app flex items-center justify-center overflow-hidden border border-app-border">
                 {rec.avatar_url ? (
                   <Image src={rec.avatar_url} alt={rec.username} fill className="object-cover" />
@@ -95,11 +95,13 @@ export default function WhoIsIntoWhatYouAreOn({ recommendations }: WhoIsIntoWhat
                 )}
               </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-lg text-app-font truncate leading-tight">
-                {rec.display_name || rec.username}
-              </h3>
-              <p className="text-sm text-app-font opacity-60 truncate mb-1">@{rec.username}</p>
+            <div className="flex flex-col gap-6">
+              <div>
+                <h3 className="font-bold text-lg text-app-font truncate leading-tight">
+                  {rec.display_name || rec.username}
+                </h3>
+                <p className="text-sm text-app-font opacity-60 truncate mb-1">@{rec.username}</p>
+              </div>
               <p className="text-xs text-app-font opacity-60 italic">
                 {formatDescription(rec.matching_categories)}
               </p>

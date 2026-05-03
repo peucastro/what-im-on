@@ -3,7 +3,7 @@ import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import WhoIsIntoWhatYouAreOn from '@/components/WhoIsIntoWhatYouAreOn';
-import PeopleCategoryCarousel from '@/components/PeopleCategoryCarousel';
+import FeaturedItem from '@/components/FeaturedItem';
 
 interface Recommendation {
   user_id: string;
@@ -101,12 +101,34 @@ export default async function OthersPage() {
 
               if (categoryRecs.length === 0) return null;
 
+              const uniqueCategoryUsers = Array.from(
+                categoryRecs
+                  .reduce((map, rec) => {
+                    if (!map.has(rec.user_id)) {
+                      map.set(rec.user_id, {
+                        id: rec.username,
+                        title: rec.display_name || rec.username,
+                        description: `shares ${rec.shared_items} items with you`,
+                        image_url: rec.avatar_url || undefined,
+                      });
+                    }
+                    return map;
+                  }, new Map<string, { id: string; title: string; description: string; image_url?: string }>())
+                  .values()
+              );
+
               return (
-                <PeopleCategoryCarousel
-                  key={String(cat.slug)}
-                  title={String(cat.label || '').toLowerCase()}
-                  recommendations={categoryRecs}
-                />
+                <div key={String(cat.slug)} className="space-y-8">
+                  <h2 className="text-xl font-bold lowercase text-app-font tracking-tight px-4">
+                    similar <span className="text-app-font">{String(cat.label)}</span> taste
+                  </h2>
+                  <FeaturedItem
+                    items={uniqueCategoryUsers}
+                    categoryLabel={String(cat.label)}
+                    isOwner={false}
+                    forceSquare={true}
+                  />
+                </div>
               );
             })}
           </>
