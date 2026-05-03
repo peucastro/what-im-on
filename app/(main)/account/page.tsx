@@ -4,8 +4,10 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { createClient } from '@/utils/supabase/client';
 import { updateProfile, updateEmail, updatePassword, deleteAccount } from './actions';
+import { updateAvatar } from '@/app/(auth)/onboarding/actions';
 import OnboardingButton from '@/components/OnboardingButton';
 import FormMessage from '@/components/FormMessage';
+import AvatarUpload from '@/components/AvatarUpload';
 import { useRouter } from 'next/navigation';
 
 import { containerVariants, itemVariants } from '@/utils/animations';
@@ -18,6 +20,7 @@ interface UserData {
 interface ProfileData {
   username?: string;
   display_name?: string;
+  avatar_url?: string | null;
 }
 
 export default function AccountPage() {
@@ -31,6 +34,7 @@ export default function AccountPage() {
   const [profileSuccess, setProfileSuccess] = useState(false);
   const [profileError, setProfileError] = useState(false);
   const [profileMsg, setProfileMsg] = useState<string | null>(null);
+  const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
 
   // Email State
   const [emailLoading, setEmailLoading] = useState(false);
@@ -79,14 +83,45 @@ export default function AccountPage() {
     const username = formData.get('username') as string;
     const display_name = formData.get('display_name') as string;
 
-    const result = await updateProfile({ username, display_name });
-    setProfileLoading(false);
-    if (result.success) {
+    try {
+      // 1. Update Profile Data
+      const profileResult = await updateProfile({ username, display_name });
+
+      if (!profileResult.success) {
+        setProfileError(true);
+        setProfileMsg(profileResult.error || 'failed to update profile');
+        setProfileLoading(false);
+        return;
+      }
+
+      // 2. Update Avatar if selected
+      if (selectedAvatar) {
+        const avatarResult = await updateAvatar(selectedAvatar);
+        if (!avatarResult.success) {
+          setProfileError(true);
+          setProfileMsg(avatarResult.error || 'failed to update avatar');
+          setProfileLoading(false);
+          return;
+        }
+        setSelectedAvatar(null);
+      }
+
       setProfileSuccess(true);
       setTimeout(() => setProfileSuccess(false), 3000);
-    } else {
+
+      // Refresh profile data
+      const supabase = createClient();
+      const { data: updatedProfile } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', user?.id)
+        .single();
+      setProfile(updatedProfile);
+    } catch {
       setProfileError(true);
-      setProfileMsg(result.error || 'failed to update profile');
+      setProfileMsg('an unexpected error occurred');
+    } finally {
+      setProfileLoading(false);
     }
   };
 
@@ -181,52 +216,63 @@ export default function AccountPage() {
           initial="hidden"
           animate="visible"
         >
-          {/* Profile Section */}
           <motion.section variants={itemVariants} className="flex flex-col">
             <div>
               <h2 className={sectionTitleClasses}>profile</h2>
               <p className={sectionDescClasses}>how others see you on the platform</p>
             </div>
 
-            <form onSubmit={handleUpdateProfile} className="flex flex-col gap-6">
-              <div className="flex flex-col gap-2">
-                <label htmlFor="username" className={labelClasses}>
-                  username
-                </label>
-                <input
-                  id="username"
-                  name="username"
-                  defaultValue={profile?.username || ''}
-                  placeholder="username"
-                  className={inputClasses}
-                />
+            <form onSubmit={handleUpdateProfile} className="flex flex-col gap-8">
+              <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="username" className={labelClasses}>
+                    username
+                  </label>
+                  <input
+                    id="username"
+                    name="username"
+                    defaultValue={profile?.username || ''}
+                    placeholder="username"
+                    className={inputClasses}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="display_name" className={labelClasses}>
+                    display name
+                  </label>
+                  <input
+                    id="display_name"
+                    name="display_name"
+                    defaultValue={profile?.display_name || ''}
+                    placeholder="display name"
+                    className={inputClasses}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-4">
+                  <label className={labelClasses}>avatar</label>
+                  <AvatarUpload
+                    currentAvatarUrl={profile?.avatar_url}
+                    onFileSelect={setSelectedAvatar}
+                    isLoading={profileLoading}
+                    isSuccess={profileSuccess}
+                  />
+                </div>
+
+                <OnboardingButton
+                  isLoading={profileLoading}
+                  isSuccess={profileSuccess}
+                  isError={profileError}
+                  loadingText="saving profile..."
+                  successText="profile saved"
+                  className="rounded-xl bg-black text-white py-3 lowercase font-bold"
+                >
+                  save profile
+                </OnboardingButton>
+
+                <FormMessage message={profileMsg} type={profileError ? 'error' : 'success'} />
               </div>
-
-              <div className="flex flex-col gap-2">
-                <label htmlFor="display_name" className={labelClasses}>
-                  display name
-                </label>
-                <input
-                  id="display_name"
-                  name="display_name"
-                  defaultValue={profile?.display_name || ''}
-                  placeholder="display name"
-                  className={inputClasses}
-                />
-              </div>
-
-              <OnboardingButton
-                isLoading={profileLoading}
-                isSuccess={profileSuccess}
-                isError={profileError}
-                loadingText="saving profile..."
-                successText="profile saved"
-                className="rounded-xl bg-black text-white py-3 lowercase font-bold"
-              >
-                save profile
-              </OnboardingButton>
-
-              <FormMessage message={profileMsg} type={profileError ? 'error' : 'success'} />
             </form>
           </motion.section>
 
