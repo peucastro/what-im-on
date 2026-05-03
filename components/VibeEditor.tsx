@@ -54,9 +54,9 @@ export default function VibeEditor() {
   }
 
   return (
-    <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/20 p-4 backdrop-blur-sm">
-      <div className="w-full max-w-sm max-h-[90vh] overflow-y-auto rounded-app border border-app-border bg-app-nav p-8 shadow-2xl relative">
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-app-overlay sticky top-0" />
+    <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
+      <div className="w-full max-w-sm max-h-[65vh] overflow-y-auto rounded-app outline outline-app-border border-0 bg-app-background p-8 shadow-2xl relative">
+        <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-app-overlay sticky top-0" />
 
         <div className="relative z-10">
           <h2 className="text-2xl font-bold text-app-font lowercase mb-8 text-center tracking-tight">
