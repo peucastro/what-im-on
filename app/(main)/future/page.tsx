@@ -51,8 +51,8 @@ export default function FuturePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f3f4f5]">
-        <p className="animate-pulse text-gray-400">Loading Suggestions...</p>
+      <div className="min-h-screen flex items-center justify-center bg-app-page">
+        <p className="animate-pulse text-app-font opacity-60">Loading Suggestions...</p>
       </div>
     );
   }
@@ -67,11 +67,13 @@ function FutureBody({ recommendations }: BodyProps) {
 
   if (!hasAnyRecommendations) {
     return (
-      <div className="min-h-screen bg-[#f3f4f5] flex flex-col items-center justify-center pb-20 text-center px-4">
-        <h1 className="text-2xl font-normal text-gray-400 tracking-tight">
-          We still dont&apos; have recommendations for you...
-        </h1>
-        <p className="text-gray-400 mt-2">Add some interests to get started!</p>
+      <div className="min-h-screen bg-app-page flex flex-col items-center justify-center pb-32 text-center px-4">
+        <div className="w-full mx-auto md:max-w-lg px-4">
+          <h1 className="text-2xl font-normal text-app-font opacity-60">
+            We still dont&apos; have recommendations for you...
+          </h1>
+          <p className="text-app-font opacity-60 mt-2">Add some interests to get started!</p>
+        </div>
       </div>
     );
   }
@@ -86,20 +88,25 @@ function FutureBody({ recommendations }: BodyProps) {
   ] as const;
 
   return (
-    <div className="min-h-screen bg-[#f3f4f5] text-black pb-20 overflow-hidden">
-      <main className="max-w-6xl mx-auto px-4 md:px-8 pt-12 md:pt-20">
-        <h1 className="text-3xl md:text-4xl font-normal mb-12 tracking-tight text-gray-900">
-          What you might like
-        </h1>
+    <div className="min-h-screen bg-app-page text-app-font pb-32 overflow-hidden">
+      <main className="w-full mx-auto md:max-w-lg px-4 md:px-0">
+        <div className="pt-8 md:pt-12">
+          <h1 className="text-xl md:text-4xl lowercase font-normal mb-12">What you might like</h1>
 
-        <div className="flex flex-col gap-16">
-          {categoriesConfig.map(({ apiKey, title, creatorKey }) => {
-            const items = recommendations?.[apiKey as keyof RecommendationsData];
-            if (!items || items.length === 0) return null;
-            return (
-              <CategoryCarousel key={apiKey} title={title} items={items} creatorKey={creatorKey} />
-            );
-          })}
+          <div className="flex flex-col">
+            {categoriesConfig.map(({ apiKey, title, creatorKey }) => {
+              const items = recommendations?.[apiKey as keyof RecommendationsData];
+              if (!items || items.length === 0) return null;
+              return (
+                <CategoryCarousel
+                  key={apiKey}
+                  title={title}
+                  items={items}
+                  creatorKey={creatorKey}
+                />
+              );
+            })}
+          </div>
         </div>
       </main>
     </div>
@@ -108,49 +115,88 @@ function FutureBody({ recommendations }: BodyProps) {
 
 // --- CARROSSEL ---
 function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
-  const [activeIndex, setActiveIndex] = useState(Math.floor(items.length / 2));
+  const [activeIndex, setActiveIndex] = useState(
+    items.length > 0 ? Math.floor(items.length / 2) : 0
+  );
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+
+  // Create virtual items for infinite effect (3x duplication)
+  const virtualItems = items.length > 0 ? [...items, ...items, ...items] : [];
 
   const getStyles = (distance: number) => {
-    if (distance === 0)
-      return 'w-[140px] h-[140px] md:w-[170px] md:h-[170px] lg:w-[200px] lg:h-[200px] opacity-100 z-30 scale-110 shadow-2xl';
-    if (distance === 1)
-      return 'w-[110px] h-[110px] md:w-[140px] md:h-[140px] lg:w-[170px] lg:h-[170px] opacity-70 z-20';
-    if (distance === 2)
-      return 'w-[90px] h-[90px] md:w-[110px] md:h-[110px] lg:w-[140px] lg:h-[140px] opacity-40 z-10';
-    if (distance === 3)
-      return 'w-[70px] h-[70px] md:w-[90px] md:h-[90px] lg:w-[110px] lg:h-[110px] opacity-20 z-0';
+    if (distance === 0) return 'h-[96px] w-[96px] opacity-100 z-30 scale-110';
+    if (distance === 1) return 'h-[75px] w-[75px] opacity-70 z-20';
+    if (distance === 2) return 'h-[65px] w-[65px] opacity-40 z-10';
     return 'w-0 h-0 opacity-0 pointer-events-none hidden';
   };
 
-  const activeItem = items[activeIndex];
+  const activeItem = items.length > 0 ? items[activeIndex % items.length] : null;
+
+  const handleItemClick = (virtualIndex: number) => {
+    const realIndex = virtualIndex % items.length;
+    const middleStart = items.length;
+    const equivalentMiddleIndex = middleStart + realIndex;
+    setActiveIndex(equivalentMiddleIndex);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStart === null) return;
+    const touchEnd = e.changedTouches[0].clientX;
+    const diff = touchStart - touchEnd;
+
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        // Swipe left -> Next
+        setActiveIndex((prev) => (prev + 1) % virtualItems.length);
+      } else {
+        // Swipe right -> Prev
+        setActiveIndex((prev) => (prev - 1 + virtualItems.length) % virtualItems.length);
+      }
+    }
+    setTouchStart(null);
+  };
 
   return (
     <div className="w-full">
-      <h2 className="text-2xl font-bold mb-8 capitalize text-gray-900 tracking-tight">{title}</h2>
+      <h2 className="text-xl font-semibold text-app-font lowercase">{title}</h2>
 
-      <div className="relative flex items-center justify-center">
-        <div className="flex items-center justify-center gap-2 md:gap-4 lg:gap-6 h-[240px] w-full">
-          {items.map((item, index) => {
-            const distance = Math.abs(index - activeIndex);
+      <div
+        className="relative flex items-center justify-center touch-pan-y"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        <div className="flex items-center justify-center gap-3 h-[120px] w-full overflow-hidden">
+          {virtualItems.map((item, virtualIndex) => {
+            const distance = Math.abs(virtualIndex - activeIndex);
+            if (distance > 2) return null; // Only show ±2 items from center
+
+            const realIndex = virtualIndex % items.length;
+            const realItem = items[realIndex];
+
             return (
               <div
-                key={index}
-                onClick={() => setActiveIndex(index)}
-                className={`${getStyles(distance)} bg-[#d9d9d9] rounded-[4px] shrink-0 cursor-pointer overflow-hidden relative transition-all duration-500 ease-in-out`}
+                key={`${virtualIndex}-${realItem.title}`}
+                onClick={() => handleItemClick(virtualIndex)}
+                className={`${getStyles(distance)} bg-app-nav rounded-app shrink-0 cursor-pointer overflow-hidden relative transition-all duration-500 ease-in-out border border-app-border flex items-center justify-center`}
               >
-                {item.imageUrl ? (
+                {realItem.imageUrl ? (
                   <Image
-                    src={item.imageUrl}
-                    alt={item.title}
-                    fill
-                    className="object-cover"
-                    sizes="200px"
+                    src={realItem.imageUrl}
+                    alt={realItem.title}
+                    width={distance === 0 ? 120 : distance === 1 ? 100 : 80}
+                    height={distance === 0 ? 92 : distance === 1 ? 75 : 65}
+                    className="object-cover lowercase"
+                    sizes="120px"
                   />
                 ) : (
                   // Fallback — sem imagem
-                  <div className="w-full h-full flex items-center justify-center p-4 text-center">
-                    <span className="text-[10px] md:text-[12px] text-gray-600 font-semibold uppercase leading-tight">
-                      {item.title}
+                  <div className="w-full h-full flex items-center justify-center p-2 text-center">
+                    <span className="text-[8px] md:text-[10px] text-app-font opacity-60 font-semibold uppercase leading-tight truncate">
+                      {realItem.title}
                     </span>
                   </div>
                 )}
@@ -163,11 +209,11 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
       </div>
 
       {activeItem && (
-        <div className="text-center mt-6 h-20">
-          <p className="text-[14px] md:text-[16px] font-bold text-gray-900 leading-tight">
+        <div className="text-center my-2">
+          <p className="text-lg font-bold text-app-font">
             {activeItem.title} ({activeItem.year})
           </p>
-          <p className="text-[12px] md:text-[14px] text-gray-600">{activeItem[creatorKey]}</p>
+          <p className="text-sm text-app-font opacity-80">{activeItem[creatorKey]}</p>
         </div>
       )}
     </div>
