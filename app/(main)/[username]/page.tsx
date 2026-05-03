@@ -5,7 +5,6 @@ import ItemCard from '@/components/ItemCard';
 import ProfileHeader from '@/components/ProfileHeader';
 import VibeButton from '@/components/VibeButton';
 import ProfileThemeOverride from '@/components/ProfileThemeOverride';
-import FeaturedItem from '@/components/FeaturedItem';
 import { UserPreferences } from '@/utils/themes';
 
 interface Item {
@@ -165,31 +164,19 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
         </div>
       ) : (
         <div className="space-y-8 sm:px-6 px-0">
-          {profile.itemGroups.map((group: ItemGroup) => {
-            const featuredItem = group.items[0];
-            const remainingItems = group.items.slice(1);
-
-            return (
-              <div key={group.category_label}>
-                <div className="mb-4 flex items-center gap-2 px-4 sm:px-0">
-                  {group.category_icon && <span className="text-2xl">{group.category_icon}</span>}
-                  <h2 className="text-xl font-semibold text-app-font lowercase">
-                    {group.category_label}
-                  </h2>
-                </div>
-
-                {featuredItem && (
-                  <FeaturedItem item={featuredItem} categoryLabel={group.category_label} />
-                )}
-
-                <div className="border-b border-app-border pb-6">
-                  {remainingItems.map((item: Item) => (
-                    <ItemCard key={item.id} item={item} />
-                  ))}
-                </div>
+          {profile.itemGroups.map((group: ItemGroup) => (
+            <div key={group.category_label}>
+              <div className="mb-4 flex items-center gap-2 px-4 sm:px-0">
+                {group.category_icon && <span className="text-2xl">{group.category_icon}</span>}
+                <h2 className="text-xl font-semibold text-app-font">{group.category_label}</h2>
               </div>
-            );
-          })}
+              <div className="border-b border-app-border pb-6">
+                {group.items.map((item: Item) => (
+                  <ItemCard key={item.id} item={item} />
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 import VibeEditor from './VibeEditor';
 import { useTheme } from './ThemeProvider';
 import { UserPreferences } from '@/utils/themes';
@@ -21,14 +20,14 @@ export default function ProfileHeader({
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
   }, []);
 
   // During SSR and initial hydration, we MUST use propPreferences or the default global context
   // to match what the server sent. Only after mounting do we enable live 'optimistic' updates for owners.
-  const activePreferences =
-    isOwner && isMounted ? globalActivePreferences : propPreferences || globalActivePreferences;
+  const activePreferences = (isOwner && isMounted)
+    ? globalActivePreferences
+    : propPreferences || globalActivePreferences;
 
   return (
     <div className="relative group">
@@ -46,13 +45,12 @@ export default function ProfileHeader({
       {/* Pet at the bottom */}
       {activePreferences.pet_id !== 'none' && (
         <div className="absolute top-16 right-14 pointer-events-none z-20">
-          <Image
+          <img
             src={`/assets/pets/${activePreferences.pet_id}.gif`}
             alt="pet"
             width={64}
             height={64}
             className="w-16 h-16 object-contain"
-            unoptimized
           />
         </div>
       )}
@@ -60,13 +58,12 @@ export default function ProfileHeader({
       {/* Overlay */}
       {activePreferences.overlay_id && activePreferences.overlay_id !== 'none' && (
         <div className="absolute top-0 right-0 pointer-events-none z-10">
-          <Image
+          <img
             src={`/assets/overlays/${activePreferences.overlay_id}.png`}
             alt="overlay"
-            width={160}
-            height={160}
+            width={40}
+            height={40}
             className="w-40 h-40 object-contain opacity-80"
-            unoptimized
           />
         </div>
       )}
