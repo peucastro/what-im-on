@@ -44,6 +44,7 @@ export function ThemeProvider({
 
   // Load cache only after mount
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
     const cached = localStorage.getItem(THEME_CACHE_KEY);
     if (cached) {
@@ -57,9 +58,12 @@ export function ThemeProvider({
   }, []);
 
   // Sync with server preferences when they change (e.g. login/logout)
-  useEffect(() => {
+  // Moving this to render phase to avoid "cascading renders" lint error
+  const [prevServerPreferences, setPrevServerPreferences] = useState(serverPreferences);
+  if (serverPreferences !== prevServerPreferences) {
+    setPrevServerPreferences(serverPreferences);
     setPreferences(serverPreferences);
-  }, [serverPreferences]);
+  }
 
   // Persist to localStorage whenever preferences change (only if no override and mounted)
   useEffect(() => {
