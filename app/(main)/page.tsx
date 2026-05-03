@@ -307,7 +307,7 @@ export default function Landing() {
             <div className="absolute inset-0 bg-[#2AADA2]/10 blur-3xl -z-10 rounded-full" />
             <Image
               alt="Template Terminal Single"
-              className="w-[220px] md:w-[280px] shadow-2xl rounded-[40px] border-8 border-white"
+              className="w-[220px] md:w-[280px] shadow-2xl border-8 border-white"
               src={template2}
             />
           </motion.div>
@@ -333,7 +333,7 @@ export default function Landing() {
             <div className="absolute inset-0 bg-[#006A00]/10 blur-3xl -z-10 rounded-full" />
             <Image
               alt="Suggestions"
-              className="w-[220px] md:w-[280px] shadow-2xl rounded-[40px] border-8 border-white"
+              className="w-[220px] md:w-[280px] shadow-2xl border-8 border-white"
               src={suggestions}
             />
           </motion.div>
@@ -366,12 +366,12 @@ export default function Landing() {
       >
         <div
           ref={galleryRef}
-          className="flex flex-row gap-8 items-center overflow-x-auto md:overflow-visible pb-20 snap-x snap-mandatory md:snap-none w-full md:justify-center no-scrollbar px-[calc((100vw-240px)/2)] md:px-0"
+          className="flex flex-row gap-8 items-center overflow-x-auto md:overflow-visible py-20 snap-x snap-mandatory md:snap-none w-full md:justify-center no-scrollbar px-[calc((100vw-240px)/2)] md:px-0"
         >
           <motion.div whileHover={{ scale: 1.02 }} className="shrink-0">
             <Image
               alt="Template Terminal"
-              className="w-[240px] md:w-[280px] h-auto aspect-[1/2] object-contain snap-center shadow-xl rounded-[32px] border-4 border-white bg-white"
+              className="w-[240px] md:w-[280px] h-auto aspect-[1/2] object-contain snap-center shadow-xl border-4 border-white bg-white"
               src={template5}
             />
           </motion.div>
@@ -379,14 +379,14 @@ export default function Landing() {
             <Image
               ref={middleCardRef}
               alt="Template Minecraft"
-              className="w-[240px] md:w-[280px] h-auto aspect-[1/2] object-contain snap-center shadow-2xl rounded-[32px] border-4 border-white bg-white"
+              className="w-[240px] md:w-[280px] h-auto aspect-[1/2] object-contain snap-center shadow-2xl border-4 border-white bg-white"
               src={others}
             />
           </motion.div>
           <motion.div whileHover={{ scale: 1.02 }} className="shrink-0">
             <Image
               alt="Template Nostalgic"
-              className="w-[240px] md:w-[280px] h-auto aspect-[1/2] object-contain snap-center shadow-xl rounded-[32px] border-4 border-white bg-white"
+              className="w-[240px] md:w-[280px] h-auto aspect-[1/2] object-contain snap-center shadow-xl border-4 border-white bg-white"
               src={template6}
             />
           </motion.div>
