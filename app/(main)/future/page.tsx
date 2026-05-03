@@ -138,7 +138,7 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
     if (virtualIndex === activeIndex) {
       const realItem = items[virtualIndex % items.length];
       if (realItem) {
-        navigator.clipboard.writeText(realItem.title);
+        navigator.clipboard.writeText(`${realItem.title} - ${realItem.year}`);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       }
