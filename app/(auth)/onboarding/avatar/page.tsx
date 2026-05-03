@@ -37,7 +37,7 @@ function AvatarForm() {
         setTimeout(() => {
           setShowExit(true);
           setTimeout(() => {
-            router.push(result.username ? `/${result.username}` : '/');
+            router.push(result.username ? `/${encodeURIComponent(result.username)}` : '/');
           }, 300);
         }, 1000);
       }

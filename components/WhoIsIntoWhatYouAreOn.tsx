@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { encodeUserForPath } from '@/utils/username';
 import { getDefaultAvatarUrl } from '@/utils/avatar';
 import {
   THEMES,

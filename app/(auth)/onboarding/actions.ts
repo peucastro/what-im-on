@@ -1,6 +1,7 @@
 'use server';
 
 import { createClient } from '@/utils/supabase/server';
+import { sanitizeUsernameToSlug, validateUsername } from '@/utils/username';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
@@ -23,14 +24,21 @@ export async function updateUsername(username: string): Promise<ActionResult> {
     redirect('/login');
   }
 
-  const { error } = await supabase.from('users').update({ username }).eq('id', user.id);
+  const slug = sanitizeUsernameToSlug(username);
+  const validation = validateUsername(slug);
+
+  if (!validation.valid) {
+    return { success: false, error: validation.error || 'Invalid username' };
+  }
+
+  const { error } = await supabase.from('users').update({ username: slug }).eq('id', user.id);
 
   if (error) {
     return { success: false, error: error.message };
   }
 
   revalidatePath('/onboarding/display-name');
-  return { success: true };
+  return { success: true, username: slug };
 }
 
 export async function updateDisplayName(display_name: string): Promise<ActionResult> {
