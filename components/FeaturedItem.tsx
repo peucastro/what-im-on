@@ -306,7 +306,7 @@ export default function FeaturedItem({
             {/* Extra Far Left - 50px */}
             {isPortrait && (
               <div
-                className={`h-[50px] ${aspectClass} bg-app-secondary-accent border border-app-border opacity-[0.05] rounded-app flex-shrink-0 transition-transform duration-300 ${isOwner ? 'group-hover/shelf:-translate-x-1' : ''}`}
+                className={`h-[50px] ${aspectClass} bg-app-secondary-accent border border-app-border opacity-10 rounded-app flex-shrink-0 transition-transform duration-300 ${isOwner ? 'group-hover/shelf:-translate-x-1' : ''}`}
               />
             )}
 
@@ -359,7 +359,7 @@ export default function FeaturedItem({
             {/* Extra Far Right - 50px */}
             {isPortrait && (
               <div
-                className={`h-[50px] ${aspectClass} bg-app-secondary-accent opacity-[0.05] rounded-app border border-app-border flex-shrink-0 transition-transform duration-300 ${isOwner ? 'group-hover/shelf:translate-x-1' : ''}`}
+                className={`h-[50px] ${aspectClass} bg-app-secondary-accent opacity-10 rounded-app border border-app-border flex-shrink-0 transition-transform duration-300 ${isOwner ? 'group-hover/shelf:translate-x-1' : ''}`}
               />
             )}
           </div>
