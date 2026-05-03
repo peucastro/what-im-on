@@ -6,9 +6,15 @@
 
   /* App Specific Theme Variables */
   --color-app-border: var(--app-border);
+  --outline-app-border: var(--app-border);
   --color-app-font: var(--app-font);
   --color-app-accent: var(--app-accent);
+  --color-app-secondary-accent: var(--app-secondary-accent);
   --color-app-nav: var(--app-nav);
+  --color-app-background: var(--app-page-background);
+  --color-app-header-background: var(--app-header-background);
+  --color-app-profile-background: var(--app-profile-background);
+  --color-app-text: var(--app-font);
 
   --radius-app: var(--app-radius);
 
@@ -52,10 +58,39 @@ body {
 @layer utilities {
   .bg-app-header {
     background-image: var(--app-header-image);
+    background-color: var(--app-header-background);
+  }
+
+  .bg-app-profile {
+    background-color: var(--app-profile-background);
   }
 
   .bg-app-page {
     background: var(--app-page-background);
+  }
+
+  .text-app-background {
+    color: var(--app-page-background);
+  }
+
+  .bg-app-background {
+    background-color: var(--app-page-background);
+  }
+
+  .text-app-text {
+    color: var(--app-font);
+  }
+
+  .bg-app-text {
+    background-color: var(--app-font);
+  }
+
+  .text-app-secondary-accent {
+    color: var(--app-secondary-accent);
+  }
+
+  .bg-app-secondary-accent {
+    background-color: var(--app-secondary-accent);
   }
 }
 

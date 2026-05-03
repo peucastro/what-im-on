@@ -54,9 +54,9 @@ export default function VibeEditor() {
   }
 
   return (
-    <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/20 p-4 backdrop-blur-sm">
-      <div className="w-full max-w-sm max-h-[70vh] overflow-y-auto rounded-app border border-app-border bg-app-nav p-8 shadow-2xl relative">
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-app-overlay sticky top-0" />
+    <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
+      <div className="w-full max-w-sm max-h-[65vh] overflow-y-auto rounded-app outline outline-app-border border-0 bg-app-background p-8 shadow-2xl relative">
+        <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-app-overlay sticky top-0" />
 
         <div className="relative z-10">
           <h2 className="text-2xl font-bold text-app-font lowercase mb-8 text-center tracking-tight">
@@ -76,7 +76,7 @@ export default function VibeEditor() {
                     onClick={() => setPreferences({ ...preferences, theme_id: t.id })}
                     className={`px-3 py-2 text-xs rounded-app border transition-all lowercase ${
                       preferences.theme_id === t.id
-                        ? 'border-app-accent bg-app-accent text-white'
+                        ? 'border-app-accent bg-app-text text-app-background'
                         : 'border-app-border text-app-font hover:border-app-accent'
                     }`}
                   >
@@ -98,7 +98,7 @@ export default function VibeEditor() {
                     onClick={() => setPreferences({ ...preferences, border_radius: r })}
                     className={`px-3 py-2 text-xs rounded-app border transition-all lowercase ${
                       preferences.border_radius === r
-                        ? 'border-app-accent bg-app-accent text-white'
+                        ? 'border-app-accent bg-app-text text-app-background'
                         : 'border-app-border text-app-font hover:border-app-accent'
                     }`}
                   >
@@ -120,7 +120,7 @@ export default function VibeEditor() {
                     onClick={() => setPreferences({ ...preferences, font_family: f })}
                     className={`px-3 py-2 text-xs rounded-app border transition-all lowercase ${
                       preferences.font_family === f
-                        ? 'border-app-accent bg-app-accent text-white'
+                        ? 'border-app-accent bg-app-text text-app-background'
                         : 'border-app-border text-app-font hover:border-app-accent'
                     }`}
                     style={{ fontFamily: FONT_FAMILY_MAP[f] }}
@@ -143,7 +143,7 @@ export default function VibeEditor() {
                     onClick={() => setPreferences({ ...preferences, pet_id: p })}
                     className={`px-3 py-2 text-xs rounded-app border transition-all lowercase ${
                       preferences.pet_id === p
-                        ? 'border-app-accent bg-app-accent text-white'
+                        ? 'border-app-accent bg-app-text text-app-background'
                         : 'border-app-border text-app-font hover:border-app-accent'
                     }`}
                   >
@@ -165,7 +165,7 @@ export default function VibeEditor() {
                     onClick={() => setPreferences({ ...preferences, overlay_id: o })}
                     className={`px-3 py-2 text-xs rounded-app border transition-all lowercase ${
                       preferences.overlay_id === o
-                        ? 'border-app-accent bg-app-accent text-white'
+                        ? 'border-app-accent bg-app-text text-app-background'
                         : 'border-app-border text-app-font hover:border-app-accent'
                     }`}
                   >
@@ -181,13 +181,13 @@ export default function VibeEditor() {
               onClick={handleSave}
               disabled={isSaving}
               variant="primary"
-              className="w-full py-3 text-sm"
+              className="w-full py-3 bg-app-text text-app-background text-sm"
             >
               {isSaving ? 'saving...' : 'save vibe'}
             </VibeButton>
             <button
               onClick={handleCancel}
-              className="w-full py-3 text-sm lowercase font-medium text-app-font opacity-40 hover:opacity-100 transition-opacity"
+              className="w-full py-3 text-sm lowercase font-medium text-app-font hover:opacity-100 transition-opacity"
             >
               cancel
             </button>
