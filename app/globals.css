@@ -13,6 +13,7 @@
   --color-app-nav: var(--app-nav);
   --color-app-background: var(--app-page-background);
   --color-app-header-background: var(--app-header-background);
+  --color-app-profile-background: var(--app-profile-background);
   --color-app-text: var(--app-font);
 
   --radius-app: var(--app-radius);
@@ -58,6 +59,10 @@ body {
   .bg-app-header {
     background-image: var(--app-header-image);
     background-color: var(--app-header-background);
+  }
+
+  .bg-app-profile {
+    background-color: var(--app-profile-background);
   }
 
   .bg-app-page {

@@ -104,6 +104,7 @@ export function ThemeProvider({
     root.style.setProperty('--app-nav', theme.colors.navBackground);
     root.style.setProperty('--app-header-image', theme.colors.headerImage);
     root.style.setProperty('--app-header-background', theme.colors.headerBackground);
+    root.style.setProperty('--app-profile-background', theme.colors.profileBackground);
     root.style.setProperty('--app-overlay-image', theme.colors.overlay);
     root.style.setProperty('--app-page-background', theme.colors.pageBackground);
 

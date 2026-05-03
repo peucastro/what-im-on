@@ -8,10 +8,12 @@ export interface UserPreferences {
   pet_id: string;
   overlay_id: string;
 }
+
 export interface ThemeColors {
   border: string;
   headerImage: string;
   headerBackground: string;
+  profileBackground: string;
   font: string;
   accent: string;
   secondaryAccent: string;
@@ -34,12 +36,13 @@ export const THEMES: Record<string, ThemeDefinition> = {
       border: '#e2e8f0',
       headerImage: 'none',
       headerBackground: '#ffffff',
+      profileBackground: '#ffffff',
       font: '#1a202c',
       accent: '#000000',
-      secondaryAccent: '#bbbbbb',
+      secondaryAccent: '#4a5568',
       overlay: 'none',
       navBackground: '#ffffff',
-      pageBackground: '#eeeeee',
+      pageBackground: '#ffffff',
     },
   },
   forest: {
@@ -49,6 +52,7 @@ export const THEMES: Record<string, ThemeDefinition> = {
       border: '#2d3748',
       headerImage: 'none',
       headerBackground: '#1a202c',
+      profileBackground: '#1a202c',
       font: '#f7fafc',
       accent: '#48bb78',
       secondaryAccent: '#38a169',
@@ -64,9 +68,10 @@ export const THEMES: Record<string, ThemeDefinition> = {
       border: '#C97C00',
       headerImage: 'none',
       headerBackground: '#000000',
+      profileBackground: '#000000',
       font: '#C97C00',
-      accent: '#C97C00',
-      secondaryAccent: '#000000',
+      accent: '#000000',
+      secondaryAccent: '#8a5500',
       overlay: 'none',
       navBackground: '#000000',
       pageBackground: '#000000',
@@ -79,9 +84,10 @@ export const THEMES: Record<string, ThemeDefinition> = {
       border: '#535353',
       headerImage: 'none',
       headerBackground: '#000000',
+      profileBackground: '#282828',
       font: '#eeeeee',
       accent: '#2F322E',
-      secondaryAccent: '#282828',
+      secondaryAccent: '#2F322E',
       overlay: 'none',
       navBackground: '#282828',
       pageBackground: '#4C5844',
@@ -94,6 +100,7 @@ export const THEMES: Record<string, ThemeDefinition> = {
       border: '#CCCCCC',
       headerImage: 'none',
       headerBackground: '#FB77D8',
+      profileBackground: '#FB77D8',
       font: '#000000',
       accent: '#FB77D8',
       secondaryAccent: '#FB77D8',
