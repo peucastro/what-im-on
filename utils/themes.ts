@@ -87,6 +87,21 @@ export const THEMES: Record<string, ThemeDefinition> = {
       pageBackground: '#4C5844',
     },
   },
+  pink: {
+    id: 'pink',
+    name: 'Pink',
+    colors: {
+      border: '#CCCCCC',
+      headerImage: 'none',
+      headerBackground: '#FB77D8',
+      font: '#000000',
+      accent: '#FB77D8',
+      secondaryAccent: '#FB77D8',
+      overlay: 'none',
+      navBackground: '#ffffff',
+      pageBackground: '#FFDDF6',
+    },
+  },
 };
 
 export const BORDER_RADIUS_MAP: Record<BorderRadius, string> = {
