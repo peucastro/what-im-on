@@ -16,15 +16,19 @@ async function getImageUrl(
   subtitle?: string
 ): Promise<string | undefined> {
   try {
-    const query = subtitle ? `${title} ${subtitle}` : title;
+    // Don't include subtitle in query for better results
+    const query = title;
+
     switch (category) {
       case 'movie': {
         const results = await searchOMDb(query, 'movie');
-        return results[0]?.imageUrl;
+        const imageUrl = results[0]?.imageUrl;
+        return imageUrl;
       }
       case 'tv-show': {
         const results = await searchOMDb(query, 'series');
-        return results[0]?.imageUrl;
+        const imageUrl = results[0]?.imageUrl;
+        return imageUrl;
       }
       case 'music': {
         const results = await searchiTunes(query, 'music');
@@ -49,7 +53,7 @@ async function getImageUrl(
       default:
         return undefined;
     }
-  } catch {
+  } catch (err) {
     return undefined;
   }
 }
