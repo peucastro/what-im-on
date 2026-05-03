@@ -11,6 +11,14 @@ import CategorySelectionModal from '@/components/CategorySelectionModal';
 import SearchModal from '@/components/SearchModal';
 import type { SearchResult } from '@/lib/search/types';
 
+// Default preferences fallback
+const DEFAULT_PREFERENCES: UserPreferences = {
+  theme_id: 'default',
+  border_radius: 'low',
+  font_family: 'sans',
+  pet_id: 'none',
+};
+
 interface ItemGroup {
   category_label: string;
   category_icon?: string;
@@ -35,19 +43,34 @@ export default function ProfileClientWrapper({ profile }: { profile: ProfileData
   const [selectedCategory, setSelectedCategory] = useState<SearchCategory | null>(null);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
-  // Calculate missing categories
+  // Calculate missing categories with robust label mapping
+  const normalizeLabel = (label: string) => {
+    // Convert to lowercase and remove common plural 's'
+    const normalized = label.toLowerCase().replace(/s$/, '');
+    return normalized;
+  };
+
+  const labelToCategory: Record<string, SearchCategory> = {
+    movie: 'movie',
+    tv: 'tv',
+    show: 'tv', // Handle 'TV Shows' -> 'show'
+    book: 'book', // Handle 'Books' -> 'book'
+    podcast: 'podcast',
+    album: 'album',
+    music: 'music',
+    game: 'game',
+  };
+
   const userCategoryLabels = profile.itemGroups.map((group) => {
-    // Map category labels back to SearchCategory type
-    const labelToCategory: Record<string, SearchCategory> = {
-      Movies: 'movie',
-      'TV Shows': 'tv',
-      Books: 'book',
-      Podcasts: 'podcast',
-      Albums: 'album',
-      Music: 'music',
-      Games: 'game',
-    };
-    return labelToCategory[group.category_label] || 'movie';
+    const normalized = normalizeLabel(group.category_label);
+    const mapped = labelToCategory[normalized];
+
+    // Fallback to 'movie' if category is unknown (with warning in development)
+    if (!mapped && process.env.NODE_ENV === 'development') {
+      console.warn(`Unknown category label: "${group.category_label}" -> "${normalized}"`);
+    }
+
+    return mapped || 'movie';
   });
 
   const missingCategories = ALL_CATEGORIES.filter(
@@ -74,12 +97,24 @@ export default function ProfileClientWrapper({ profile }: { profile: ProfileData
 
   return (
     <div className="space-y-12 mb-24 w-full mx-auto md:max-w-sm">
-      {!profile.isOwner && <ProfileThemeOverride preferences={profile.preferences as any} />}
+      {!profile.isOwner && (
+        <ProfileThemeOverride
+          preferences={
+            profile.preferences
+              ? (profile.preferences as unknown as UserPreferences)
+              : DEFAULT_PREFERENCES
+          }
+        />
+      )}
       <div className="mt-8">
         <ProfileHeader
           username={profile.username}
           isOwner={profile.isOwner}
-          preferences={profile.preferences as any}
+          preferences={
+            profile.preferences
+              ? (profile.preferences as unknown as UserPreferences)
+              : DEFAULT_PREFERENCES
+          }
         />
       </div>
 
