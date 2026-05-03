@@ -1,11 +1,10 @@
 import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { notFound } from 'next/navigation';
-import ItemCard from '@/components/ItemCard';
 import ProfileHeader from '@/components/ProfileHeader';
 import VibeButton from '@/components/VibeButton';
 import ProfileThemeOverride from '@/components/ProfileThemeOverride';
-import FeaturedItem from '@/components/FeaturedItem';
+import CategorySection from '@/components/CategorySection';
 import { UserPreferences } from '@/utils/themes';
 
 interface Item {
@@ -55,6 +54,7 @@ async function getUserProfile(username: string) {
       `
       )
       .eq('user_id', userData.id)
+      .eq('is_current', true)
       .order('created_at', { ascending: false }),
     supabase
       .from('user_preferences')
@@ -134,7 +134,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
   }
 
   return (
-    <div className="space-y-12 w-full mx-auto md:max-w-lg">
+    <div className="space-y-12 w-full mx-auto md:max-w-lg pb-24">
       {!profile.isOwner && (
         <ProfileThemeOverride preferences={profile.preferences as UserPreferences} />
       )}
@@ -164,27 +164,15 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
           )}
         </div>
       ) : (
-        <div className="space-y-8 sm:px-6 px-0">
-          {profile.itemGroups.map((group: ItemGroup) => {
-            const featuredItem = group.items[0];
-            const remainingItems = group.items.slice(1);
-            
-            return (
-              <div key={group.category_label}>
-                <div className="mb-1 flex items-center gap-2 px-4 sm:px-0">
-                  <h2 className="text-xl font-semibold text-app-font lowercase">{group.category_label}</h2>
-                </div>
-                
-                {featuredItem && (
-                  <FeaturedItem 
-                    item={featuredItem} 
-                    categoryLabel={group.category_label} 
-                    isOwner={profile.isOwner}
-                  />
-                )}
-              </div>
-            );
-          })}
+        <div>
+          {profile.itemGroups.map((group: ItemGroup) => (
+            <CategorySection
+              key={group.category_label}
+              categoryLabel={group.category_label}
+              items={group.items}
+              isOwner={profile.isOwner}
+            />
+          ))}
         </div>
       )}
     </div>

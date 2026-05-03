@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
@@ -19,13 +19,28 @@ interface FeaturedItemProps {
   item: Item;
   categoryLabel: string;
   isOwner?: boolean;
+  externalOpenSearch?: boolean;
+  onSearchClose?: () => void;
 }
 
-export default function FeaturedItem({ item, categoryLabel, isOwner }: FeaturedItemProps) {
+export default function FeaturedItem({ 
+  item, 
+  categoryLabel, 
+  isOwner,
+  externalOpenSearch = false,
+  onSearchClose
+}: FeaturedItemProps) {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const supabase = createClient();
+
+  // Sync internal modal state with external trigger
+  useEffect(() => {
+    if (externalOpenSearch) {
+      setIsModalOpen(true);
+    }
+  }, [externalOpenSearch]);
 
   const { title, description, image_url: imageUrl } = item;
   
@@ -39,6 +54,11 @@ export default function FeaturedItem({ item, categoryLabel, isOwner }: FeaturedI
 
   const isPortrait = aspectClass !== 'aspect-square';
 
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    if (onSearchClose) onSearchClose();
+  };
+
   const handleSelectResult = async (result: SearchResult) => {
     if (!isOwner || !item.category_id) return;
 
@@ -47,8 +67,7 @@ export default function FeaturedItem({ item, categoryLabel, isOwner }: FeaturedI
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('not authenticated');
 
-      // 1. Archive previous current item for this category (manual update to ensure unique constraint isn't violated)
-      // Even though there's a trigger, sometimes explicit order helps or handles race conditions better in Supabase.
+      // 1. Archive previous current item for this category
       await supabase
         .from('items')
         .update({ is_current: false, ended_at: new Date().toISOString() })
@@ -71,7 +90,7 @@ export default function FeaturedItem({ item, categoryLabel, isOwner }: FeaturedI
 
       if (error) throw error;
 
-      setIsModalOpen(false);
+      handleCloseModal();
       router.refresh();
     } catch (err) {
       console.error('Failed to update featured item:', err);
@@ -92,9 +111,9 @@ export default function FeaturedItem({ item, categoryLabel, isOwner }: FeaturedI
       {/* The Shelf / Dock Effect */}
       <div 
         onClick={handleContainerClick}
-        className={`flex items-center justify-center gap-2 mb-1 w-full h-[120px] min-w-max px-4 ${isOwner ? 'cursor-pointer group/shelf' : ''}`}
+        className={`flex items-center justify-center gap-2 mb-4 w-full h-[120px] min-w-max px-4 ${isOwner ? 'cursor-pointer group/shelf' : ''}`}
       >
-        {/* Extra Far Left - 50px (only for non-1:1) */}
+        {/* Extra Far Left - 50px */}
         {isPortrait && (
           <div className={`h-[50px] ${aspectClass} bg-app-accent opacity-[0.05] rounded-app flex-shrink-0 transition-transform duration-300 ${isOwner ? 'group-hover/shelf:-translate-x-1' : ''}`} />
         )}
@@ -136,19 +155,19 @@ export default function FeaturedItem({ item, categoryLabel, isOwner }: FeaturedI
         {/* Far Right - 65px */}
         <div className={`h-[65px] ${aspectClass} bg-app-accent opacity-20 rounded-app flex-shrink-0 transition-transform duration-300 ${isOwner ? 'group-hover/shelf:translate-x-0.5' : ''}`} />
 
-        {/* Extra Far Right - 50px (only for non-1:1) */}
+        {/* Extra Far Right - 50px */}
         {isPortrait && (
           <div className={`h-[50px] ${aspectClass} bg-app-accent opacity-[0.05] rounded-app flex-shrink-0 transition-transform duration-300 ${isOwner ? 'group-hover/shelf:translate-x-1' : ''}`} />
         )}
       </div>
 
       {/* Title and Author/Artist */}
-      <div className="text-center px-4">
-        <h3 className="text-lg font-bold text-app-font tracking-tight leading-tight">
+      <div className="text-center px-4 mt-2">
+        <h3 className="text-lg font-bold text-app-font lowercase tracking-tight leading-tight">
           {title}
         </h3>
         {description && (
-          <p className="text-xs text-app-font opacity-60 mt-1 font-medium">
+          <p className="text-xs text-app-font opacity-60 lowercase mt-1 font-medium">
             {description}
           </p>
         )}
@@ -158,7 +177,7 @@ export default function FeaturedItem({ item, categoryLabel, isOwner }: FeaturedI
         <SearchModal
           category={categoryLabel}
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={handleCloseModal}
           onSelect={handleSelectResult}
         />
       )}
