@@ -91,9 +91,7 @@ function FutureBody({ recommendations }: BodyProps) {
     <div className="min-h-screen bg-app-page text-app-font pb-32 overflow-hidden">
       <main className="w-full mx-auto md:max-w-lg px-4 md:px-0">
         <div className="pt-8 md:pt-12">
-          <h1 className="text-xl md:text-4xl lowercase font-normal mb-12">
-            What you might like
-          </h1>
+          <h1 className="text-xl md:text-4xl lowercase font-normal mb-12">What you might like</h1>
 
           <div className="flex flex-col">
             {categoriesConfig.map(({ apiKey, title, creatorKey }) => {
@@ -215,9 +213,7 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
           <p className="text-lg font-bold text-app-font">
             {activeItem.title} ({activeItem.year})
           </p>
-          <p className="text-sm text-app-font opacity-80">
-            {activeItem[creatorKey]}
-          </p>
+          <p className="text-sm text-app-font opacity-80">{activeItem[creatorKey]}</p>
         </div>
       )}
     </div>
