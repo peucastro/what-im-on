@@ -6,6 +6,7 @@ export interface UserPreferences {
   border_radius: BorderRadius;
   font_family: FontFamily;
   pet_id: string;
+  overlay_id: string;
 }
 
 export interface ThemeColors {

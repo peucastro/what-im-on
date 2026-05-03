@@ -24,6 +24,7 @@ const DEFAULT_PREFERENCES: UserPreferences = {
   border_radius: 'low',
   font_family: 'sans',
   pet_id: 'none',
+  overlay_id: 'none',
 };
 
 export function ThemeProvider({
@@ -36,35 +37,36 @@ export function ThemeProvider({
   const pathname = usePathname();
   const isHomePage = pathname === '/';
 
-  const [preferences, setPreferences] = useState<UserPreferences>(() => {
-    if (typeof window !== 'undefined') {
-      const cached = localStorage.getItem(THEME_CACHE_KEY);
-      if (cached) {
-        try {
-          return JSON.parse(cached);
-        } catch (e) {
-          console.error('Failed to parse cached theme', e);
-        }
+  // Initialize with serverPreferences to ensure hydration matches server
+  const [preferences, setPreferences] = useState<UserPreferences>(serverPreferences);
+  const [override, setOverride] = useState<UserPreferences | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Load cache only after mount
+  useEffect(() => {
+    setIsMounted(true);
+    const cached = localStorage.getItem(THEME_CACHE_KEY);
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        setPreferences(parsed);
+      } catch (e) {
+        console.error('Failed to parse cached theme', e);
       }
     }
-    return serverPreferences;
-  });
-
-  const [override, setOverride] = useState<UserPreferences | null>(null);
+  }, []);
 
   // Sync with server preferences when they change (e.g. login/logout)
-  const [prevServerPreferences, setPrevServerPreferences] = useState(serverPreferences);
-  if (serverPreferences !== prevServerPreferences) {
-    setPrevServerPreferences(serverPreferences);
-    setPreferences(serverPreferences);
-  }
-
-  // Persist to localStorage whenever preferences change (only if no override)
   useEffect(() => {
-    if (!override) {
+    setPreferences(serverPreferences);
+  }, [serverPreferences]);
+
+  // Persist to localStorage whenever preferences change (only if no override and mounted)
+  useEffect(() => {
+    if (isMounted && !override) {
       localStorage.setItem(THEME_CACHE_KEY, JSON.stringify(preferences));
     }
-  }, [preferences, override]);
+  }, [preferences, override, isMounted]);
 
   // Compute active preferences based on current page/override
   const activePreferences = useMemo(() => {

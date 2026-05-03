@@ -60,12 +60,13 @@ export default async function RootLayout({
     border_radius: 'low',
     font_family: 'sans',
     pet_id: 'none',
+    overlay_id: 'none',
   };
 
   if (user) {
     const { data } = await supabase
       .from('user_preferences')
-      .select('theme_id, border_radius, font_family, pet_id')
+      .select('theme_id, border_radius, font_family, pet_id, overlay_id')
       .eq('user_id', user.id)
       .single();
 
