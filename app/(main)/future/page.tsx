@@ -95,66 +95,92 @@ function FutureBody({ recommendations }: BodyProps) {
             What you might like
           </h1>
 
-         <div className="flex flex-col gap-16">
-           {categoriesConfig.map(({ apiKey, title, creatorKey }) => {
-             const items = recommendations?.[apiKey as keyof RecommendationsData];
-             if (!items || items.length === 0) return null;
-             return (
-               <CategoryCarousel key={apiKey} title={title} items={items} creatorKey={creatorKey} />
-             );
-           })}
-         </div>
-       </div>
+          <div className="flex flex-col gap-8">
+            {categoriesConfig.map(({ apiKey, title, creatorKey }) => {
+              const items = recommendations?.[apiKey as keyof RecommendationsData];
+              if (!items || items.length === 0) return null;
+              return (
+                <CategoryCarousel
+                  key={apiKey}
+                  title={title}
+                  items={items}
+                  creatorKey={creatorKey}
+                />
+              );
+            })}
+          </div>
+        </div>
       </main>
-     </div>
+    </div>
   );
 }
 
 // --- CARROSSEL ---
 function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
-  const [activeIndex, setActiveIndex] = useState(Math.floor(items.length / 2));
+  const [activeIndex, setActiveIndex] = useState(
+    items.length > 0 ? Math.floor(items.length / 2) : 0
+  );
+
+  // Create virtual items for infinite effect (3x duplication)
+  const virtualItems = items.length > 0 ? [...items, ...items, ...items] : [];
 
   const getStyles = (distance: number) => {
-    if (distance === 0)
-      return 'w-[100px] h-[100px] md:w-[120px] md:h-[120px] opacity-100 z-30 scale-110 shadow-xl';
-    if (distance === 1)
-      return 'w-[80px] h-[80px] md:w-[100px] md:h-[100px] opacity-70 z-20';
-    if (distance === 2)
-      return 'w-[60px] h-[60px] md:w-[80px] md:h-[80px] opacity-40 z-10';
-    if (distance === 3)
-      return 'w-[40px] h-[40px] md:w-[60px] md:h-[60px] opacity-20 z-0';
+    if (distance === 0) return 'h-[96px] w-[96px] opacity-100 z-30 scale-110 shadow-xl';
+    if (distance === 1) return 'h-[75px] w-[75px] opacity-70 z-20';
+    if (distance === 2) return 'h-[65px] w-[65px] opacity-40 z-10';
     return 'w-0 h-0 opacity-0 pointer-events-none hidden';
   };
 
-  const activeItem = items[activeIndex];
+  const getPositionStyle = (distance: number) => {
+    if (distance === 0) return 'translate-y-0';
+    if (distance === 1) return distance === 1 ? 'translate-y-[-8px]' : 'translate-y-[8px]';
+    if (distance === 2) return distance === 2 ? 'translate-y-[-16px]' : 'translate-y-[16px]';
+    return '';
+  };
+
+  const activeItem = items.length > 0 ? items[activeIndex % items.length] : null;
+
+  const handleItemClick = (virtualIndex: number) => {
+    // Calculate the real index and find the equivalent position in the middle duplication
+    const realIndex = virtualIndex % items.length;
+    const middleStart = items.length; // Start of middle duplication
+    const equivalentMiddleIndex = middleStart + realIndex;
+    setActiveIndex(equivalentMiddleIndex);
+  };
 
   return (
     <div className="w-full">
-        <h2 className="text-2xl font-bold mb-8 capitalize text-app-font tracking-tight">{title}</h2>
+      <h2 className="text-2xl font-bold mb-8 capitalize text-app-font tracking-tight">{title}</h2>
 
       <div className="relative flex items-center justify-center">
-        <div className="flex items-center justify-center gap-2 md:gap-3 h-[240px] w-full overflow-x-hidden">
-          {items.map((item, index) => {
-            const distance = Math.abs(index - activeIndex);
+        <div className="flex items-center justify-center gap-3 h-[120px] w-full overflow-hidden">
+          {virtualItems.map((item, virtualIndex) => {
+            const distance = Math.abs(virtualIndex - activeIndex);
+            if (distance > 2) return null; // Only show ±2 items from center
+
+            const realIndex = virtualIndex % items.length;
+            const realItem = items[realIndex];
+
             return (
               <div
-                key={index}
-                onClick={() => setActiveIndex(index)}
-                 className={`${getStyles(distance)} bg-app-nav rounded-app shrink-0 cursor-pointer overflow-hidden relative transition-all duration-500 ease-in-out border border-app-border`}
+                key={`${virtualIndex}-${realItem.title}`}
+                onClick={() => handleItemClick(virtualIndex)}
+                className={`${getStyles(distance)} ${getPositionStyle(distance)} bg-app-nav rounded-app shrink-0 cursor-pointer overflow-hidden relative transition-all duration-500 ease-in-out border border-app-border flex items-center justify-center`}
               >
-                {item.imageUrl ? (
+                {realItem.imageUrl ? (
                   <Image
-                    src={item.imageUrl}
-                    alt={item.title}
-                    fill
+                    src={realItem.imageUrl}
+                    alt={realItem.title}
+                    width={distance === 0 ? 120 : distance === 1 ? 100 : 80}
+                    height={distance === 0 ? 92 : distance === 1 ? 75 : 65}
                     className="object-cover"
-                    sizes="200px"
+                    sizes="120px"
                   />
                 ) : (
-                   // Fallback — sem imagem
-                  <div className="w-full h-full flex items-center justify-center p-4 text-center">
-                    <span className="text-[10px] md:text-[12px] text-app-font opacity-60 font-semibold uppercase leading-tight">
-                      {item.title}
+                  // Fallback — sem imagem
+                  <div className="w-full h-full flex items-center justify-center p-2 text-center">
+                    <span className="text-[8px] md:text-[10px] text-app-font opacity-60 font-semibold uppercase leading-tight truncate">
+                      {realItem.title}
                     </span>
                   </div>
                 )}
@@ -166,12 +192,14 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
         </div>
       </div>
 
-       {activeItem && (
+      {activeItem && (
         <div className="text-center mt-6 h-20">
           <p className="text-[14px] md:text-[16px] font-bold text-app-font leading-tight">
             {activeItem.title} ({activeItem.year})
           </p>
-          <p className="text-[12px] md:text-[14px] text-app-font opacity-60">{activeItem[creatorKey]}</p>
+          <p className="text-[12px] md:text-[14px] text-app-font opacity-60">
+            {activeItem[creatorKey]}
+          </p>
         </div>
       )}
     </div>
