@@ -14,6 +14,7 @@ export interface ThemeColors {
   headerImage: string;
   font: string;
   accent: string;
+  secondaryAccent: string;
   overlay: string;
   navBackground: string;
   pageBackground: string; // Image URL or color
@@ -32,11 +33,12 @@ export const THEMES: Record<string, ThemeDefinition> = {
     colors: {
       border: '#e2e8f0',
       headerImage: 'none',
-      font: '#1a202c',
+      font: '#000000',
       accent: '#000000',
+      secondaryAccent: '#4a4a4a',
       overlay: 'none',
       navBackground: '#ffffff',
-      pageBackground: '#ffffff',
+      pageBackground: '#eeeeee',
     },
   },
   forest: {
@@ -47,9 +49,24 @@ export const THEMES: Record<string, ThemeDefinition> = {
       headerImage: 'none',
       font: '#f7fafc',
       accent: '#48bb78',
+      secondaryAccent: '#48bb78',
       overlay: 'none',
       navBackground: '#1a202c',
       pageBackground: '#2d3748',
+    },
+  },
+  terminal: {
+    id: 'terminal',
+    name: 'Terminal',
+    colors: {
+      border: '#C97C00',
+      headerImage: 'none',
+      font: '#C97C00',
+      accent: '#C97C00',
+      secondaryAccent: '#000000',
+      overlay: 'none',
+      navBackground: '#000000',
+      pageBackground: '#000000',
     },
   },
 };

@@ -123,23 +123,23 @@ export default function FeaturedItem({
         {/* Extra Far Left - 50px */}
         {isPortrait && (
           <div
-            className={`h-[50px] ${aspectClass} bg-app-accent opacity-[0.05] rounded-app flex-shrink-0 transition-transform duration-300 ${isOwner ? 'group-hover/shelf:-translate-x-1' : ''}`}
+            className={`h-[50px] ${aspectClass} bg-app-secondary-accent border border-app-border opacity-[0.05] rounded-app flex-shrink-0 transition-transform duration-300 ${isOwner ? 'group-hover/shelf:-translate-x-1' : ''}`}
           />
         )}
 
         {/* Far Left - 65px */}
         <div
-          className={`h-[65px] ${aspectClass} bg-app-accent opacity-20 rounded-app flex-shrink-0 transition-transform duration-300 ${isOwner ? 'group-hover/shelf:-translate-x-0.5' : ''}`}
+          className={`h-[65px] ${aspectClass} bg-app-secondary-accent border border-app-border opacity-20 rounded-app flex-shrink-0 transition-transform duration-300 ${isOwner ? 'group-hover/shelf:-translate-x-0.5' : ''}`}
         />
 
         {/* Mid Left - 75px */}
         <div
-          className={`h-[75px] ${aspectClass} bg-app-accent opacity-40 rounded-app flex-shrink-0`}
+          className={`h-[75px] ${aspectClass} bg-app-secondary-accent border border-app-border opacity-40 rounded-app flex-shrink-0`}
         />
 
         {/* Main Featured Image - 100px */}
         <div
-          className={`relative z-10 h-[100px] ${aspectClass} rounded-app overflow-hidden border-2 border-app-accent bg-app-nav flex-shrink-0 transition-all duration-300 ${isOwner ? 'group-hover/shelf:scale-105 group-hover/shelf:border-app-font' : ''}`}
+          className={`relative z-10 h-[100px] ${aspectClass} rounded-app overflow-hidden border-2 border-app-border bg-app-nav flex-shrink-0 transition-all duration-300 ${isOwner ? 'group-hover/shelf:scale-105 group-hover/shelf:border-app-font' : ''}`}
         >
           {imageUrl ? (
             <Image
@@ -150,7 +150,7 @@ export default function FeaturedItem({
               unoptimized
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-app-font opacity-20 bg-app-accent/10">
+            <div className="w-full h-full flex items-center justify-center text-app-font opacity-20 bg-app-secondary-accent/10">
               ?
             </div>
           )}
@@ -166,18 +166,18 @@ export default function FeaturedItem({
 
         {/* Mid Right - 75px */}
         <div
-          className={`h-[75px] ${aspectClass} bg-app-accent opacity-40 rounded-app flex-shrink-0`}
+          className={`h-[75px] ${aspectClass} bg-app-secondary-accent opacity-40 border border-app-border rounded-app flex-shrink-0`}
         />
 
         {/* Far Right - 65px */}
         <div
-          className={`h-[65px] ${aspectClass} bg-app-accent opacity-20 rounded-app flex-shrink-0 transition-transform duration-300 ${isOwner ? 'group-hover/shelf:translate-x-0.5' : ''}`}
+          className={`h-[65px] ${aspectClass} bg-app-secondary-accent opacity-20 rounded-app border border-app-border flex-shrink-0 transition-transform duration-300 ${isOwner ? 'group-hover/shelf:translate-x-0.5' : ''}`}
         />
 
         {/* Extra Far Right - 50px */}
         {isPortrait && (
           <div
-            className={`h-[50px] ${aspectClass} bg-app-accent opacity-[0.05] rounded-app flex-shrink-0 transition-transform duration-300 ${isOwner ? 'group-hover/shelf:translate-x-1' : ''}`}
+            className={`h-[50px] ${aspectClass} bg-app-secondary-accent opacity-[0.05] rounded-app border border-app-border flex-shrink-0 transition-transform duration-300 ${isOwner ? 'group-hover/shelf:translate-x-1' : ''}`}
           />
         )}
       </div>

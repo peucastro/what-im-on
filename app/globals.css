@@ -6,9 +6,13 @@
 
   /* App Specific Theme Variables */
   --color-app-border: var(--app-border);
+  --outline-app-border: var(--app-border);
   --color-app-font: var(--app-font);
   --color-app-accent: var(--app-accent);
+  --color-app-secondary-accent: var(--app-secondary-accent);
   --color-app-nav: var(--app-nav);
+  --color-app-background: var(--app-page-background);
+  --color-app-text: var(--app-font);
 
   --radius-app: var(--app-radius);
 
@@ -56,6 +60,30 @@ body {
 
   .bg-app-page {
     background: var(--app-page-background);
+  }
+
+  .text-app-background {
+    color: var(--app-page-background);
+  }
+
+  .bg-app-background {
+    background-color: var(--app-page-background);
+  }
+
+  .text-app-text {
+    color: var(--app-font);
+  }
+
+  .bg-app-text {
+    background-color: var(--app-font);
+  }
+
+  .text-app-secondary-accent {
+    color: var(--app-secondary-accent);
+  }
+
+  .bg-app-secondary-accent {
+    background-color: var(--app-secondary-accent);
   }
 }
 

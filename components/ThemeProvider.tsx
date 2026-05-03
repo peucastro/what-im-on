@@ -100,6 +100,7 @@ export function ThemeProvider({
     root.style.setProperty('--app-border', theme.colors.border);
     root.style.setProperty('--app-font', theme.colors.font);
     root.style.setProperty('--app-accent', theme.colors.accent);
+    root.style.setProperty('--app-secondary-accent', theme.colors.secondaryAccent);
     root.style.setProperty('--app-nav', theme.colors.navBackground);
     root.style.setProperty('--app-header-image', theme.colors.headerImage);
     root.style.setProperty('--app-overlay-image', theme.colors.overlay);

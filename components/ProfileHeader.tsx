@@ -32,7 +32,7 @@ export default function ProfileHeader({
 
   return (
     <div className="relative group">
-      <h1 className="text-xl font-normal text-app-font border border-app-border sm:p-4 p-4 bg-app-nav font-sans">
+      <h1 className="text-xl font-normal text-app-font outline outline-app-border border-o sm:p-4 p-4 bg-app-nav font-sans">
         <span className="lowercase">what</span>
         <br />
         <span className="font-semibold font-app">{username}&apos;s</span>
