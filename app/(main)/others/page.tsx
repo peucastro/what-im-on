@@ -69,7 +69,7 @@ export default async function OthersPage() {
     <div className="mx-auto w-full max-w-lg">
       <Navbar />
 
-      <div className="p-4 space-y-12 pb-20">
+      <div className="p-4 space-y-12 pb-32">
         {recsError ? (
           <div className="p-4 bg-red-50 text-red-600 rounded-app border border-red-100">
             Failed to load recommendations. Please try again later.
