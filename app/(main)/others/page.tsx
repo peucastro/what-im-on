@@ -53,8 +53,14 @@ export default async function OthersPage() {
   const userCategories = Array.from(
     new Map(
       (currentItems || [])
-        .filter((item: { category_slug: any; category_label: any; }) => item.category_slug && item.category_label)
-        .map((item: { category_slug: string; category_label: string; }) => [item.category_slug as string, item.category_label as string])
+        .filter(
+          (item: { category_slug: string | null; category_label: string | null }) =>
+            item.category_slug && item.category_label
+        )
+        .map((item: { category_slug: string; category_label: string }) => [
+          item.category_slug as string,
+          item.category_label as string,
+        ])
     ).entries()
   ).map(([slug, label]) => ({ slug, label }));
 
