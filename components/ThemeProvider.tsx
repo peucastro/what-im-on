@@ -34,8 +34,15 @@ export function ThemeProvider({
   preferences: UserPreferences;
 }) {
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isThemedPage = useMemo(() => {
+    if (!pathname) return false;
+
     const themedStaticRoutes = new Set(['/present', '/future', '/others']);
     const nonThemedPrefixes = ['/account', '/onboarding', '/login', '/register', '/auth', '/api'];
 
@@ -46,19 +53,20 @@ export function ThemeProvider({
     return true;
   }, [pathname]);
 
-  const [preferences, setPreferences] = useState<UserPreferences>(() => {
+  const [preferences, setPreferences] = useState<UserPreferences>(serverPreferences);
+
+  useEffect(() => {
     if (typeof window !== 'undefined') {
       const cached = localStorage.getItem(THEME_CACHE_KEY);
       if (cached) {
         try {
-          return JSON.parse(cached);
+          setPreferences(JSON.parse(cached));
         } catch (e) {
           console.error('Failed to parse cached theme', e);
         }
       }
     }
-    return serverPreferences;
-  });
+  }, []);
 
   const [override, setOverride] = useState<UserPreferences | null>(null);
 
