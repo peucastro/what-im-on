@@ -156,7 +156,7 @@ function RegisterForm() {
           <div className="w-full border-t border-zinc-200"></div>
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-2 bg-white text-zinc-500">or</span>
+          <span className="px-2 bg-transparent text-zinc-500">or</span>
         </div>
       </motion.div>
 

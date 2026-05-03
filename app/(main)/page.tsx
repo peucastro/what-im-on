@@ -73,7 +73,7 @@ export default function Landing() {
 
   return (
     <motion.div
-      className="bg-white min-h-screen w-full overflow-x-hidden font-sans text-black flex flex-col items-center"
+      className="bg-cover min-h-screen w-full overflow-x-hidden font-sans text-black flex flex-col items-center"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
