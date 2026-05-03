@@ -69,7 +69,7 @@ function FutureBody({ recommendations }: BodyProps) {
     return (
       <div className="min-h-screen bg-app-page flex flex-col items-center justify-center pb-32 text-center px-4">
         <div className="w-full mx-auto md:max-w-lg px-4">
-          <h1 className="text-2xl font-normal text-app-font opacity-60 tracking-tight">
+          <h1 className="text-2xl font-normal text-app-font opacity-60">
             We still dont&apos; have recommendations for you...
           </h1>
           <p className="text-app-font opacity-60 mt-2">Add some interests to get started!</p>
@@ -91,7 +91,7 @@ function FutureBody({ recommendations }: BodyProps) {
     <div className="min-h-screen bg-app-page text-app-font pb-32 overflow-hidden">
       <main className="w-full mx-auto md:max-w-lg px-4 md:px-0">
         <div className="pt-8 md:pt-12">
-          <h1 className="text-3xl md:text-4xl font-normal mb-12 tracking-tight">
+          <h1 className="text-xl md:text-4xl lowercase font-normal mb-12">
             What you might like
           </h1>
 
@@ -126,7 +126,7 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
   const virtualItems = items.length > 0 ? [...items, ...items, ...items] : [];
 
   const getStyles = (distance: number) => {
-    if (distance === 0) return 'h-[96px] w-[96px] opacity-100 z-30 scale-110 shadow-xl';
+    if (distance === 0) return 'h-[96px] w-[96px] opacity-100 z-30 scale-110';
     if (distance === 1) return 'h-[75px] w-[75px] opacity-70 z-20';
     if (distance === 2) return 'h-[65px] w-[65px] opacity-40 z-10';
     return 'w-0 h-0 opacity-0 pointer-events-none hidden';
@@ -164,7 +164,7 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
 
   return (
     <div className="w-full">
-      <h2 className="text-2xl font-bold mb-10 capitalize text-app-font tracking-tight">{title}</h2>
+      <h2 className="text-xl font-semibold text-app-font lowercase">{title}</h2>
 
       <div
         className="relative flex items-center justify-center touch-pan-y"
@@ -191,7 +191,7 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
                     alt={realItem.title}
                     width={distance === 0 ? 120 : distance === 1 ? 100 : 80}
                     height={distance === 0 ? 92 : distance === 1 ? 75 : 65}
-                    className="object-cover"
+                    className="object-cover lowercase"
                     sizes="120px"
                   />
                 ) : (
@@ -211,7 +211,7 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
       </div>
 
       {activeItem && (
-        <div className="text-center mt-2 h-20">
+        <div className="text-center my-2">
           <p className="text-[14px] md:text-[16px] font-bold text-app-font leading-tight">
             {activeItem.title} ({activeItem.year})
           </p>
