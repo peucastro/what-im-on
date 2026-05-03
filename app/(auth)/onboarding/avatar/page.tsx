@@ -5,7 +5,7 @@ import { updateAvatar } from '@/app/(auth)/onboarding/actions';
 import OnboardingButton from '@/components/OnboardingButton';
 import ProgressIndicator from '@/components/ProgressIndicator';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState, useRef, Suspense } from 'react';
 import { triggerConfetti } from '@/utils/confetti';
 import { containerVariants, itemVariants } from '@/utils/animations';
@@ -13,7 +13,6 @@ import FormMessage from '@/components/FormMessage';
 
 function AvatarForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -97,13 +96,9 @@ function AvatarForm() {
         setTimeout(() => {
           setShowExit(true);
           setTimeout(() => {
-            const nextParam = searchParams.get('next');
-            router.push(nextParam || '/');
+            router.push(result.username ? `/${result.username}` : '/');
           }, 300);
         }, 1000);
-      } else {
-        setIsError(true);
-        setErrorMessage(result.error || 'An error occurred');
       }
     } catch (error) {
       setIsError(true);

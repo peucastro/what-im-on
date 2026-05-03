@@ -28,10 +28,8 @@ function LoginForm() {
     setErrorMessage(null);
 
     const formData = new FormData(e.currentTarget);
-    const redirectTo = searchParams.get('next') || undefined;
-
     try {
-      const result = await login(formData, redirectTo);
+      const result = await login(formData);
 
       if (result.success) {
         setIsSuccess(true);

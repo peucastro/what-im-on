@@ -8,6 +8,7 @@ import { revalidatePath } from 'next/cache';
 export type ActionResult = {
   success: boolean;
   error?: string;
+  username?: string;
 };
 
 export async function updateUsername(username: string): Promise<ActionResult> {
@@ -99,5 +100,12 @@ export async function updateAvatar(file?: File): Promise<ActionResult> {
   }
 
   revalidatePath('/');
-  return { success: true };
+
+  const { data: profile } = await supabase
+    .from('users')
+    .select('username')
+    .eq('id', user.id)
+    .single();
+
+  return { success: true, username: profile?.username };
 }

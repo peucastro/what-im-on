@@ -59,7 +59,7 @@ export type AuthActionResult = {
   redirectUrl?: string;
 };
 
-export async function login(formData: FormData, redirectTo?: string): Promise<AuthActionResult> {
+export async function login(formData: FormData): Promise<AuthActionResult> {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
@@ -76,7 +76,7 @@ export async function login(formData: FormData, redirectTo?: string): Promise<Au
     return { success: false, error: message };
   }
 
-  let redirectUrl = redirectTo || '/';
+  let redirectUrl: string;
 
   if (data.user) {
     const { data: profile } = await supabase
@@ -85,9 +85,13 @@ export async function login(formData: FormData, redirectTo?: string): Promise<Au
       .eq('id', data.user.id)
       .single();
 
-    if (!profile?.username) {
+    if (profile?.username) {
+      redirectUrl = `/${profile.username}`;
+    } else {
       redirectUrl = '/onboarding/username';
     }
+  } else {
+    redirectUrl = '/';
   }
 
   revalidatePath('/', 'layout');
