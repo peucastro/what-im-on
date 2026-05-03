@@ -1,6 +1,7 @@
 'use server';
 
 import { createClient } from '@/utils/supabase/server';
+import { sanitizeUsernameToSlug, validateUsername } from '@/utils/username';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
@@ -26,7 +27,17 @@ export async function updateProfile(data: {
     redirect('/login');
   }
 
-  const { error } = await supabase.from('users').update(data).eq('id', user.id);
+  const updateData = { ...data };
+  if (updateData.username) {
+    const slug = sanitizeUsernameToSlug(updateData.username);
+    const validation = validateUsername(slug);
+    if (!validation.valid) {
+      return { success: false, error: validation.error || 'Invalid username' };
+    }
+    updateData.username = slug;
+  }
+
+  const { error } = await supabase.from('users').update(updateData).eq('id', user.id);
 
   if (error) {
     return { success: false, error: error.message };

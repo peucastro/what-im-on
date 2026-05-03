@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { encodeUserForPath } from '@/utils/username';
 
 interface Recommendation {
   user_id: string;
@@ -78,7 +79,7 @@ export default function WhoIsIntoWhatYouAreOn({ recommendations }: WhoIsIntoWhat
       <div className="flex flex-col gap-2">
         {recommendations.slice(0, 3).map((rec) => (
           <Link
-            href={`/${rec.username}`}
+            href={`/${encodeUserForPath(rec.username)}`}
             key={rec.user_id}
             className="flex items-center gap-4 p-4 border border-app-border rounded-app bg-app-nav hover:opacity-90 transition-all shadow-sm group"
           >

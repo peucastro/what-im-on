@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { cookies, headers } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
+import { encodeUserForPath } from '@/utils/username';
 
 function getAuthErrorMessage(code?: string, fallbackMessage?: string): string {
   if (code && /^\d{3}$/.test(code)) {
@@ -86,7 +87,7 @@ export async function login(formData: FormData): Promise<AuthActionResult> {
       .single();
 
     if (profile?.username) {
-      redirectUrl = `/${profile.username}`;
+      redirectUrl = `/${encodeUserForPath(profile.username)}`;
     } else {
       redirectUrl = '/onboarding/username';
     }
