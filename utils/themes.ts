@@ -35,7 +35,7 @@ export const THEMES: Record<string, ThemeDefinition> = {
       headerImage: 'none',
       font: '#000000',
       accent: '#000000',
-      secondaryAccent: '#4a4a4a',
+      secondaryAccent: '#bbbbbb',
       overlay: 'none',
       navBackground: '#ffffff',
       pageBackground: '#eeeeee',
