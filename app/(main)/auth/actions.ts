@@ -142,6 +142,13 @@ export async function signup(formData: FormData, redirectTo?: string): Promise<A
 export async function signOut() {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
+
+  // Clear theme preferences from localStorage when logging out
+  // This ensures the theme resets to default for the next user/session
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('app-theme-preferences');
+  }
+
   await supabase.auth.signOut();
   revalidatePath('/', 'layout');
   redirect('/login');
