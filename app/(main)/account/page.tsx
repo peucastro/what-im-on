@@ -154,24 +154,23 @@ export default function AccountPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="w-6 h-6 border-2 border-app-border border-t-app-accent rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-zinc-200 border-t-black rounded-full animate-spin" />
       </div>
     );
   }
 
   const inputClasses =
-    'w-full px-4 py-2.5 bg-app-nav border border-app-border rounded-app text-sm text-app-font placeholder:opacity-30 focus:outline-none focus:ring-1 focus:ring-app-accent transition-all font-app';
-  const labelClasses =
-    'text-[10px] font-bold uppercase tracking-wider text-app-font opacity-40 ml-1';
-  const sectionTitleClasses = 'text-xl font-bold tracking-tight text-app-font lowercase';
-  const sectionDescClasses = 'text-app-font opacity-50 text-sm lowercase mb-6';
+    'w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-sm text-zinc-900 placeholder:opacity-40 focus:outline-none focus:ring-1 focus:ring-black focus:bg-white transition-all font-sans';
+  const labelClasses = 'text-[10px] font-bold uppercase tracking-wider text-zinc-400 ml-1';
+  const sectionTitleClasses = 'text-xl font-bold tracking-tight text-zinc-900 lowercase';
+  const sectionDescClasses = 'text-zinc-500 text-sm lowercase mb-6';
 
   return (
     <div className="flex flex-col items-center px-4 py-12 min-h-screen">
       <div className="w-full max-w-sm">
         <div className="mb-12 text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-app-font lowercase">settings</h1>
-          <p className="text-app-font opacity-50 text-sm mt-2 lowercase">
+          <h1 className="text-3xl font-bold tracking-tight text-zinc-900 lowercase">settings</h1>
+          <p className="text-zinc-500 text-sm mt-2 lowercase">
             manage your personal information and security
           </p>
         </div>
@@ -222,7 +221,7 @@ export default function AccountPage() {
                 isError={profileError}
                 loadingText="saving profile..."
                 successText="profile saved"
-                className="rounded-app bg-app-accent text-white py-3 lowercase font-bold"
+                className="rounded-xl bg-black text-white py-3 lowercase font-bold"
               >
                 save profile
               </OnboardingButton>
@@ -324,7 +323,7 @@ export default function AccountPage() {
                 isError={passwordError}
                 loadingText="updating password..."
                 successText="password updated"
-                className="rounded-app bg-app-accent text-white py-3 lowercase font-bold"
+                className="rounded-xl bg-black text-white py-3 lowercase font-bold"
               >
                 update password
               </OnboardingButton>
@@ -336,7 +335,7 @@ export default function AccountPage() {
           {/* Danger Zone */}
           <motion.section
             variants={itemVariants}
-            className="flex flex-col gap-4 pt-12 border-t border-app-border"
+            className="flex flex-col gap-4 pt-12 border-t border-zinc-200"
           >
             {!showDeleteConfirm ? (
               <button
@@ -347,13 +346,13 @@ export default function AccountPage() {
               </button>
             ) : (
               <div className="flex flex-col items-center gap-4">
-                <p className="text-xs text-app-font opacity-40 text-center lowercase">
+                <p className="text-xs text-zinc-400 text-center lowercase">
                   this will permanently delete your account and all associated data.
                 </p>
                 <div className="flex gap-4">
                   <button
                     onClick={() => setShowDeleteConfirm(false)}
-                    className="text-sm font-bold text-app-font opacity-60 hover:opacity-100 transition-colors lowercase"
+                    className="text-sm font-bold text-zinc-500 hover:text-zinc-700 transition-colors lowercase"
                   >
                     cancel
                   </button>

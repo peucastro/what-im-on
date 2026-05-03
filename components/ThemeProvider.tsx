@@ -34,7 +34,17 @@ export function ThemeProvider({
   preferences: UserPreferences;
 }) {
   const pathname = usePathname();
-  const isHomePage = pathname === '/';
+
+  const isThemedPage = useMemo(() => {
+    const themedStaticRoutes = new Set(['/present', '/future', '/others']);
+    const nonThemedPrefixes = ['/account', '/onboarding', '/login', '/register', '/auth', '/api'];
+
+    if (themedStaticRoutes.has(pathname)) return true;
+    if (pathname === '/') return false;
+    if (nonThemedPrefixes.some((prefix) => pathname.startsWith(prefix))) return false;
+
+    return true;
+  }, [pathname]);
 
   const [preferences, setPreferences] = useState<UserPreferences>(() => {
     if (typeof window !== 'undefined') {
@@ -68,10 +78,10 @@ export function ThemeProvider({
 
   // Compute active preferences based on current page/override
   const activePreferences = useMemo(() => {
+    if (!isThemedPage) return DEFAULT_PREFERENCES;
     if (override) return override;
-    if (isHomePage) return DEFAULT_PREFERENCES;
     return preferences;
-  }, [isHomePage, preferences, override]);
+  }, [isThemedPage, preferences, override]);
 
   const theme = useMemo(() => {
     return THEMES[activePreferences.theme_id] || THEMES.default;
@@ -96,7 +106,7 @@ export function ThemeProvider({
 
   return (
     <ThemeContext.Provider value={{ preferences, activePreferences, setPreferences, setOverride }}>
-      <div className="app-overlay" />
+      {isThemedPage && <div className="app-overlay" />}
       {children}
     </ThemeContext.Provider>
   );
