@@ -1,10 +1,10 @@
 import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { searchTMDB } from '@/lib/search/tmdb';
+import { searchOMDb } from '@/lib/search/omdb';
 import { searchiTunes } from '@/lib/search/itunes';
 import { searchGames } from '@/lib/search/rawg';
-import { searchBooks } from '@/lib/search/google-books';
+import { searchBooks } from '@/lib/search/openlibrary';
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
@@ -15,11 +15,11 @@ async function getImageUrl(title: string, category: string, subtitle?: string): 
     const query = subtitle ? `${title} ${subtitle}` : title;
     switch (category) {
       case 'movie': {
-        const results = await searchTMDB(query, 'movie');
+        const results = await searchOMDb(query, 'movie');
         return results[0]?.imageUrl;
       }
       case 'tv-show': {
-        const results = await searchTMDB(query, 'tv');
+        const results = await searchOMDb(query, 'series');
         return results[0]?.imageUrl;
       }
       case 'music': {
@@ -175,13 +175,13 @@ Use this exact structure (only include the keys relevant to the user's categorie
     );
 
     const toInsert = [
-      ...songs.map((s)     => ({ user_id: user.id, category_id: categoryMap['music'],   title: s.title, reason: `By ${s.artist}` })),
-      ...books.map((b)     => ({ user_id: user.id, category_id: categoryMap['book'],    title: b.title, reason: `By ${b.author}` })),
-      ...movies.map((m)    => ({ user_id: user.id, category_id: categoryMap['movie'],   title: m.title, reason: `Directed by ${m.director}` })),
-      ...tv_shows.map((t)  => ({ user_id: user.id, category_id: categoryMap['tv-show'], title: t.title, reason: `${t.network} — ${t.year}` })),
-      ...games.map((g)     => ({ user_id: user.id, category_id: categoryMap['game'],    title: g.title, reason: `By ${g.studio}` })),
-      ...podcasts.map((p)  => ({ user_id: user.id, category_id: categoryMap['podcast'], title: p.title, reason: `Hosted by ${p.host}` })),
-      ...albums.map((a)    => ({ user_id: user.id, category_id: categoryMap['album'],   title: a.title, reason: `By ${a.artist}` })),
+      ...songs.map((s)     => ({ user_id: user.id, category_id: categoryMap['music'],   title: s.title, image_url: s.imageUrl, reason: `By ${s.artist}` })),
+      ...books.map((b)     => ({ user_id: user.id, category_id: categoryMap['book'],    title: b.title, image_url: b.imageUrl, reason: `By ${b.author}` })),
+      ...movies.map((m)    => ({ user_id: user.id, category_id: categoryMap['movie'],   title: m.title, image_url: m.imageUrl, reason: `Directed by ${m.director}` })),
+      ...tv_shows.map((t)  => ({ user_id: user.id, category_id: categoryMap['tv-show'], title: t.title, image_url: t.imageUrl, reason: `${t.network} — ${t.year}` })),
+      ...games.map((g)     => ({ user_id: user.id, category_id: categoryMap['game'],    title: g.title, image_url: g.imageUrl, reason: `By ${g.studio}` })),
+      ...podcasts.map((p)  => ({ user_id: user.id, category_id: categoryMap['podcast'], title: p.title, image_url: p.imageUrl, reason: `Hosted by ${p.host}` })),
+      ...albums.map((a)    => ({ user_id: user.id, category_id: categoryMap['album'],   title: a.title, image_url: a.imageUrl, reason: `By ${a.artist}` })),
     ].filter((r) => r.category_id);
 
     if (toInsert.length > 0) {
