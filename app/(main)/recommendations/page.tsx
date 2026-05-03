@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 interface RecommendationItem {
   title: string;
   year: string;
-  [key: string]: string; 
+  [key: string]: string;
 }
 
 interface RecommendationsData {
@@ -37,11 +37,11 @@ export default function RecommendationsPage() {
     async function fetchData() {
       try {
         // Substitui pelo teu URL real
-        const response = await fetch('/api/recommendations'); 
+        const response = await fetch('/api/recommendations');
         const json = await response.json();
         setData(json.recommendations);
       } catch (error) {
-        console.error("Erro ao carregar dados:", error);
+        console.error('Erro ao carregar dados:', error);
       } finally {
         setLoading(false);
       }
@@ -62,8 +62,8 @@ export default function RecommendationsPage() {
 
 // --- COMPONENTE DO CORPO (UI) ---
 function RecommendationsBody({ recommendations }: BodyProps) {
-  const hasAnyRecommendations = recommendations && 
-    Object.values(recommendations).some(arr => arr && arr.length > 0);
+  const hasAnyRecommendations =
+    recommendations && Object.values(recommendations).some((arr) => arr && arr.length > 0);
 
   if (!hasAnyRecommendations) {
     return (
@@ -82,7 +82,7 @@ function RecommendationsBody({ recommendations }: BodyProps) {
     { apiKey: 'movies', title: 'movies', creatorKey: 'director' },
     { apiKey: 'tv_shows', title: 'tv shows', creatorKey: 'network' },
     { apiKey: 'podcasts', title: 'podcasts', creatorKey: 'host' },
-    { apiKey: 'games', title: 'games', creatorKey: 'studio' }
+    { apiKey: 'games', title: 'games', creatorKey: 'studio' },
   ] as const;
 
   return (
@@ -98,12 +98,7 @@ function RecommendationsBody({ recommendations }: BodyProps) {
             if (!items || items.length === 0) return null;
 
             return (
-              <CategoryCarousel 
-                key={apiKey}
-                title={title} 
-                items={items} 
-                creatorKey={creatorKey} 
-              />
+              <CategoryCarousel key={apiKey} title={title} items={items} creatorKey={creatorKey} />
             );
           })}
         </div>
@@ -122,21 +117,21 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
 
     // Destaque Central (Equivalente ao do mockup "The Future (default).png")
     if (distance === 0)
-      return "w-[140px] h-[140px] md:w-[170px] md:h-[170px] lg:w-[200px] lg:h-[200px] opacity-100 z-30 scale-110 shadow-2xl border border-white/50 transition-all duration-500 ease-in-out";
-    
+      return 'w-[140px] h-[140px] md:w-[170px] md:h-[170px] lg:w-[200px] lg:h-[200px] opacity-100 z-30 scale-110 shadow-2xl border border-white/50 transition-all duration-500 ease-in-out';
+
     // Vizinhos imediatos
     if (distance === 1)
-      return "w-[110px] h-[110px] md:w-[140px] md:h-[140px] lg:w-[170px] lg:h-[170px] opacity-70 z-20 transition-all duration-500";
-    
+      return 'w-[110px] h-[110px] md:w-[140px] md:h-[140px] lg:w-[170px] lg:h-[170px] opacity-70 z-20 transition-all duration-500';
+
     // Segunda camada
     if (distance === 2)
-      return "w-[90px] h-[90px] md:w-[110px] md:h-[110px] lg:w-[140px] lg:h-[140px] opacity-40 z-10 transition-all duration-500";
-    
+      return 'w-[90px] h-[90px] md:w-[110px] md:h-[110px] lg:w-[140px] lg:h-[140px] opacity-40 z-10 transition-all duration-500';
+
     // Terceira camada (para chegar aos 7 itens visíveis)
     if (distance === 3)
-      return "w-[70px] h-[70px] md:w-[90px] md:h-[90px] lg:w-[110px] lg:h-[110px] opacity-20 z-0 transition-all duration-500";
+      return 'w-[70px] h-[70px] md:w-[90px] md:h-[90px] lg:w-[110px] lg:h-[110px] opacity-20 z-0 transition-all duration-500';
 
-    return "w-0 h-0 opacity-0 pointer-events-none hidden"; 
+    return 'w-0 h-0 opacity-0 pointer-events-none hidden';
   };
 
   const activeItem = items[activeIndex];
@@ -144,7 +139,7 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
   return (
     <div className="w-full">
       <h2 className="text-2xl font-bold mb-8 capitalize text-gray-900 tracking-tight">{title}</h2>
-      
+
       <div className="relative flex items-center justify-center">
         {/* Container do Cover Flow */}
         <div className="flex items-center justify-center gap-2 md:gap-4 lg:gap-6 h-[240px] w-full">
@@ -158,7 +153,7 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
               <div className="w-full h-full flex items-center justify-center p-4 text-center">
                 <span className="text-[10px] md:text-xs text-gray-600 font-semibold uppercase leading-tight">
-                   {item.title}
+                  {item.title}
                 </span>
               </div>
             </div>
@@ -172,9 +167,7 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
           <p className="text-xl md:text-2xl font-bold text-gray-900 leading-tight">
             {activeItem.title} ({activeItem.year})
           </p>
-          <p className="text-base md:text-lg text-gray-600">
-            {activeItem[creatorKey]}
-          </p>
+          <p className="text-base md:text-lg text-gray-600">{activeItem[creatorKey]}</p>
         </div>
       )}
     </div>
