@@ -273,7 +273,7 @@ export default function Landing() {
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               alt="Template Default"
-              className="w-[160px] md:w-[320px] shadow-2xl rounded-2xl border border-zinc-100"
+              className="w-[160px] md:w-[320px] shadow-2xl border border-zinc-100"
               src={template1}
             />
           </motion.div>
@@ -287,7 +287,7 @@ export default function Landing() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
               alt="Template Terminal"
-              className="w-[180px] md:w-[360px] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] border-4 border-white rounded-2xl"
+              className="w-[180px] md:w-[360px] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] border-4 border-white"
               src={template2}
             />
           </motion.div>
@@ -301,7 +301,7 @@ export default function Landing() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 }}
               alt="Template Nostalgic"
-              className="w-[160px] md:w-[320px] shadow-2xl rounded-2xl border border-zinc-100"
+              className="w-[160px] md:w-[320px] shadow-2xl border border-zinc-100"
               src={template6}
             />
           </motion.div>
@@ -323,7 +323,7 @@ export default function Landing() {
             </h2>
             <p className="text-zinc-500 text-lg md:text-xl leading-relaxed tracking-tight">
               From the book on your nightstand to the song on repeat show the world what makes you,{' '}
-              <span className="font-bold text-[#830527]">you</span>
+              <span className="font-bold mb-8 text-[#830527]">you</span>
             </p>
           </div>
           <motion.div
