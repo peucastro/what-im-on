@@ -134,7 +134,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
   }
 
   return (
-    <div className="space-y-12 w-full mx-auto md:max-w-sm">
+    <div className="space-y-12 w-full mx-auto md:max-w-lg">
       {!profile.isOwner && (
         <ProfileThemeOverride preferences={profile.preferences as UserPreferences} />
       )}
@@ -171,7 +171,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
             
             return (
               <div key={group.category_label}>
-                <div className="mb-4 flex items-center gap-2 px-4 sm:px-0">
+                <div className="mb-1 flex items-center gap-2 px-4 sm:px-0">
                   <h2 className="text-xl font-semibold text-app-font lowercase">{group.category_label}</h2>
                 </div>
                 
