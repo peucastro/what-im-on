@@ -9,6 +9,7 @@ const DEFAULT_PREFERENCES: UserPreferences = {
   border_radius: 'low',
   font_family: 'sans',
   pet_id: 'none',
+  overlay_id: 'none',
 };
 
 export default function ProfileThemeOverride({

@@ -65,7 +65,7 @@ export default function UserDropdown({ username }: UserDropdownProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.98 }}
             transition={{ duration: 0.1, ease: 'easeOut' }}
-            className="absolute right-0 mt-1 w-48 origin-top-right rounded-app border border-app-border bg-app-nav p-1.5 shadow-xl z-50 overflow-hidden"
+            className="absolute right-0 mt-1 w-48 origin-top-right rounded-app border border-app-border bg-app-nav p-1.5 shadow-xl z-[110] overflow-hidden"
           >
             <div className="flex flex-col gap-0.5">
               <Link

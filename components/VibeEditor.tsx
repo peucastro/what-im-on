@@ -147,6 +147,28 @@ export default function VibeEditor() {
                 ))}
               </div>
             </section>
+
+            {/* Overlay Selection */}
+            <section>
+              <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-app-font opacity-40 mb-3 ml-1">
+                overlay
+              </label>
+              <div className="grid grid-cols-3 gap-2">
+                {['none', 'binary', 'leaves', 'stars'].map((o) => (
+                  <button
+                    key={o}
+                    onClick={() => setPreferences({ ...preferences, overlay_id: o })}
+                    className={`px-3 py-2 text-xs rounded-app border transition-all lowercase ${
+                      preferences.overlay_id === o
+                        ? 'border-app-accent bg-app-accent text-white'
+                        : 'border-app-border text-app-font hover:border-app-accent'
+                    }`}
+                  >
+                    {o}
+                  </button>
+                ))}
+              </div>
+            </section>
           </div>
 
           <div className="mt-10 flex flex-col gap-2">
