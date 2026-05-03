@@ -281,7 +281,7 @@ export default function FeaturedItem({
       <div
         ref={scrollContainerRef}
         onClick={handleContainerClick}
-        className={`flex items-center gap-2 mb-4 w-full h-[120px] overflow-x-auto no-scrollbar snap-x snap-mandatory ${isOwner || href || items ? 'cursor-pointer group/shelf' : ''}`}
+        className={`flex items-center gap-2 mb-1 w-full h-[120px] overflow-x-auto no-scrollbar snap-x snap-mandatory ${isOwner || href || items ? 'cursor-pointer group/shelf' : ''}`}
         style={
           items
             ? {
