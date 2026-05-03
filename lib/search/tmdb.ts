@@ -15,7 +15,6 @@ interface TMDBItem {
 export async function searchTMDB(query: string, category: 'movie' | 'tv'): Promise<SearchResult[]> {
   const apiKey = process.env.TMDB_API_KEY;
   if (!apiKey) {
-    console.warn('[TMDB] Missing TMDB_API_KEY');
     return [];
   }
 
@@ -25,7 +24,6 @@ export async function searchTMDB(query: string, category: 'movie' | 'tv'): Promi
     );
 
     if (!res.ok) {
-      console.warn(`[TMDB] Request failed with status ${res.status} for ${category}: ${query}`);
       return [];
     }
 

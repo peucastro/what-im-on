@@ -18,19 +18,16 @@ async function getImageUrl(
   try {
     // Don't include subtitle in query for better results
     const query = title;
-    console.log(`[ImageFetch] Searching ${category}: "${query}"`);
-    
+
     switch (category) {
       case 'movie': {
         const results = await searchOMDb(query, 'movie');
         const imageUrl = results[0]?.imageUrl;
-        console.log(`[ImageFetch] OMDb movie results: ${results.length}, has image: ${!!imageUrl}`);
         return imageUrl;
       }
       case 'tv-show': {
         const results = await searchOMDb(query, 'series');
         const imageUrl = results[0]?.imageUrl;
-        console.log(`[ImageFetch] OMDb series results: ${results.length}, has image: ${!!imageUrl}`);
         return imageUrl;
       }
       case 'music': {
@@ -57,7 +54,6 @@ async function getImageUrl(
         return undefined;
     }
   } catch (err) {
-    console.error(`[ImageFetch] Error fetching image for ${title}:`, err);
     return undefined;
   }
 }
@@ -179,7 +175,6 @@ Use this exact structure (only include the keys relevant to the user's categorie
     }
 
     // ── Enrich with real images in parallel ───────────────────────────────────
-    console.log('[Recommendations] Enriching with images for categories:', Array.from(userSlugs));
     const [songs, books, movies, tv_shows, games, podcasts, albums] = await Promise.all([
       userSlugs.has('music')
         ? enrichWithImages(recommendations.songs ?? [], 'music', 'artist')
@@ -199,9 +194,6 @@ Use this exact structure (only include the keys relevant to the user's categorie
         ? enrichWithImages(recommendations.albums ?? [], 'album', 'artist')
         : [],
     ]);
-
-    console.log('[Recommendations] Movies enriched:', movies.slice(0, 2));
-    console.log('[Recommendations] TV shows enriched:', tv_shows.slice(0, 2));
 
     const enriched = { songs, books, movies, tv_shows, games, podcasts, albums };
 

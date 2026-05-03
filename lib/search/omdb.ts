@@ -21,7 +21,6 @@ interface OmdbSearchResponse {
 export async function searchOMDb(query: string, type: OmdbType): Promise<SearchResult[]> {
   const apiKey = process.env.OMDB_API_KEY;
   if (!apiKey) {
-    console.warn('[OMDb] Missing OMDB_API_KEY');
     return [];
   }
 
@@ -31,7 +30,6 @@ export async function searchOMDb(query: string, type: OmdbType): Promise<SearchR
     );
 
     if (!res.ok) {
-      console.warn(`[OMDb] Request failed with status ${res.status} for ${type}: ${query}`);
       return [];
     }
 
@@ -50,7 +48,6 @@ export async function searchOMDb(query: string, type: OmdbType): Promise<SearchR
       year: item.Year ? Number.parseInt(item.Year, 10) : undefined,
     }));
   } catch (err) {
-    console.error('[OMDb] Error:', err);
     return [];
   }
 }
