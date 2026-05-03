@@ -112,11 +112,15 @@ export default function FeaturedItem({
         const itemsContainer = container.querySelector('.items-list-container') as HTMLDivElement;
         if (itemsContainer && itemsContainer.children[initialIndex]) {
           const targetItem = itemsContainer.children[initialIndex] as HTMLElement;
-          targetItem.scrollIntoView({
-            behavior: 'auto',
-            block: 'nearest',
-            inline: 'center',
-          });
+
+          // Manually calculate scroll position to avoid window jumping
+          const containerRect = container.getBoundingClientRect();
+          const itemRect = targetItem.getBoundingClientRect();
+
+          const scrollOffset =
+            itemRect.left + itemRect.width / 2 - (containerRect.left + containerRect.width / 2);
+
+          container.scrollLeft += scrollOffset;
           setActiveIndex(initialIndex);
         }
       };
@@ -211,7 +215,8 @@ export default function FeaturedItem({
     imgTitle?: string,
     isLink?: boolean,
     customHref?: string,
-    distance: number = 0
+    distance: number = 0,
+    key?: string | number
   ) => {
     let sizeClass = 'h-[100px]';
     let opacityClass = 'opacity-100';
@@ -234,6 +239,7 @@ export default function FeaturedItem({
 
     const imgContent = (
       <div
+        key={key}
         className={`relative z-10 ${sizeClass} ${aspectClass} rounded-app overflow-hidden border-2 border-app-border bg-app-nav flex-shrink-0 transition-all duration-300 ${isOwner || isLink ? 'group-hover/shelf:scale-105 group-hover/shelf:border-app-font' : ''} ${opacityClass}`}
       >
         {imgUrl ? (
@@ -264,7 +270,7 @@ export default function FeaturedItem({
       return (
         <Link
           href={customHref}
-          key={customHref}
+          key={key || customHref}
           className="flex-shrink-0 snap-center h-[100px] flex items-center"
         >
           {imgContent}
@@ -325,7 +331,8 @@ export default function FeaturedItem({
                 it.title,
                 true,
                 it.id === it.title ? undefined : `/${it.id}`,
-                Math.abs(idx - activeIndex)
+                Math.abs(idx - activeIndex),
+                it.id || idx
               )
             )}
           </div>
