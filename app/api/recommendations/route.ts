@@ -1,12 +1,12 @@
 import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { searchOMDb } from '@/lib/search/omdb';
+import { searchTMDB } from '@/lib/search/tmdb';
 import { searchiTunes } from '@/lib/search/itunes';
 import { searchGames } from '@/lib/search/rawg';
 import { searchBooks } from '@/lib/search/openlibrary';
 
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 // ─── Image fetchers per category ─────────────────────────────────────────────
 
@@ -21,12 +21,12 @@ async function getImageUrl(
 
     switch (category) {
       case 'movie': {
-        const results = await searchOMDb(query, 'movie');
+        const results = await searchTMDB(query, 'movie');
         const imageUrl = results[0]?.imageUrl;
         return imageUrl;
       }
       case 'tv-show': {
-        const results = await searchOMDb(query, 'series');
+        const results = await searchTMDB(query, 'tv');
         const imageUrl = results[0]?.imageUrl;
         return imageUrl;
       }
@@ -123,15 +123,15 @@ export async function GET() {
 
     const userSlugs = new Set(currentItems.map((i) => i.category_slug));
 
-    // ── Groq ──────────────────────────────────────────────────────────────────
-    const groqRes = await fetch(GROQ_API_URL, {
+    // ── Openrouter ──────────────────────────────────────────────────────────────────
+    const openrouterRes = await fetch(OPENROUTER_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
+        model: 'openai/gpt-oss-20b:free',
         temperature: 0.7,
         max_tokens: 1500,
         messages: [
@@ -159,13 +159,13 @@ Use this exact structure (only include the keys relevant to the user's categorie
       }),
     });
 
-    if (!groqRes.ok) {
-      const err = await groqRes.text();
-      return NextResponse.json({ error: `Groq error: ${err}` }, { status: 500 });
+    if (!openrouterRes.ok) {
+      const err = await openrouterRes.text();
+      return NextResponse.json({ error: `Openrouter error: ${err}` }, { status: 500 });
     }
 
-    const groqData = await groqRes.json();
-    const raw = groqData.choices?.[0]?.message?.content ?? '{}';
+    const openrouterData = await openrouterRes.json();
+    const raw = openrouterData.choices?.[0]?.message?.content ?? '{}';
 
     let recommendations;
     try {
