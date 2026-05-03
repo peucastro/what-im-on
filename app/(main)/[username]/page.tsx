@@ -128,7 +128,5 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
     notFound();
   }
 
-  return (
-    <ProfileClientWrapper profile={profile} />
-  );
+  return <ProfileClientWrapper profile={profile} />;
 }

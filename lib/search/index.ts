@@ -4,6 +4,8 @@ import { searchBooks } from './google-books';
 import { searchiTunes } from './itunes';
 import { searchGames } from './rawg';
 
+export type { SearchCategory, SearchResult };
+
 export const ALL_CATEGORIES: SearchCategory[] = [
   'movie',
   'tv',
