@@ -35,27 +35,39 @@ export function ThemeProvider({
   preferences: UserPreferences;
 }) {
   const pathname = usePathname();
-  const isHomePage = pathname === '/';
 
-  // Initialize with serverPreferences to ensure hydration matches server
+  const isThemedPage = useMemo(() => {
+    if (!pathname) return false;
+
+    const themedStaticRoutes = new Set(['/present', '/future', '/others']);
+    const nonThemedPrefixes = ['/account', '/onboarding', '/login', '/register', '/auth', '/api'];
+
+    if (themedStaticRoutes.has(pathname)) return true;
+    if (pathname === '/') return false;
+    if (nonThemedPrefixes.some((prefix) => pathname.startsWith(prefix))) return false;
+
+    return true;
+  }, [pathname]);
+
   const [preferences, setPreferences] = useState<UserPreferences>(serverPreferences);
-  const [override, setOverride] = useState<UserPreferences | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
 
-  // Load cache only after mount
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsMounted(true);
-    const cached = localStorage.getItem(THEME_CACHE_KEY);
-    if (cached) {
-      try {
-        const parsed = JSON.parse(cached);
-        setPreferences(parsed);
-      } catch (e) {
-        console.error('Failed to parse cached theme', e);
+    if (typeof window !== 'undefined') {
+      const cached = localStorage.getItem(THEME_CACHE_KEY);
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached);
+          setTimeout(() => {
+            setPreferences((prev) => ({ ...prev, ...parsed }));
+          }, 0);
+        } catch (e) {
+          console.error('Failed to parse cached theme', e);
+        }
       }
     }
   }, []);
+
+  const [override, setOverride] = useState<UserPreferences | null>(null);
 
   // Sync with server preferences when they change (e.g. login/logout)
   useEffect(() => {
@@ -65,17 +77,17 @@ export function ThemeProvider({
 
   // Persist to localStorage whenever preferences change (only if no override and mounted)
   useEffect(() => {
-    if (isMounted && !override) {
+    if (!override) {
       localStorage.setItem(THEME_CACHE_KEY, JSON.stringify(preferences));
     }
-  }, [preferences, override, isMounted]);
+  }, [preferences, override]);
 
   // Compute active preferences based on current page/override
   const activePreferences = useMemo(() => {
+    if (!isThemedPage) return DEFAULT_PREFERENCES;
     if (override) return override;
-    if (isHomePage) return DEFAULT_PREFERENCES;
     return preferences;
-  }, [isHomePage, preferences, override]);
+  }, [isThemedPage, preferences, override]);
 
   const theme = useMemo(() => {
     return THEMES[activePreferences.theme_id] || THEMES.default;
@@ -100,7 +112,7 @@ export function ThemeProvider({
 
   return (
     <ThemeContext.Provider value={{ preferences, activePreferences, setPreferences, setOverride }}>
-      <div className="app-overlay" />
+      {isThemedPage && <div className="app-overlay" />}
       {children}
     </ThemeContext.Provider>
   );
