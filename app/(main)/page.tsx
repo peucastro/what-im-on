@@ -326,7 +326,10 @@ export default function Landing() {
               <span className="font-bold text-[#830527]">you</span>
             </p>
           </div>
-          <motion.div ref={addFeatureRef} className="mt-20 relative w-full max-w-[760px] min-h-[220px] sm:min-h-[260px] md:min-h-[420px] flex items-center justify-center">
+          <motion.div
+            ref={addFeatureRef}
+            className="mt-20 relative w-full max-w-[760px] min-h-[220px] sm:min-h-[260px] md:min-h-[420px] flex items-center justify-center"
+          >
             <div className="absolute inset-0 bg-[#2AADA2]/10 blur-3xl -z-10 rounded-full" />
 
             <motion.div
@@ -354,7 +357,12 @@ export default function Landing() {
             </motion.div>
 
             <motion.div
-              style={{ x: addRightX, y: addRightY, rotate: addRightRotate, opacity: addRightOpacity }}
+              style={{
+                x: addRightX,
+                y: addRightY,
+                rotate: addRightRotate,
+                opacity: addRightOpacity,
+              }}
               whileHover={{ y: -8, rotate: 10, scale: 1.02 }}
               className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 origin-center"
             >
