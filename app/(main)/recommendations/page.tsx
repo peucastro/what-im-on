@@ -77,12 +77,12 @@ function RecommendationsBody({ recommendations }: BodyProps) {
   }
 
   const categoriesConfig = [
-    { apiKey: 'albums',   title: 'songs',    creatorKey: 'artist'   },
-    { apiKey: 'books',    title: 'books',    creatorKey: 'author'   },
-    { apiKey: 'movies',   title: 'movies',   creatorKey: 'director' },
-    { apiKey: 'tv_shows', title: 'tv shows', creatorKey: 'network'  },
-    { apiKey: 'podcasts', title: 'podcasts', creatorKey: 'host'     },
-    { apiKey: 'games',    title: 'games',    creatorKey: 'studio'   },
+    { apiKey: 'albums', title: 'songs', creatorKey: 'artist' },
+    { apiKey: 'books', title: 'books', creatorKey: 'author' },
+    { apiKey: 'movies', title: 'movies', creatorKey: 'director' },
+    { apiKey: 'tv_shows', title: 'tv shows', creatorKey: 'network' },
+    { apiKey: 'podcasts', title: 'podcasts', creatorKey: 'host' },
+    { apiKey: 'games', title: 'games', creatorKey: 'studio' },
   ] as const;
 
   return (
@@ -111,10 +111,14 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
   const [activeIndex, setActiveIndex] = useState(Math.floor(items.length / 2));
 
   const getStyles = (distance: number) => {
-    if (distance === 0) return 'w-[140px] h-[140px] md:w-[170px] md:h-[170px] lg:w-[200px] lg:h-[200px] opacity-100 z-30 scale-110 shadow-2xl';
-    if (distance === 1) return 'w-[110px] h-[110px] md:w-[140px] md:h-[140px] lg:w-[170px] lg:h-[170px] opacity-70 z-20';
-    if (distance === 2) return 'w-[90px] h-[90px] md:w-[110px] md:h-[110px] lg:w-[140px] lg:h-[140px] opacity-40 z-10';
-    if (distance === 3) return 'w-[70px] h-[70px] md:w-[90px] md:h-[90px] lg:w-[110px] lg:h-[110px] opacity-20 z-0';
+    if (distance === 0)
+      return 'w-[140px] h-[140px] md:w-[170px] md:h-[170px] lg:w-[200px] lg:h-[200px] opacity-100 z-30 scale-110 shadow-2xl';
+    if (distance === 1)
+      return 'w-[110px] h-[110px] md:w-[140px] md:h-[140px] lg:w-[170px] lg:h-[170px] opacity-70 z-20';
+    if (distance === 2)
+      return 'w-[90px] h-[90px] md:w-[110px] md:h-[110px] lg:w-[140px] lg:h-[140px] opacity-40 z-10';
+    if (distance === 3)
+      return 'w-[70px] h-[70px] md:w-[90px] md:h-[90px] lg:w-[110px] lg:h-[110px] opacity-20 z-0';
     return 'w-0 h-0 opacity-0 pointer-events-none hidden';
   };
 

@@ -10,7 +10,11 @@ const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 // ─── Image fetchers per category ─────────────────────────────────────────────
 
-async function getImageUrl(title: string, category: string, subtitle?: string): Promise<string | undefined> {
+async function getImageUrl(
+  title: string,
+  category: string,
+  subtitle?: string
+): Promise<string | undefined> {
   try {
     const query = subtitle ? `${title} ${subtitle}` : title;
     switch (category) {
@@ -58,7 +62,11 @@ async function enrichWithImages<T extends { title: string; [key: string]: string
   return Promise.all(
     items.map(async (item) => ({
       ...item,
-      imageUrl: await getImageUrl(item.title, category, subtitleKey ? item[subtitleKey] : undefined),
+      imageUrl: await getImageUrl(
+        item.title,
+        category,
+        subtitleKey ? item[subtitleKey] : undefined
+      ),
     }))
   );
 }
@@ -90,12 +98,23 @@ export async function GET() {
 
     if (!currentItems || currentItems.length === 0) {
       return NextResponse.json({
-        recommendations: { songs: [], books: [], movies: [], tv_shows: [], games: [], podcasts: [], albums: [] },
+        recommendations: {
+          songs: [],
+          books: [],
+          movies: [],
+          tv_shows: [],
+          games: [],
+          podcasts: [],
+          albums: [],
+        },
       });
     }
 
     const interestsSummary = currentItems
-      .map((item) => `${item.category_label}: ${item.title}${item.description ? ` — ${item.description}` : ''}`)
+      .map(
+        (item) =>
+          `${item.category_label}: ${item.title}${item.description ? ` — ${item.description}` : ''}`
+      )
       .join('\n');
 
     const userSlugs = new Set(currentItems.map((i) => i.category_slug));
@@ -153,13 +172,23 @@ Use this exact structure (only include the keys relevant to the user's categorie
 
     // ── Enrich with real images in parallel ───────────────────────────────────
     const [songs, books, movies, tv_shows, games, podcasts, albums] = await Promise.all([
-      userSlugs.has('music')   ? enrichWithImages(recommendations.songs    ?? [], 'music',   'artist')   : [],
-      userSlugs.has('book')    ? enrichWithImages(recommendations.books    ?? [], 'book',    'author')   : [],
-      userSlugs.has('movie')   ? enrichWithImages(recommendations.movies   ?? [], 'movie',   'director') : [],
-      userSlugs.has('tv-show') ? enrichWithImages(recommendations.tv_shows ?? [], 'tv-show', 'network')  : [],
-      userSlugs.has('game')    ? enrichWithImages(recommendations.games    ?? [], 'game',    'studio')   : [],
-      userSlugs.has('podcast') ? enrichWithImages(recommendations.podcasts ?? [], 'podcast', 'host')     : [],
-      userSlugs.has('album')   ? enrichWithImages(recommendations.albums   ?? [], 'album',   'artist')   : [],
+      userSlugs.has('music')
+        ? enrichWithImages(recommendations.songs ?? [], 'music', 'artist')
+        : [],
+      userSlugs.has('book') ? enrichWithImages(recommendations.books ?? [], 'book', 'author') : [],
+      userSlugs.has('movie')
+        ? enrichWithImages(recommendations.movies ?? [], 'movie', 'director')
+        : [],
+      userSlugs.has('tv-show')
+        ? enrichWithImages(recommendations.tv_shows ?? [], 'tv-show', 'network')
+        : [],
+      userSlugs.has('game') ? enrichWithImages(recommendations.games ?? [], 'game', 'studio') : [],
+      userSlugs.has('podcast')
+        ? enrichWithImages(recommendations.podcasts ?? [], 'podcast', 'host')
+        : [],
+      userSlugs.has('album')
+        ? enrichWithImages(recommendations.albums ?? [], 'album', 'artist')
+        : [],
     ]);
 
     const enriched = { songs, books, movies, tv_shows, games, podcasts, albums };
@@ -175,13 +204,55 @@ Use this exact structure (only include the keys relevant to the user's categorie
     );
 
     const toInsert = [
-      ...songs.map((s)     => ({ user_id: user.id, category_id: categoryMap['music'],   title: s.title, image_url: s.imageUrl, reason: `By ${s.artist}` })),
-      ...books.map((b)     => ({ user_id: user.id, category_id: categoryMap['book'],    title: b.title, image_url: b.imageUrl, reason: `By ${b.author}` })),
-      ...movies.map((m)    => ({ user_id: user.id, category_id: categoryMap['movie'],   title: m.title, image_url: m.imageUrl, reason: `Directed by ${m.director}` })),
-      ...tv_shows.map((t)  => ({ user_id: user.id, category_id: categoryMap['tv-show'], title: t.title, image_url: t.imageUrl, reason: `${t.network} — ${t.year}` })),
-      ...games.map((g)     => ({ user_id: user.id, category_id: categoryMap['game'],    title: g.title, image_url: g.imageUrl, reason: `By ${g.studio}` })),
-      ...podcasts.map((p)  => ({ user_id: user.id, category_id: categoryMap['podcast'], title: p.title, image_url: p.imageUrl, reason: `Hosted by ${p.host}` })),
-      ...albums.map((a)    => ({ user_id: user.id, category_id: categoryMap['album'],   title: a.title, image_url: a.imageUrl, reason: `By ${a.artist}` })),
+      ...songs.map((s) => ({
+        user_id: user.id,
+        category_id: categoryMap['music'],
+        title: s.title,
+        image_url: s.imageUrl,
+        reason: `By ${s.artist}`,
+      })),
+      ...books.map((b) => ({
+        user_id: user.id,
+        category_id: categoryMap['book'],
+        title: b.title,
+        image_url: b.imageUrl,
+        reason: `By ${b.author}`,
+      })),
+      ...movies.map((m) => ({
+        user_id: user.id,
+        category_id: categoryMap['movie'],
+        title: m.title,
+        image_url: m.imageUrl,
+        reason: `Directed by ${m.director}`,
+      })),
+      ...tv_shows.map((t) => ({
+        user_id: user.id,
+        category_id: categoryMap['tv-show'],
+        title: t.title,
+        image_url: t.imageUrl,
+        reason: `${t.network} — ${t.year}`,
+      })),
+      ...games.map((g) => ({
+        user_id: user.id,
+        category_id: categoryMap['game'],
+        title: g.title,
+        image_url: g.imageUrl,
+        reason: `By ${g.studio}`,
+      })),
+      ...podcasts.map((p) => ({
+        user_id: user.id,
+        category_id: categoryMap['podcast'],
+        title: p.title,
+        image_url: p.imageUrl,
+        reason: `Hosted by ${p.host}`,
+      })),
+      ...albums.map((a) => ({
+        user_id: user.id,
+        category_id: categoryMap['album'],
+        title: a.title,
+        image_url: a.imageUrl,
+        reason: `By ${a.artist}`,
+      })),
     ].filter((r) => r.category_id);
 
     if (toInsert.length > 0) {

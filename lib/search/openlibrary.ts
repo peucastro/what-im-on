@@ -16,7 +16,7 @@ export async function searchBooks(query: string): Promise<SearchResult[]> {
       `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=20`
     );
     if (!res.ok) return [];
-    
+
     const data = await res.json();
     const normalizedQuery = query.toLowerCase().trim();
 
@@ -40,7 +40,7 @@ export async function searchBooks(query: string): Promise<SearchResult[]> {
           year: item.first_publish_year,
         };
       })
-      .sort((left, right) => {
+      .sort((left: SearchResult, right: SearchResult) => {
         const leftTitle = left.title.toLowerCase();
         const rightTitle = right.title.toLowerCase();
 
@@ -55,7 +55,7 @@ export async function searchBooks(query: string): Promise<SearchResult[]> {
 
         return (right.imageUrl ? 1 : 0) - (left.imageUrl ? 1 : 0);
       })
-      .filter((item) => Boolean(item.imageUrl))
+      .filter((item: SearchResult) => Boolean(item.imageUrl))
       .slice(0, 7);
   } catch {
     return [];

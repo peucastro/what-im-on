@@ -36,7 +36,9 @@ export async function searchTMDB(query: string, category: 'movie' | 'tv'): Promi
       title: category === 'movie' ? item.title : item.name,
       externalId: String(item.id),
       subtitle:
-        category === 'movie' ? item.release_date?.split('-')[0] : item.first_air_date?.split('-')[0],
+        category === 'movie'
+          ? item.release_date?.split('-')[0]
+          : item.first_air_date?.split('-')[0],
       imageUrl: item.poster_path ? `https://image.tmdb.org/t/p/w200${item.poster_path}` : undefined,
       year: item.release_date ? new Date(item.release_date).getFullYear() : undefined,
       description: item.overview,
