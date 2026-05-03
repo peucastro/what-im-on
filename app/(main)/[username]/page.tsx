@@ -1,12 +1,7 @@
 import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { notFound } from 'next/navigation';
-import ItemCard from '@/components/ItemCard';
-import ProfileHeader from '@/components/ProfileHeader';
-import VibeButton from '@/components/VibeButton';
-import ProfileThemeOverride from '@/components/ProfileThemeOverride';
-import { UserPreferences } from '@/utils/themes';
-import { ALL_CATEGORIES } from '@/lib/search/index';
+import ProfileClientWrapper from './ProfileClientWrapper';
 
 interface Item {
   id: string;
@@ -134,77 +129,6 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
   }
 
   return (
-    <div className="space-y-12 w-full mx-auto md:max-w-sm">
-      {!profile.isOwner && (
-        <ProfileThemeOverride preferences={profile.preferences as UserPreferences} />
-      )}
-      <div className="mt-8">
-        <ProfileHeader
-          username={profile.username}
-          isOwner={profile.isOwner}
-          preferences={profile.preferences as UserPreferences}
-        />
-      </div>
-
-      {profile.itemGroups.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-4 text-center space-y-2 px-4">
-          <div className="space-y-2">
-            {!profile.isOwner && (
-              <p className="text-app-font lowercase">no current interests yet</p>
-            )}
-            {profile.isOwner && (
-              <p className="text-app-font lowercase">your profile is looking a bit empty...</p>
-            )}
-          </div>
-
-          {profile.isOwner && (
-            <VibeButton variant="outline" className="hover:opacity-100">
-              ➕ &nbsp; add something
-            </VibeButton>
-          )}
-        </div>
-      ) : profile.itemGroups.length === ALL_CATEGORIES.length ? (
-        <div className="space-y-8 sm:px-6 px-0">
-          {profile.itemGroups.map((group: ItemGroup) => (
-            <div key={group.category_label}>
-              <div className="mb-4 flex items-center gap-2 px-4 sm:px-0">
-                {group.category_icon && <span className="text-2xl">{group.category_icon}</span>}
-                <h2 className="text-xl font-semibold text-app-font">{group.category_label}</h2>
-              </div>
-              <div className="border-b border-app-border pb-6">
-                {group.items.map((item: Item) => (
-                  <ItemCard key={item.id} item={item} />
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <>
-          <div className="space-y-8 sm:px-6 px-0">
-            {profile.itemGroups.map((group: ItemGroup) => (
-              <div key={group.category_label}>
-                <div className="mb-4 flex items-center gap-2 px-4 sm:px-0">
-                  {group.category_icon && <span className="text-2xl">{group.category_icon}</span>}
-                  <h2 className="text-xl font-semibold text-app-font">{group.category_label}</h2>
-                </div>
-                <div className="border-b border-app-border pb-6">
-                  {group.items.map((item: Item) => (
-                    <ItemCard key={item.id} item={item} />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-          {profile.isOwner && (
-            <div className="flex justify-center mt-6">
-              <VibeButton variant="outline" className="hover:opacity-100">
-                ➕ &nbsp; add something
-              </VibeButton>
-            </div>
-          )}
-        </>
-      )}
-    </div>
+    <ProfileClientWrapper profile={profile} />
   );
 }
