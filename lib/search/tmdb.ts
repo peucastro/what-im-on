@@ -13,20 +13,38 @@ interface TMDBItem {
 }
 
 export async function searchTMDB(query: string, category: 'movie' | 'tv'): Promise<SearchResult[]> {
-  const res = await fetch(
-    `${BASE_URL}/search/${category}?api_key=${process.env.TMDB_API_KEY}&query=${encodeURIComponent(query)}`
-  );
-  if (!res.ok) return [];
-  const data = await res.json();
-  return data.results.map((item: TMDBItem) => ({
-    id: `${category}_${item.id}`,
-    category: category as SearchCategory,
-    title: category === 'movie' ? item.title : item.name,
-    externalId: String(item.id),
-    subtitle:
-      category === 'movie' ? item.release_date?.split('-')[0] : item.first_air_date?.split('-')[0],
-    imageUrl: item.poster_path ? `https://image.tmdb.org/t/p/w200${item.poster_path}` : undefined,
-    year: item.release_date ? new Date(item.release_date).getFullYear() : undefined,
-    description: item.overview,
-  }));
+  const apiKey = process.env.TMDB_API_KEY;
+  if (!apiKey) {
+    console.warn('[TMDB] Missing TMDB_API_KEY');
+    return [];
+  }
+
+  try {
+    const res = await fetch(
+      `${BASE_URL}/search/${category}?api_key=${apiKey}&query=${encodeURIComponent(query)}`
+    );
+
+    if (!res.ok) {
+      console.warn(`[TMDB] Request failed with status ${res.status} for ${category}: ${query}`);
+      return [];
+    }
+
+    const data = await res.json();
+    return (data.results || []).map((item: TMDBItem) => ({
+      id: `${category}_${item.id}`,
+      category: category as SearchCategory,
+      title: category === 'movie' ? item.title : item.name,
+      externalId: String(item.id),
+      subtitle:
+        category === 'movie'
+          ? item.release_date?.split('-')[0]
+          : item.first_air_date?.split('-')[0],
+      imageUrl: item.poster_path ? `https://image.tmdb.org/t/p/w200${item.poster_path}` : undefined,
+      year: item.release_date ? new Date(item.release_date).getFullYear() : undefined,
+      description: item.overview,
+    }));
+  } catch (err) {
+    console.error('[TMDB] Error:', err);
+    return [];
+  }
 }
