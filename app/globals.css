@@ -12,6 +12,7 @@
   --color-app-secondary-accent: var(--app-secondary-accent);
   --color-app-nav: var(--app-nav);
   --color-app-background: var(--app-page-background);
+  --color-app-header-background: var(--app-header-background);
   --color-app-text: var(--app-font);
 
   --radius-app: var(--app-radius);
@@ -56,6 +57,7 @@ body {
 @layer utilities {
   .bg-app-header {
     background-image: var(--app-header-image);
+    background-color: var(--app-header-background);
   }
 
   .bg-app-page {

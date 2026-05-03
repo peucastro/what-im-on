@@ -8,10 +8,10 @@ export interface UserPreferences {
   pet_id: string;
   overlay_id: string;
 }
-
 export interface ThemeColors {
   border: string;
   headerImage: string;
+  headerBackground: string;
   font: string;
   accent: string;
   secondaryAccent: string;
@@ -33,7 +33,8 @@ export const THEMES: Record<string, ThemeDefinition> = {
     colors: {
       border: '#e2e8f0',
       headerImage: 'none',
-      font: '#000000',
+      headerBackground: '#ffffff',
+      font: '#1a202c',
       accent: '#000000',
       secondaryAccent: '#bbbbbb',
       overlay: 'none',
@@ -47,9 +48,10 @@ export const THEMES: Record<string, ThemeDefinition> = {
     colors: {
       border: '#2d3748',
       headerImage: 'none',
+      headerBackground: '#1a202c',
       font: '#f7fafc',
       accent: '#48bb78',
-      secondaryAccent: '#48bb78',
+      secondaryAccent: '#38a169',
       overlay: 'none',
       navBackground: '#1a202c',
       pageBackground: '#2d3748',
@@ -61,12 +63,28 @@ export const THEMES: Record<string, ThemeDefinition> = {
     colors: {
       border: '#C97C00',
       headerImage: 'none',
+      headerBackground: '#000000',
       font: '#C97C00',
       accent: '#C97C00',
       secondaryAccent: '#000000',
       overlay: 'none',
       navBackground: '#000000',
       pageBackground: '#000000',
+    },
+  },
+  steam: {
+    id: 'steam',
+    name: 'Steam 2005',
+    colors: {
+      border: '#535353',
+      headerImage: 'none',
+      headerBackground: '#000000',
+      font: '#eeeeee',
+      accent: '#2F322E',
+      secondaryAccent: '#282828',
+      overlay: 'none',
+      navBackground: '#282828',
+      pageBackground: '#4C5844',
     },
   },
 };
