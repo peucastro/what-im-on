@@ -132,13 +132,6 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
     return 'w-0 h-0 opacity-0 pointer-events-none hidden';
   };
 
-  const getPositionStyle = (distance: number) => {
-    if (distance === 0) return 'translate-y-0';
-    if (distance === 1) return 'translate-y-[-8px]';
-    if (distance === 2) return 'translate-y-[-16px]';
-    return '';
-  };
-
   const activeItem = items.length > 0 ? items[activeIndex % items.length] : null;
 
   const handleItemClick = (virtualIndex: number) => {
@@ -190,7 +183,7 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
               <div
                 key={`${virtualIndex}-${realItem.title}`}
                 onClick={() => handleItemClick(virtualIndex)}
-                className={`${getStyles(distance)} ${getPositionStyle(distance)} bg-app-nav rounded-app shrink-0 cursor-pointer overflow-hidden relative transition-all duration-500 ease-in-out border border-app-border flex items-center justify-center`}
+                className={`${getStyles(distance)} bg-app-nav rounded-app shrink-0 cursor-pointer overflow-hidden relative transition-all duration-500 ease-in-out border border-app-border flex items-center justify-center`}
               >
                 {realItem.imageUrl ? (
                   <Image
