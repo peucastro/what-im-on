@@ -10,7 +10,12 @@ export default function VibeEditor() {
   const { preferences, setPreferences } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [originalPreferences] = useState(preferences);
+  const [originalPreferences, setOriginalPreferences] = useState(preferences);
+
+  const handleOpen = () => {
+    setOriginalPreferences(preferences);
+    setIsOpen(true);
+  };
   const supabase = createClient();
 
   const handleSave = async () => {
@@ -45,7 +50,7 @@ export default function VibeEditor() {
   };
 
   if (!isOpen) {
-    return <VibeButton onClick={() => setIsOpen(true)}>✏️ &nbsp; edit vibe</VibeButton>;
+    return <VibeButton onClick={handleOpen}>✏️ &nbsp; edit vibe</VibeButton>;
   }
 
   return (
@@ -180,12 +185,12 @@ export default function VibeEditor() {
             >
               {isSaving ? 'saving...' : 'save vibe'}
             </VibeButton>
-            <VibeButton
+            <button
               onClick={handleCancel}
-              className="w-full py-3 text-sm border-transparent hover:bg-zinc-100 hover:text-app-font"
+              className="w-full py-3 text-sm lowercase font-medium text-app-font opacity-40 hover:opacity-100 transition-opacity"
             >
               cancel
-            </VibeButton>
+            </button>
           </div>
         </div>
       </div>

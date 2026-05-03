@@ -211,7 +211,7 @@ export default function AccountPage() {
         </div>
 
         <motion.div
-          className="flex flex-col gap-12 pb-24"
+          className="flex flex-col gap-12 pb-32"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
