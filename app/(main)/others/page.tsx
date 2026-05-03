@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import WhoIsIntoWhatYouAreOn from '@/components/WhoIsIntoWhatYouAreOn';
 import FeaturedItem from '@/components/FeaturedItem';
+import { getDefaultAvatarUrl } from '@/utils/avatar';
 
 interface Recommendation {
   user_id: string;
@@ -68,7 +69,7 @@ export default async function OthersPage() {
     <div className="mx-auto w-full max-w-lg">
       <Navbar />
 
-      <div className="p-4 space-y-12 pb-20">
+      <div className="p-4 space-y-12 pb-32">
         {recsError ? (
           <div className="p-4 bg-red-50 text-red-600 rounded-app border border-red-100">
             Failed to load recommendations. Please try again later.
@@ -109,7 +110,8 @@ export default async function OthersPage() {
                         id: rec.username,
                         title: rec.display_name || rec.username,
                         description: `shares ${rec.shared_items} items with you`,
-                        image_url: rec.avatar_url || undefined,
+                        image_url:
+                          rec.avatar_url || getDefaultAvatarUrl(rec.display_name || rec.username),
                       });
                     }
                     return map;

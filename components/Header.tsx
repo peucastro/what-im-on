@@ -25,7 +25,7 @@ export default async function Header() {
 
   return (
     <header className="w-full">
-      <nav className="m-2 border border-app-border bg-app-header bg-cover bg-center rounded-app">
+      <nav className="m-2 border border-app-border bg-app-header-background rounded-app">
         <div className="mx-auto flex max-w-3xl items-center justify-between sm:px-6 px-4">
           <Link
             href="/"

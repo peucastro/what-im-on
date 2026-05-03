@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // --- INTERFACES ---
 interface RecommendationItem {
@@ -119,6 +120,7 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
     items.length > 0 ? Math.floor(items.length / 2) : 0
   );
   const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [copied, setCopied] = useState(false);
 
   // Create virtual items for infinite effect (3x duplication)
   const virtualItems = items.length > 0 ? [...items, ...items, ...items] : [];
@@ -133,6 +135,15 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
   const activeItem = items.length > 0 ? items[activeIndex % items.length] : null;
 
   const handleItemClick = (virtualIndex: number) => {
+    if (virtualIndex === activeIndex) {
+      const realItem = items[virtualIndex % items.length];
+      if (realItem) {
+        navigator.clipboard.writeText(`${realItem.title} - ${realItem.year}`);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
+      return;
+    }
     const realIndex = virtualIndex % items.length;
     const middleStart = items.length;
     const equivalentMiddleIndex = middleStart + realIndex;
@@ -202,6 +213,21 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
                 )}
                 {/* Overlay gradiente em cima da imagem */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+
+                <AnimatePresence>
+                  {distance === 0 && copied && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="absolute inset-0 flex items-center justify-center bg-black/40 z-40 pointer-events-none"
+                    >
+                      <span className="text-[10px] font-bold text-white uppercase tracking-wider">
+                        Copied!
+                      </span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             );
           })}

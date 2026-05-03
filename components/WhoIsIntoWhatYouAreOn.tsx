@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { encodeUserForPath } from '@/utils/username';
+import { getDefaultAvatarUrl } from '@/utils/avatar';
 
 interface Recommendation {
   user_id: string;
@@ -73,9 +74,7 @@ export default function WhoIsIntoWhatYouAreOn({ recommendations }: WhoIsIntoWhat
 
   return (
     <section className="space-y-4">
-      <h2 className="text-xl font-bold text-app-font mb-4 lowercase">
-        who&apos;s into what you&apos;re on
-      </h2>
+      <h2 className="text-xl text-app-font mb-4 lowercase">who&apos;s into what you&apos;re on</h2>
       <div className="flex flex-col gap-2">
         {recommendations.slice(0, 3).map((rec) => (
           <Link
@@ -85,15 +84,13 @@ export default function WhoIsIntoWhatYouAreOn({ recommendations }: WhoIsIntoWhat
           >
             <div className="relative w-24 h-24 shrink-0">
               <div className="w-full h-full bg-app-border rounded-app flex items-center justify-center overflow-hidden border border-app-border">
-                {rec.avatar_url ? (
-                  <Image src={rec.avatar_url} alt={rec.username} fill className="object-cover" />
-                ) : (
-                  <span className="text-2xl font-bold text-app-font opacity-30">
-                    {rec.display_name
-                      ? rec.display_name[0].toUpperCase()
-                      : rec.username[0].toUpperCase()}
-                  </span>
-                )}
+                <Image
+                  src={rec.avatar_url || getDefaultAvatarUrl(rec.display_name || rec.username)}
+                  alt={rec.username}
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
               </div>
             </div>
             <div className="flex flex-col gap-6">

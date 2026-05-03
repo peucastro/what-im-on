@@ -56,9 +56,18 @@ body {
 }
 
 @layer utilities {
-  .bg-app-header {
-    background-image: var(--app-header-image);
-    background-color: var(--app-header-background);
+  .bg-profile-header {
+    background-image: linear-gradient(
+        to right,
+        var(--app-profile-background) 0%,
+        var(--app-profile-background) 40%,
+        transparent 100%
+      ),
+      var(--app-header-image);
+    background-color: var(--app-profile-background);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
   .bg-app-profile {
