@@ -183,7 +183,7 @@ export default function FeaturedItem({
       </div>
 
       {/* Title and Author/Artist */}
-      <div className="text-center px-4 mt-2">
+      <div className="text-center px-4">
         <h3 className="text-lg font-bold text-app-font tracking-tight leading-tight">
           {title}
         </h3>

@@ -27,7 +27,7 @@ export default function CategorySection({ categoryLabel, items, isOwner }: Categ
   const categoryId = featuredItem?.category_id;
 
   return (
-    <div className="space-y-4">
+    <div >
       <div className="flex items-center justify-between px-4 sm:px-0">
         <h2 className="text-xl font-semibold text-app-font lowercase">{categoryLabel}</h2>
         {isOwner && categoryId && (

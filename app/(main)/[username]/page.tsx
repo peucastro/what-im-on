@@ -2,9 +2,9 @@ import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { notFound } from 'next/navigation';
 import ProfileHeader from '@/components/ProfileHeader';
-import VibeButton from '@/components/VibeButton';
 import ProfileThemeOverride from '@/components/ProfileThemeOverride';
 import CategorySection from '@/components/CategorySection';
+import AddCategory from '@/components/AddCategory';
 import { UserPreferences } from '@/utils/themes';
 
 interface Item {
@@ -21,11 +21,17 @@ interface ItemGroup {
   items: Item[];
 }
 
+interface Category {
+  id: string;
+  label: string;
+  icon: string | null;
+}
+
 async function getUserProfile(username: string) {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
-  // 1. Get user by username first to know whose items to fetch
+  // 1. Get user by username first
   const { data: userData, error: userError } = await supabase
     .from('users')
     .select('id, username, display_name')
@@ -36,12 +42,11 @@ async function getUserProfile(username: string) {
     return null;
   }
 
-  // 2. Parallelize items fetch, preferences fetch, and current auth check
-  const [itemsResult, preferencesResult, authResult] = await Promise.all([
+  // 2. Parallelize data fetching
+  const [itemsResult, preferencesResult, categoriesResult, authResult] = await Promise.all([
     supabase
       .from('items')
-      .select(
-        `
+      .select(`
         id,
         title,
         description,
@@ -51,8 +56,7 @@ async function getUserProfile(username: string) {
           label,
           icon
         )
-      `
-      )
+      `)
       .eq('user_id', userData.id)
       .eq('is_current', true)
       .order('created_at', { ascending: false }),
@@ -61,22 +65,15 @@ async function getUserProfile(username: string) {
       .select('theme_id, border_radius, font_family, pet_id, overlay_id')
       .eq('user_id', userData.id)
       .single(),
+    supabase
+      .from('categories')
+      .select('id, label, icon')
+      .order('label', { ascending: true }),
     supabase.auth.getUser(),
   ]);
 
-  const itemsData = itemsResult.data;
-  const preferencesData = preferencesResult.data;
   const authUser = authResult.data?.user;
   const isOwner = authUser?.id === userData.id;
-
-  if (itemsResult.error) {
-    console.error('[ProfilePage] Error fetching items:', itemsResult.error);
-    return null;
-  }
-
-  if (preferencesResult.error) {
-    console.error('[ProfilePage] Error fetching preferences:', preferencesResult.error);
-  }
 
   // Group items by category
   const groups: Record<string, ItemGroup> = {};
@@ -88,13 +85,12 @@ async function getUserProfile(username: string) {
     image_url: string | null;
     category_id: string;
     categories: {
-      id: string;
       label: string;
       icon: string | null;
     } | null;
   }
 
-  ((itemsData as unknown as RawItem[]) || []).forEach((item) => {
+  ((itemsResult.data as unknown as RawItem[]) || []).forEach((item) => {
     const categoryLabel = item.categories?.label || 'Other';
     const categoryIcon = item.categories?.icon;
 
@@ -115,13 +111,12 @@ async function getUserProfile(username: string) {
     });
   });
 
-  const itemsByCategory = Object.values(groups);
-
   return {
     username: userData.display_name || userData.username,
-    itemGroups: itemsByCategory,
+    itemGroups: Object.values(groups),
     isOwner,
-    preferences: preferencesData,
+    preferences: preferencesResult.data,
+    allCategories: (categoriesResult.data || []) as Category[],
   };
 }
 
@@ -146,35 +141,28 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
         />
       </div>
 
-      {profile.itemGroups.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-4 text-center space-y-2 px-4">
-          <div className="space-y-2">
-            {!profile.isOwner && (
-              <p className="text-app-font lowercase">no current interests yet</p>
-            )}
-            {profile.isOwner && (
-              <p className="text-app-font lowercase">your profile is looking a bit empty...</p>
-            )}
-          </div>
+      <div className="space-y-4">
+        {profile.itemGroups.map((group: ItemGroup) => (
+          <CategorySection
+            key={group.category_label}
+            categoryLabel={group.category_label}
+            items={group.items}
+            isOwner={profile.isOwner}
+          />
+        ))}
 
-          {profile.isOwner && (
-            <VibeButton variant="outline" className="hover:opacity-100">
-              ➕ &nbsp; add something
-            </VibeButton>
-          )}
-        </div>
-      ) : (
-        <div>
-          {profile.itemGroups.map((group: ItemGroup) => (
-            <CategorySection
-              key={group.category_label}
-              categoryLabel={group.category_label}
-              items={group.items}
-              isOwner={profile.isOwner}
-            />
-          ))}
-        </div>
-      )}
+        {profile.isOwner && (
+          <AddCategory 
+            categories={profile.allCategories} 
+          />
+        )}
+
+        {!profile.isOwner && profile.itemGroups.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-4 text-center space-y-2 px-4">
+            <p className="text-app-font lowercase opacity-40">no current interests yet</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
