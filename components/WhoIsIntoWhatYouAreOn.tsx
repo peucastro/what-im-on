@@ -2,6 +2,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { encodeUserForPath } from '@/utils/username';
 import { getDefaultAvatarUrl } from '@/utils/avatar';
+import {
+  THEMES,
+  BORDER_RADIUS_MAP,
+  FONT_FAMILY_MAP,
+  BorderRadius,
+  FontFamily,
+} from '@/utils/themes';
 
 interface Recommendation {
   user_id: string;
@@ -13,6 +20,9 @@ interface Recommendation {
   shared_item_titles: string[];
   shared_categories: number;
   matching_categories: string[];
+  theme_id?: string;
+  border_radius?: string;
+  font_family?: string;
 }
 
 interface WhoIsIntoWhatYouAreOnProps {
@@ -76,36 +86,71 @@ export default function WhoIsIntoWhatYouAreOn({ recommendations }: WhoIsIntoWhat
     <section className="space-y-4">
       <h2 className="text-xl text-app-font mb-4 lowercase">who&apos;s into what you&apos;re on</h2>
       <div className="flex flex-col gap-2">
-        {recommendations.slice(0, 3).map((rec) => (
-          <Link
-            href={`/${encodeUserForPath(rec.username)}`}
-            key={rec.user_id}
-            className="flex items-center gap-4 p-4 border border-app-border rounded-app bg-app-nav hover:opacity-90 transition-all shadow-sm group"
-          >
-            <div className="relative w-24 h-24 shrink-0">
-              <div className="w-full h-full bg-app-border rounded-app flex items-center justify-center overflow-hidden border border-app-border">
-                <Image
-                  src={rec.avatar_url || getDefaultAvatarUrl(rec.display_name || rec.username)}
-                  alt={rec.username}
-                  fill
-                  className="object-cover"
-                  unoptimized
-                />
+        {recommendations.slice(0, 3).map((rec) => {
+          const themeId = rec.theme_id || 'default';
+          const theme = THEMES[themeId] || THEMES.default;
+          const borderRadius = BORDER_RADIUS_MAP[(rec.border_radius as BorderRadius) || 'low'];
+          const fontFamily = FONT_FAMILY_MAP[(rec.font_family as FontFamily) || 'sans'];
+
+          const cardStyle: React.CSSProperties = {
+            borderRadius,
+            fontFamily,
+            backgroundColor: theme.colors.profileBackground,
+            backgroundImage:
+              theme.colors.headerImage !== 'none'
+                ? `linear-gradient(to right, ${theme.colors.profileBackground} 0%, ${theme.colors.profileBackground} 40%, transparent 100%), ${theme.colors.headerImage}`
+                : undefined,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            borderColor: theme.colors.border,
+            borderWidth: '1px',
+            borderStyle: 'solid',
+            color: theme.colors.font,
+          };
+
+          const avatarContainerStyle: React.CSSProperties = {
+            borderRadius,
+            backgroundColor: theme.colors.border,
+            borderColor: theme.colors.border,
+          };
+
+          return (
+            <Link
+              href={`/${rec.username}`}
+              key={rec.user_id}
+              className="flex items-center gap-4 p-4 hover:opacity-90 transition-all shadow-sm group"
+              style={cardStyle}
+            >
+              <div className="relative w-24 h-24 shrink-0">
+                <div
+                  className="w-full h-full flex items-center justify-center overflow-hidden border"
+                  style={avatarContainerStyle}
+                >
+                  <Image
+                    src={rec.avatar_url || getDefaultAvatarUrl(rec.display_name || rec.username)}
+                    alt={rec.username}
+                    fill
+                    className="object-cover"
+                    style={{ borderRadius }}
+                    unoptimized
+                  />
+                </div>
               </div>
-            </div>
-            <div className="flex flex-col gap-6">
-              <div>
-                <h3 className="font-bold text-lg text-app-font truncate leading-tight">
-                  {rec.display_name || rec.username}
-                </h3>
-                <p className="text-sm text-app-font opacity-60 truncate mb-1">@{rec.username}</p>
+              <div className="flex flex-col gap-6">
+                <div>
+                  <h3 className="font-bold text-lg truncate leading-tight">
+                    {rec.display_name || rec.username}
+                  </h3>
+                  <p className="text-sm opacity-60 truncate mb-1">@{rec.username}</p>
+                </div>
+                <p className="text-xs opacity-60 italic">
+                  {formatDescription(rec.matching_categories)}
+                </p>
               </div>
-              <p className="text-xs text-app-font opacity-60 italic">
-                {formatDescription(rec.matching_categories)}
-              </p>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          );
+        })}
       </div>
     </section>
   );

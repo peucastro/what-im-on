@@ -16,6 +16,9 @@ interface Recommendation {
   shared_item_titles: string[];
   shared_categories: number;
   matching_categories: string[];
+  theme_id?: string;
+  border_radius?: string;
+  font_family?: string;
 }
 
 export default async function OthersPage() {

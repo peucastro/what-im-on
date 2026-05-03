@@ -11,27 +11,30 @@ Share what you're into and get curated recommendations. A community-driven platf
 ## Problem & Solution
 
 ### The Problem
-Social media profiles today are increasingly standardized and generic. 
+
+Social media profiles today are increasingly standardized and generic.
 Every profile looks the same.
-A photo, a bio, a follower count. 
-There's little room for genuine self-expression or to communicate 
+A photo, a bio, a follower count.
+There's little room for genuine self-expression or to communicate
 what actually makes someone who they are right now.
 
 ### Our Solution
-**what i'm on** gives users a personal space that reflects their current 
-obsessions, the book they can't put down, the album on repeat, the show 
-they're addicted to. Profiles are fully customizable and built around 
+
+**what i'm on** gives users a personal space that reflects their current
+obsessions, the book they can't put down, the album on repeat, the show
+they're addicted to. Profiles are fully customizable and built around
 real-time interests rather than static information.
 
 Key features:
-- **Current interests** — share what you're into right now across music, 
+
+- **Current interests** — share what you're into right now across music,
   books, movies, TV shows, games, podcasts and more
-- **Full profile customization** — fonts, colors, layout — your profile, 
+- **Full profile customization** — fonts, colors, layout — your profile,
   your identity
 - **AI-powered recommendations** — discover new things based on your taste
 - **Social discovery** — explore other people's profiles and find your people
   through shared obsessions
-  
+
 ## Tech Stack
 
 - Next.js 15+ (App Router)
