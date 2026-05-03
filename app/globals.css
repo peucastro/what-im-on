@@ -57,7 +57,8 @@ body {
 
 @layer utilities {
   .bg-profile-header {
-    background-image: linear-gradient(
+    background-image:
+      linear-gradient(
         to right,
         var(--app-profile-background) 0%,
         var(--app-profile-background) 40%,
