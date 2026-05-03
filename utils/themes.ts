@@ -50,7 +50,7 @@ export const THEMES: Record<string, ThemeDefinition> = {
     name: 'Forest',
     colors: {
       border: '#2d3748',
-      headerImage: 'none',
+      headerImage: 'url(/headers/forest.png)',
       headerBackground: '#1a202c',
       profileBackground: '#1a202c',
       font: '#f7fafc',
@@ -98,7 +98,7 @@ export const THEMES: Record<string, ThemeDefinition> = {
     name: 'Pink',
     colors: {
       border: '#CCCCCC',
-      headerImage: 'none',
+      headerImage: 'url(/headers/pink.png)',
       headerBackground: '#FB77D8',
       profileBackground: '#FB77D8',
       font: '#000000',
