@@ -120,6 +120,7 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
   const [activeIndex, setActiveIndex] = useState(
     items.length > 0 ? Math.floor(items.length / 2) : 0
   );
+  const [touchStart, setTouchStart] = useState<number | null>(null);
 
   // Create virtual items for infinite effect (3x duplication)
   const virtualItems = items.length > 0 ? [...items, ...items, ...items] : [];
@@ -133,26 +134,50 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
 
   const getPositionStyle = (distance: number) => {
     if (distance === 0) return 'translate-y-0';
-    if (distance === 1) return distance === 1 ? 'translate-y-[-8px]' : 'translate-y-[8px]';
-    if (distance === 2) return distance === 2 ? 'translate-y-[-16px]' : 'translate-y-[16px]';
+    if (distance === 1) return 'translate-y-[-8px]';
+    if (distance === 2) return 'translate-y-[-16px]';
     return '';
   };
 
   const activeItem = items.length > 0 ? items[activeIndex % items.length] : null;
 
   const handleItemClick = (virtualIndex: number) => {
-    // Calculate the real index and find the equivalent position in the middle duplication
     const realIndex = virtualIndex % items.length;
-    const middleStart = items.length; // Start of middle duplication
+    const middleStart = items.length;
     const equivalentMiddleIndex = middleStart + realIndex;
     setActiveIndex(equivalentMiddleIndex);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStart === null) return;
+    const touchEnd = e.changedTouches[0].clientX;
+    const diff = touchStart - touchEnd;
+
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        // Swipe left -> Next
+        setActiveIndex((prev) => (prev + 1) % virtualItems.length);
+      } else {
+        // Swipe right -> Prev
+        setActiveIndex((prev) => (prev - 1 + virtualItems.length) % virtualItems.length);
+      }
+    }
+    setTouchStart(null);
   };
 
   return (
     <div className="w-full">
       <h2 className="text-2xl font-bold mb-8 capitalize text-app-font tracking-tight">{title}</h2>
 
-      <div className="relative flex items-center justify-center">
+      <div
+        className="relative flex items-center justify-center touch-pan-y"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <div className="flex items-center justify-center gap-3 h-[120px] w-full overflow-hidden">
           {virtualItems.map((item, virtualIndex) => {
             const distance = Math.abs(virtualIndex - activeIndex);
