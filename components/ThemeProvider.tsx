@@ -34,11 +34,6 @@ export function ThemeProvider({
   preferences: UserPreferences;
 }) {
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const isThemedPage = useMemo(() => {
     if (!pathname) return false;
@@ -60,7 +55,10 @@ export function ThemeProvider({
       const cached = localStorage.getItem(THEME_CACHE_KEY);
       if (cached) {
         try {
-          setPreferences(JSON.parse(cached));
+          const parsed = JSON.parse(cached);
+          setTimeout(() => {
+            setPreferences((prev) => ({ ...prev, ...parsed }));
+          }, 0);
         } catch (e) {
           console.error('Failed to parse cached theme', e);
         }
