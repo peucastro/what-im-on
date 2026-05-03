@@ -48,7 +48,7 @@ export async function searchOMDb(query: string, type: OmdbType): Promise<SearchR
       subtitle: item.Year,
       imageUrl: item.Poster && item.Poster !== 'N/A' ? item.Poster : undefined,
       year: item.Year ? Number.parseInt(item.Year, 10) : undefined,
-    })).filter((item) => Boolean(item.imageUrl));
+    }));
   } catch (err) {
     console.error('[OMDb] Error:', err);
     return [];
