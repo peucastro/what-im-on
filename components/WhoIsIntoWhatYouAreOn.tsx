@@ -22,18 +22,20 @@ export default function WhoIsIntoWhatYouAreOn({ recommendations }: WhoIsIntoWhat
 
   const formatDescription = (matchingCategories: string[]) => {
     if (matchingCategories.length === 0) return <span>shares some of your interests</span>;
-    
+
     const categoryMapping: Record<string, string> = {
-      'movie': 'movies',
-      'tv': 'TV shows',
-      'book': 'books',
-      'podcast': 'podcasts',
-      'album': 'music',
-      'music': 'music',
-      'game': 'games'
+      movie: 'movies',
+      tv: 'TV shows',
+      book: 'books',
+      podcast: 'podcasts',
+      album: 'music',
+      music: 'music',
+      game: 'games',
     };
 
-    const categories = matchingCategories.map(cat => categoryMapping[cat.toLowerCase()] || cat.toLowerCase());
+    const categories = matchingCategories.map(
+      (cat) => categoryMapping[cat.toLowerCase()] || cat.toLowerCase()
+    );
     const uniqueCategories = Array.from(new Set(categories));
 
     if (uniqueCategories.length === 1) {
@@ -47,7 +49,8 @@ export default function WhoIsIntoWhatYouAreOn({ recommendations }: WhoIsIntoWhat
     if (uniqueCategories.length === 2) {
       return (
         <span>
-          shares your taste in <span className="font-bold">{uniqueCategories[0]}</span> and <span className="font-bold">{uniqueCategories[1]}</span>
+          shares your taste in <span className="font-bold">{uniqueCategories[0]}</span> and{' '}
+          <span className="font-bold">{uniqueCategories[1]}</span>
         </span>
       );
     }
@@ -55,19 +58,23 @@ export default function WhoIsIntoWhatYouAreOn({ recommendations }: WhoIsIntoWhat
     const last = uniqueCategories.pop();
     return (
       <span>
-        shares your taste in {uniqueCategories.map((cat, i) => (
+        shares your taste in{' '}
+        {uniqueCategories.map((cat, i) => (
           <span key={cat}>
             <span className="font-bold">{cat}</span>
             {i < uniqueCategories.length - 1 ? ', ' : ''}
           </span>
-        ))} and <span className="font-bold">{last}</span>
+        ))}{' '}
+        and <span className="font-bold">{last}</span>
       </span>
     );
   };
 
   return (
     <section className="space-y-4">
-      <h2 className="text-xl font-bold text-app-font mb-4 lowercase">who&apos;s into what you&apos;re on</h2>
+      <h2 className="text-xl font-bold text-app-font mb-4 lowercase">
+        who&apos;s into what you&apos;re on
+      </h2>
       <div className="grid gap-4 sm:grid-cols-2">
         {recommendations.slice(0, 6).map((rec) => (
           <Link
@@ -78,15 +85,12 @@ export default function WhoIsIntoWhatYouAreOn({ recommendations }: WhoIsIntoWhat
             <div className="relative w-16 h-16 flex-shrink-0">
               <div className="w-full h-full bg-app-border rounded-app flex items-center justify-center overflow-hidden border border-app-border">
                 {rec.avatar_url ? (
-                  <Image
-                    src={rec.avatar_url}
-                    alt={rec.username}
-                    fill
-                    className="object-cover"
-                  />
+                  <Image src={rec.avatar_url} alt={rec.username} fill className="object-cover" />
                 ) : (
                   <span className="text-2xl font-bold text-app-font opacity-30">
-                    {rec.display_name ? rec.display_name[0].toUpperCase() : rec.username[0].toUpperCase()}
+                    {rec.display_name
+                      ? rec.display_name[0].toUpperCase()
+                      : rec.username[0].toUpperCase()}
                   </span>
                 )}
               </div>
@@ -95,9 +99,7 @@ export default function WhoIsIntoWhatYouAreOn({ recommendations }: WhoIsIntoWhat
               <h3 className="font-bold text-lg text-app-font truncate leading-tight">
                 {rec.display_name || rec.username}
               </h3>
-              <p className="text-sm text-app-font opacity-60 truncate mb-1">
-                @{rec.username}
-              </p>
+              <p className="text-sm text-app-font opacity-60 truncate mb-1">@{rec.username}</p>
               <p className="text-xs text-app-font opacity-60 italic">
                 {formatDescription(rec.matching_categories)}
               </p>
