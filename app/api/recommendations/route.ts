@@ -10,11 +10,7 @@ const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 // ─── Image fetchers per category ─────────────────────────────────────────────
 
-async function getImageUrl(
-  title: string,
-  category: string,
-  subtitle?: string
-): Promise<string | undefined> {
+async function getImageUrl(title: string, category: string): Promise<string | undefined> {
   try {
     // Don't include subtitle in query for better results
     const query = title;
@@ -53,24 +49,19 @@ async function getImageUrl(
       default:
         return undefined;
     }
-  } catch (err) {
+  } catch {
     return undefined;
   }
 }
 
 async function enrichWithImages<T extends { title: string; [key: string]: string }>(
   items: T[],
-  category: string,
-  subtitleKey?: keyof T
+  category: string
 ): Promise<(T & { imageUrl?: string })[]> {
   return Promise.all(
     items.map(async (item) => ({
       ...item,
-      imageUrl: await getImageUrl(
-        item.title,
-        category,
-        subtitleKey ? item[subtitleKey] : undefined
-      ),
+      imageUrl: await getImageUrl(item.title, category),
     }))
   );
 }
@@ -176,23 +167,13 @@ Use this exact structure (only include the keys relevant to the user's categorie
 
     // ── Enrich with real images in parallel ───────────────────────────────────
     const [songs, books, movies, tv_shows, games, podcasts, albums] = await Promise.all([
-      userSlugs.has('music')
-        ? enrichWithImages(recommendations.songs ?? [], 'music', 'artist')
-        : [],
-      userSlugs.has('book') ? enrichWithImages(recommendations.books ?? [], 'book', 'author') : [],
-      userSlugs.has('movie')
-        ? enrichWithImages(recommendations.movies ?? [], 'movie', 'director')
-        : [],
-      userSlugs.has('tv-show')
-        ? enrichWithImages(recommendations.tv_shows ?? [], 'tv-show', 'network')
-        : [],
-      userSlugs.has('game') ? enrichWithImages(recommendations.games ?? [], 'game', 'studio') : [],
-      userSlugs.has('podcast')
-        ? enrichWithImages(recommendations.podcasts ?? [], 'podcast', 'host')
-        : [],
-      userSlugs.has('album')
-        ? enrichWithImages(recommendations.albums ?? [], 'album', 'artist')
-        : [],
+      userSlugs.has('music') ? enrichWithImages(recommendations.songs ?? [], 'music') : [],
+      userSlugs.has('book') ? enrichWithImages(recommendations.books ?? [], 'book') : [],
+      userSlugs.has('movie') ? enrichWithImages(recommendations.movies ?? [], 'movie') : [],
+      userSlugs.has('tv-show') ? enrichWithImages(recommendations.tv_shows ?? [], 'tv-show') : [],
+      userSlugs.has('game') ? enrichWithImages(recommendations.games ?? [], 'game') : [],
+      userSlugs.has('podcast') ? enrichWithImages(recommendations.podcasts ?? [], 'podcast') : [],
+      userSlugs.has('album') ? enrichWithImages(recommendations.albums ?? [], 'album') : [],
     ]);
 
     const enriched = { songs, books, movies, tv_shows, games, podcasts, albums };
