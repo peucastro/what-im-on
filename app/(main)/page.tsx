@@ -15,6 +15,9 @@ import template5 from '../../public/template5.png';
 import template6 from '../../public/template6.png';
 import others from '../../public/others.png';
 import suggestions from '../../public/suggestions.png';
+import addFeature from '../../public/addFeature.png';
+import addFeature1 from '../../public/addFeature2.png';
+import addFeature2 from '../../public/addFeature3.png';
 import { containerVariants, itemVariants } from '@/utils/animations';
 
 const MotionImage = motion.create(Image);
@@ -34,6 +37,7 @@ export default function Landing() {
   const galleryRef = useRef<HTMLDivElement>(null);
   const middleCardRef = useRef<HTMLImageElement>(null);
   const personalizeRef = useRef<HTMLDivElement>(null);
+  const addFeatureRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
     target: personalizeRef,
@@ -46,6 +50,25 @@ export default function Landing() {
   const rotate1 = useTransform(scrollYProgress, [0, 1], [-2, 2]);
   const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -3]);
   const rotate3 = useTransform(scrollYProgress, [0, 1], [2, -2]);
+
+  const { scrollYProgress: addFeatureScroll } = useScroll({
+    target: addFeatureRef,
+    offset: ['start end', 'center center'],
+  });
+
+  const addLeftX = useTransform(addFeatureScroll, [0, 1], [-210, -140]);
+  const addLeftY = useTransform(addFeatureScroll, [0, 1], [16, 0]);
+  const addLeftRotate = useTransform(addFeatureScroll, [0, 1], [-14, -8]);
+  const addLeftOpacity = useTransform(addFeatureScroll, [0, 0.4, 1], [0, 0.9, 1]);
+
+  const addCenterY = useTransform(addFeatureScroll, [0, 1], [20, 0]);
+  const addCenterRotate = useTransform(addFeatureScroll, [0, 1], [0, 0]);
+  const addCenterScale = useTransform(addFeatureScroll, [0, 1], [0.98, 1]);
+
+  const addRightX = useTransform(addFeatureScroll, [0, 1], [210, 140]);
+  const addRightY = useTransform(addFeatureScroll, [0, 1], [16, 0]);
+  const addRightRotate = useTransform(addFeatureScroll, [0, 1], [14, 8]);
+  const addRightOpacity = useTransform(addFeatureScroll, [0, 0.4, 1], [0, 0.9, 1]);
 
   useEffect(() => {
     if (window.innerWidth >= 768) return;
@@ -303,13 +326,44 @@ export default function Landing() {
               <span className="font-bold text-[#830527]">you</span>
             </p>
           </div>
-          <motion.div whileHover={{ y: -10, rotate: 1 }} className="mt-16 relative">
+          <motion.div ref={addFeatureRef} className="mt-20 relative w-full max-w-[760px] min-h-[220px] sm:min-h-[260px] md:min-h-[420px] flex items-center justify-center">
             <div className="absolute inset-0 bg-[#2AADA2]/10 blur-3xl -z-10 rounded-full" />
-            <Image
-              alt="Template Terminal Single"
-              className="w-[220px] md:w-[280px] shadow-2xl border-8 border-white"
-              src={template2}
-            />
+
+            <motion.div
+              style={{ x: addLeftX, y: addLeftY, rotate: addLeftRotate, opacity: addLeftOpacity }}
+              whileHover={{ y: -8, rotate: -10, scale: 1.02 }}
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 origin-center"
+            >
+              <Image
+                alt="Add feature 2"
+                className="w-[118px] sm:w-[136px] md:w-[230px] shadow-2xl border-8 border-white"
+                src={addFeature1}
+              />
+            </motion.div>
+
+            <motion.div
+              style={{ x: 0, y: addCenterY, rotate: addCenterRotate, scale: addCenterScale }}
+              whileHover={{ y: -12, rotate: 0, scale: 1.04 }}
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 origin-center"
+            >
+              <Image
+                alt="Add feature"
+                className="w-[154px] sm:w-[176px] md:w-[280px] shadow-2xl border-8 border-white"
+                src={addFeature}
+              />
+            </motion.div>
+
+            <motion.div
+              style={{ x: addRightX, y: addRightY, rotate: addRightRotate, opacity: addRightOpacity }}
+              whileHover={{ y: -8, rotate: 10, scale: 1.02 }}
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 origin-center"
+            >
+              <Image
+                alt="Add feature 3"
+                className="w-[118px] sm:w-[136px] md:w-[230px] shadow-2xl border-8 border-white"
+                src={addFeature2}
+              />
+            </motion.div>
           </motion.div>
         </motion.section>
 
