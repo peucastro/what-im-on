@@ -1,7 +1,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { getDefaultAvatarUrl } from '@/utils/avatar';
-import { THEMES, BORDER_RADIUS_MAP, FONT_FAMILY_MAP, BorderRadius, FontFamily } from '@/utils/themes';
+import {
+  THEMES,
+  BORDER_RADIUS_MAP,
+  FONT_FAMILY_MAP,
+  BorderRadius,
+  FontFamily,
+} from '@/utils/themes';
 
 interface Recommendation {
   user_id: string;
@@ -89,9 +95,10 @@ export default function WhoIsIntoWhatYouAreOn({ recommendations }: WhoIsIntoWhat
             borderRadius,
             fontFamily,
             backgroundColor: theme.colors.profileBackground,
-            backgroundImage: theme.colors.headerImage !== 'none' 
-              ? `linear-gradient(to right, ${theme.colors.profileBackground} 0%, ${theme.colors.profileBackground} 40%, transparent 100%), ${theme.colors.headerImage}` 
-              : undefined,
+            backgroundImage:
+              theme.colors.headerImage !== 'none'
+                ? `linear-gradient(to right, ${theme.colors.profileBackground} 0%, ${theme.colors.profileBackground} 40%, transparent 100%), ${theme.colors.headerImage}`
+                : undefined,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
@@ -115,7 +122,7 @@ export default function WhoIsIntoWhatYouAreOn({ recommendations }: WhoIsIntoWhat
               style={cardStyle}
             >
               <div className="relative w-24 h-24 shrink-0">
-                <div 
+                <div
                   className="w-full h-full flex items-center justify-center overflow-hidden border"
                   style={avatarContainerStyle}
                 >
