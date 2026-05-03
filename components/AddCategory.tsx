@@ -71,12 +71,10 @@ export default function AddCategory({ categories }: AddCategoryProps) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center py-8">
+    <div className="flex flex-col items-center justify-center">
       {!isSelectingCategory && !selectedCategory && (
         <VibeButton 
-          variant="outline" 
           onClick={() => setIsSelectingCategory(true)}
-          className="hover:opacity-100 px-6 py-3"
         >
           ➕ &nbsp; add category
         </VibeButton>

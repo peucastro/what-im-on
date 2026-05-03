@@ -129,11 +129,11 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
   }
 
   return (
-    <div className="space-y-12 w-full mx-auto md:max-w-lg pb-24">
+    <div className="w-full mx-auto md:max-w-lg pb-32">
       {!profile.isOwner && (
         <ProfileThemeOverride preferences={profile.preferences as UserPreferences} />
       )}
-      <div className="mt-8">
+      <div className="my-8">
         <ProfileHeader
           username={profile.username}
           isOwner={profile.isOwner}
@@ -151,16 +151,18 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
           />
         ))}
 
+        {profile.itemGroups.length === 0 && (
+          <div className="flex flex-col items-center justify-center mt-16 text-center px-4">
+            <p className="text-app-font lowercase opacity-40">
+              {profile.isOwner ? "your profile is looking very empty..." : "no content yet..."}
+            </p>
+          </div>
+        )}
+
         {profile.isOwner && (
           <AddCategory 
             categories={profile.allCategories} 
           />
-        )}
-
-        {!profile.isOwner && profile.itemGroups.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-4 text-center space-y-2 px-4">
-            <p className="text-app-font lowercase opacity-40">no current interests yet</p>
-          </div>
         )}
       </div>
     </div>
