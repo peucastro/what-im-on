@@ -95,7 +95,7 @@ function FutureBody({ recommendations }: BodyProps) {
             What you might like
           </h1>
 
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col">
             {categoriesConfig.map(({ apiKey, title, creatorKey }) => {
               const items = recommendations?.[apiKey as keyof RecommendationsData];
               if (!items || items.length === 0) return null;
@@ -171,7 +171,7 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
 
   return (
     <div className="w-full">
-      <h2 className="text-2xl font-bold mb-8 capitalize text-app-font tracking-tight">{title}</h2>
+      <h2 className="text-2xl font-bold mb-10 capitalize text-app-font tracking-tight">{title}</h2>
 
       <div
         className="relative flex items-center justify-center touch-pan-y"
@@ -218,7 +218,7 @@ function CategoryCarousel({ title, items, creatorKey }: CarouselProps) {
       </div>
 
       {activeItem && (
-        <div className="text-center mt-6 h-20">
+        <div className="text-center mt-2 h-20">
           <p className="text-[14px] md:text-[16px] font-bold text-app-font leading-tight">
             {activeItem.title} ({activeItem.year})
           </p>
