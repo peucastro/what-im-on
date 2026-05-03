@@ -151,6 +151,7 @@ export default function FeaturedItem({
   }
 
   const isPortrait = aspectClass !== 'aspect-square';
+  const halfWidth = isPortrait ? (100 * 2) / 3 / 2 : 50;
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -282,12 +283,20 @@ export default function FeaturedItem({
         onClick={handleContainerClick}
         className={`flex items-center gap-2 mb-4 w-full h-[120px] overflow-x-auto no-scrollbar snap-x snap-mandatory ${isOwner || href || items ? 'cursor-pointer group/shelf' : ''}`}
         style={
-          items ? { paddingLeft: 'calc(50% - 50px)', paddingRight: 'calc(50% - 50px)' } : undefined
+          items
+            ? {
+                paddingLeft: `calc(50% - ${halfWidth}px)`,
+                paddingRight: `calc(50% - ${halfWidth}px)`,
+              }
+            : undefined
         }
       >
         {/* Decorative Padding Start (Only for single item) */}
         {!items && (
-          <div className="flex-shrink-0 w-[calc(50%-50px-4px)] flex items-center justify-end gap-2 pr-2">
+          <div
+            className="flex-shrink-0 flex items-center justify-end gap-2 pr-2"
+            style={{ width: `calc(50% - ${halfWidth}px - 4px)` }}
+          >
             {/* Extra Far Left - 50px */}
             {isPortrait && (
               <div
@@ -326,7 +335,10 @@ export default function FeaturedItem({
 
         {/* Decorative Padding End (Only for single item) */}
         {!items && (
-          <div className="flex-shrink-0 w-[calc(50%-50px-4px)] flex items-center justify-start gap-2 pl-2">
+          <div
+            className="flex-shrink-0 flex items-center justify-start gap-2 pl-2"
+            style={{ width: `calc(50% - ${halfWidth}px - 4px)` }}
+          >
             {/* Mid Right - 75px */}
             <div
               className={`h-[75px] ${aspectClass} bg-app-accent opacity-40 rounded-app flex-shrink-0`}
