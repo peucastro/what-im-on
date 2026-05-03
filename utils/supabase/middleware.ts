@@ -4,6 +4,16 @@ import { type NextRequest, NextResponse } from 'next/server';
 export const updateSession = async (request: NextRequest) => {
   const isAPIRoute = (pathname: string) => pathname.startsWith('/api/');
 
+  // Check if the pathname is a profile route (/[username])
+  const isProfileRoute = (pathname: string) => {
+    // Profile routes are single-segment paths like /username
+    if (!/^\/[^/]+$/.test(pathname)) return false;
+
+    // Exclude known non-profile routes
+    const nonProfileRoutes = ['/login', '/register', '/account', '/present', '/future', '/others'];
+    return !nonProfileRoutes.includes(pathname);
+  };
+
   let supabaseResponse = NextResponse.next({
     request: {
       headers: request.headers,
@@ -41,7 +51,8 @@ export const updateSession = async (request: NextRequest) => {
     request.nextUrl.pathname !== '/' &&
     !request.nextUrl.pathname.startsWith('/login') &&
     !request.nextUrl.pathname.startsWith('/register') &&
-    !request.nextUrl.pathname.startsWith('/onboarding')
+    !request.nextUrl.pathname.startsWith('/onboarding') &&
+    !isProfileRoute(request.nextUrl.pathname)
   ) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
