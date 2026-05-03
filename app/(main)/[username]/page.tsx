@@ -176,14 +176,12 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
                 </div>
                 
                 {featuredItem && (
-                  <FeaturedItem item={featuredItem} categoryLabel={group.category_label} />
+                  <FeaturedItem 
+                    item={featuredItem} 
+                    categoryLabel={group.category_label} 
+                    isOwner={profile.isOwner}
+                  />
                 )}
-
-                <div className="border-app-border pb-6">
-                  {remainingItems.map((item: Item) => (
-                    <ItemCard key={item.id} item={item} />
-                  ))}
-                </div>
               </div>
             );
           })}
