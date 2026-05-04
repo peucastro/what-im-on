@@ -1,6 +1,10 @@
 # what i'm on
 
-![Project Banner](public/assets/banner.webp)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="public/assets/banner-dark.webp">
+  <source media="(prefers-color-scheme: light)" srcset="public/assets/banner.webp">
+  <img alt="whatimon Banner" src="public/assets/banner.webp">
+</picture>
 
 A personal space to showcase your current obsessions and crowdsource your next favorite thing. Built for Shift APPens 2026. Now with cross-media search across movies, TV shows, books, music, podcasts, albums, and games.
 
