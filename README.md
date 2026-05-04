@@ -1,6 +1,6 @@
 # what i'm on
 
-![Project Banner](public/assets/banner.png)
+![Project Banner](public/assets/banner.webp)
 
 A personal space to showcase your current obsessions and crowdsource your next favorite thing. Built for Shift APPens 2026. Now with cross-media search across movies, TV shows, books, music, podcasts, albums, and games.
 
